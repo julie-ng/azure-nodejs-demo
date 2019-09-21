@@ -28,12 +28,12 @@ stages:
         displayName: Lint Code
 
     - job: UnitTests
+      displayName: Unit Tests
       pool:
         vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run test
         displayName: Run Tests
-
 
 # ----------------------------
 # Docker Image: Build and Push
@@ -43,6 +43,7 @@ stages:
   displayName: 'Build (Docker)'
   jobs:
     - job: build_and_push_image
+      displayName: Build and Push Image
       steps:
 
       - script: docker build --tag $(imageTag) .
@@ -61,9 +62,10 @@ stages:
 # ----------------------------
 
 - stage: DeployImage
-  displayName: 'Deploy (master only)'
+  displayName: Deploy
   jobs:
   - job: deploy_image
+    displayName: 'Deploy Image (master)'
     steps:
     - task: AzureWebAppContainer@1
       displayName: Deploy container as Azure Web App
