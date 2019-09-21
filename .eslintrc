@@ -1,0 +1,44 @@
+{
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"extends": "eslint:recommended",
+	"env": {
+		"es6": true,
+		"jasmine": true,
+		"node": true
+	},
+	"globals": {
+		"context": true
+	},
+	"rules": {
+		"no-console": "off",
+		"no-unused-vars": [
+			"error",
+			{
+				"args": "none"
+			}
+		],
+		"object-curly-spacing": [
+			"error",
+			"always"
+		],
+		"semi": [
+			"error",
+			"never"
+		],
+		"space-before-blocks": "error",
+		"space-before-function-paren": "error",
+		"spaced-comment": [
+			"error",
+			"always",
+			{
+				"exceptions": [
+					"-",
+					"+"
+				]
+			}
+		],
+		"strict": "warn"
+	}
+}
