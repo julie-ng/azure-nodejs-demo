@@ -6,7 +6,7 @@ variables:
   azureSubscriptionEndpoint: $(service-connection-name)
   azureContainerRegistry: $(container-registry-host)
   registryName: $(azureContainerRegistry)/$(Build.Repository.Name)
-  imageTag: $(registryName):$(Build.BuildId)
+  imageTag: $(registryName):$(Build.BuildId)-$(Build.SourceVersion)
   appName: $(app-name)
 
 stages:
@@ -44,27 +44,17 @@ stages:
   jobs:
     - job: build_and_push_image
       steps:
-      - script: |
-          echo '##vso[task.setvariable variable=buildSha]'$(git rev-parse --short HEAD)''
-          echo 'buildSha set to $(buildSha)'
-        displayName: Get build git sha
 
-      - script: docker build --tag $(imageTag)-$(buildSha) .
+      - script: docker build --tag $(imageTag) .
         displayName: 'Docker: Build and tag image'
 
-      # Use the task to avoid embedding credentials in pipeline
       - task: Docker@1
-        displayName: 'Docker: login ACR'
+        displayName: 'Push an image'
         inputs:
-          command: login
           azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
           azureContainerRegistry: $(azureContainerRegistry)
-
-      - script: docker push $(imageTag)-$(buildSha)
-        displayName: 'Docker: Push image'
-
-      - script: docker logout $(azureContainerRegistry)
-        displayName: 'Docker: logout ACR'
+          imageName: $(imageTag)
+          command: push
 
 # ----------------------------
 # Deploy to Azure App Services
