@@ -2,10 +2,12 @@
 const express = require('express')
 const helmet = require('helmet')
 const logger = require('morgan')
+const monitor = require('./monitor')
 
 let app = express()
 app.use(helmet())
 app.use(logger('dev'))
+app.use(monitor)
 
 app.get('/', (req, res) => {
 	res.send('Hello World!')
