@@ -1,3 +1,5 @@
+'use strict'
+
 const appInsights = require('applicationinsights')
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATION_KEY || false
 

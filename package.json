@@ -15,7 +15,7 @@
     "release": "standard-version",
     "test": "jest",
     "test:watch": "jest --watch",
-    "preflight": "npm audit && npm run lint && npm run test"
+    "preflight": "NODE_ENV=test npm audit && npm run lint && npm run test"
   },
   "dependencies": {
     "applicationinsights": "^1.4.2",
