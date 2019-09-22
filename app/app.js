@@ -2,9 +2,11 @@
 const express = require('express')
 const helmet = require('helmet')
 const logger = require('morgan')
-const monitor = require('./monitor')
+const monitor = require('./middleware/monitor')
+const forceHttps = require('./middleware/force-https')
 
 let app = express()
+app.use(forceHttps)
 app.use(helmet())
 app.use(logger('dev'))
 app.use(monitor)
