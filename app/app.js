@@ -41,13 +41,15 @@ app.get('/health', (req, res) => {
 })
 
 app.post('/webhooks/test', bodyParser.json(), (req, res) => {
-	res.send(JSON.stringify({
+	let payload = {
 		status:  'OK',
 		payload: {
 			headers: req.headers,
 			body: req.body
 		}
-	}))
+	}
+	console.log(payload)
+	res.send(JSON.stringify(payload))
 })
 
 app.use((req, res, next) => {
