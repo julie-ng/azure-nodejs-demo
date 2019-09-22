@@ -19,6 +19,7 @@ stages:
       steps:
       - script: npm audit
         displayName: Audit Dependencies
+        continueOnError: true
 
     - job: Linter
       pool:
