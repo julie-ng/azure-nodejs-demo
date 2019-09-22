@@ -38,6 +38,16 @@ describe ('app', () => {
       })
     })
   })
+
+  describe ('POST /webhooks/test', () => {
+    it (`returns 200`, (done) => {
+      const url = getUrl('/webhooks/test')
+      request.post(url, (error, response, body) => {
+        expect(response.statusCode).toBe(200)
+        done()
+      })
+    })
+  })
 })
 
 function getUrl (path) {

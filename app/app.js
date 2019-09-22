@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const logger = require('morgan')
 const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
+const bodyParser = require('body-parser')
 
 let app = express()
 app.use(forceHttps)
@@ -37,6 +38,16 @@ app.get('/health', (req, res) => {
 	_addEnvVar(body, 'instanceId', 'WEBSITE_INSTANCE_ID')
 
 	res.json(body)
+})
+
+app.post('/webhooks/test', bodyParser.json(), (req, res) => {
+	res.send(JSON.stringify({
+		status:  'OK',
+		payload: {
+			headers: req.headers,
+			body: req.body
+		}
+	}))
 })
 
 app.use((req, res, next) => {
