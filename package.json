@@ -23,7 +23,7 @@
     "express": "^4.16.3",
     "express-handlebars": "^3.1.0",
     "handlebars": ">=4.3.0",
-    "hbs": "^4.0.4",
+    "hbs": "^4.0.5",
     "helmet": "^3.16.0",
     "http": "0.0.0",
     "morgan": "^1.9.1"
