@@ -1,5 +1,7 @@
 # azure-nodejs-dummy
 
+[![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-dummy?branchName=master)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=3&branchName=master)
+
 A multipurpose dummy node.js app for cloud architecture demos
 
 [https://nodejs-demo.onazure.io/](https://nodejs-demo.onazure.io/)
