@@ -5,6 +5,7 @@ trigger:
 variables:
   repository: $(registry-host)/$(registry-namespace)
   imageName: $(repository)/$(app-name)
+  imageTag: $(Build.BuildId)-$(Build.SourceVersion)
 
 stages:
 - stage: Tests
@@ -43,11 +44,6 @@ stages:
     - job: build_and_push_image
       displayName: Build and Push Image
       steps:
-
-      - script: |
-          echo '##vso[task.setvariable variable=imageTag]'$(Build.BuildId)-$(git rev-parse --short HEAD)''
-          echo 'imageTag set to $(imageTag)'
-        displayName: Set image tag with git sha
 
       - script: docker build --tag $(imageName):$(imageTag) .
         displayName: 'Docker: Build and tag image'
