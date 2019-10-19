@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.2.0...v0.2.1) (2019-10-19)
+
+
+### Bug Fixes
+
+* **pipelines:** use global image tag so deploy job also has value ([4fa42bc](https://github.com/julie-ng/azure-nodejs-dummy/commit/4fa42bc))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.1.0...v0.2.0) (2019-10-19)
 
