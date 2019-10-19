@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/julie-ng/azure-nodejs-dummy"
   },
+  "private": true,
   "scripts": {
     "start": "node app/server.js",
     "dev": "NODE_ENV=development nodemon -w app app/server.js",
