@@ -1,6 +1,6 @@
-# azure-nodejs-dummy
+# azure-nodejs-demo
 
-[![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-dummy?branchName=master)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=3&branchName=master)
+[![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-demo?branchName=master)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=5&branchName=master)
 
 A multipurpose dummy node.js app for cloud architecture demos
 
