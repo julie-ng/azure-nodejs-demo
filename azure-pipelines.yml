@@ -3,9 +3,13 @@ trigger:
   - feat/*
 
 variables:
-  repository: $(registry-host)/$(registry-namespace)
-  imageName: $(repository)/$(app-name)
-  imageTag: $(Build.BuildId)-$(Build.SourceVersion)
+  - group: azure-demos-config
+  - name: repository
+    value: $(registry-host)/$(registry-namespace)
+  - name: imageName
+    value: $(repository)/$(app-name)
+  - name: imageTag
+    value: $(Build.BuildId)-$(Build.SourceVersion)
 
 stages:
 - stage: Tests
