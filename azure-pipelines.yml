@@ -6,6 +6,9 @@ schedules:
   - cron: "0 12 * * 0"
     displayName: Weekly Sunday build
     always: true
+    branches:
+      include:
+      - master
 
 variables:
   - group: azure-demos-config
