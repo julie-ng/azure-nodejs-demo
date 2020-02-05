@@ -2,6 +2,11 @@ trigger:
   - master
   - feat/*
 
+schedules:
+  - cron: "0 12 * * 0"
+    displayName: Weekly Sunday build
+    always: true
+
 variables:
   - group: azure-demos-config
   - name: repository
