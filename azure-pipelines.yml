@@ -14,9 +14,9 @@ variables:
   - group: azure-demos-config
   - name: repository
     value: $(registry-host)/$(registry-namespace)
-  - name: imageName
+  - name: image-name
     value: $(repository)/$(app-name)
-  - name: imageTag
+  - name: image-tag
     value: $(Build.BuildId)-$(Build.SourceVersion)
 
 stages:
@@ -57,7 +57,7 @@ stages:
       displayName: Build and Push Image
       steps:
 
-      - script: docker build --tag $(imageName):$(imageTag) .
+      - script: docker build --tag $(image-name):$(image-tag) .
         displayName: 'Docker: Build and tag image'
 
       - task: Docker@1
@@ -65,7 +65,7 @@ stages:
         inputs:
           azureSubscriptionEndpoint: $(service-connection-name)
           azureContainerRegistry: $(registry-host)
-          imageName: $(imageName):$(imageTag)
+          imageName: $(image-name):$(image-tag)
           command: push
 
 # ----------------------------
@@ -84,4 +84,4 @@ stages:
       inputs:
         appName: $(app-services-name)
         azureSubscription: $(service-connection-name)
-        imageName: $(imageName):$(imageTag)
+        imageName: $(image-name):$(image-tag)
