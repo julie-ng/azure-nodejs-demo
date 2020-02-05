@@ -1,3 +1,6 @@
+# Build numbering format
+name: $(BuildID)
+
 trigger:
   - master
   - feat/*
