@@ -36,9 +36,9 @@ app.get('/health', (req, res) => {
 		description: 'An Azure App Service Demo using Azure DevOps and Azure Container Registry (ACR)',
 		details: {
 			uptime: {
-				componentType: 'system',
-				observedValue: process.uptime(),
-				observedUnit: 's',
+				component_type: 'system',
+				observed_value: process.uptime(),
+				observed_unit: 's',
 				status: 'pass',
 				time: new Date()
 			}
