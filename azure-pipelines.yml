@@ -66,7 +66,7 @@ stages:
       - task: Docker@1
         displayName: 'Push an image'
         inputs:
-          azureSubscriptionEndpoint: $(service-connection-name)
+          azureSubscriptionEndpoint: $(registry-service-connection)
           azureContainerRegistry: $(registry-host)
           imageName: $(image-name):$(image-tag)
           command: push
@@ -86,5 +86,5 @@ stages:
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       inputs:
         appName: $(app-services-name)
-        azureSubscription: $(service-connection-name)
+        azureSubscription: $(appservice-service-connection)
         imageName: $(image-name):$(image-tag)
