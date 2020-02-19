@@ -9,16 +9,25 @@ const logger = require('morgan')
 const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
+const Healthcheck = require('standard-healthcheck')
+
+const healthcheck = new Healthcheck({
+	version: process.env.npm_package_version,
+	description: process.env.npm_package_description,
+	includeEnv: ['WEBSITE_HOSTNAME', 'WEBSITE_INSTANCE_ID']
+})
 
 let app = express()
 
 // --- Middleware ---
+
 app.use(forceHttps)
 app.use(helmet())
 app.use(logger('dev'))
 app.use(monitor)
 
 // --- Views ---
+
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
@@ -27,29 +36,6 @@ app.get('/', (req, res) => {
 	res.render('home', {
 		title: 'Node.js on Azure Demo'
 	})
-})
-
-app.get('/health', (req, res) => {
-	let body = {
-		status: 'pass',
-		version: '1',
-		description: 'An Azure App Service Demo using Azure DevOps and Azure Container Registry (ACR)',
-		details: {
-			uptime: {
-				component_type: 'system',
-				observed_value: process.uptime(),
-				observed_unit: 's',
-				status: 'pass',
-				time: new Date()
-			}
-		}
-	}
-
-	// Azure specific variables
-	_addEnvVar(body, 'hostname', 'WEBSITE_HOSTNAME')
-	_addEnvVar(body, 'instanceId', 'WEBSITE_INSTANCE_ID')
-
-	res.json(body)
 })
 
 app.post('/webhooks/test', bodyParser.json(), (req, res) => {
@@ -63,6 +49,8 @@ app.post('/webhooks/test', bodyParser.json(), (req, res) => {
 	console.log(payload)
 	res.send(JSON.stringify(payload))
 })
+
+app.get('/health', healthcheck.endpoint)
 
 app.use((req, res, next) => {
   res.status(404).send('Oops - page not found.')
