@@ -56,10 +56,4 @@ app.use((req, res, next) => {
   res.status(404).send('Oops - page not found.')
 })
 
-function _addEnvVar (body, key, varname) {
-	if (process.env.hasOwnProperty(varname)) {
-		body[key] = process.env[varname]
-	}
-}
-
 module.exports = app
