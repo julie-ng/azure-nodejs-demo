@@ -15,10 +15,20 @@ schedules:
 
 variables:
   - group: azure-demos-config
-  - name: repository
-    value: $(registry-host)/$(registry-namespace)
+
+  - name: registry-namespace
+    value: demos
+
+  - name: app-name
+    value: azure-nodejs-demo
+
+  - name: app-services-name
+    value: azure-nodejs-demo
+
+  # Pattern: registry.azurecr.io/demos/app-name:12-gitsha
   - name: image-name
-    value: $(repository)/$(app-name)
+    value: $(registry-host)/$(registry-namespace)/$(app-name)
+
   - name: image-tag
     value: $(Build.BuildId)-$(Build.SourceVersion)
 
