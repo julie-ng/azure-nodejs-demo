@@ -2,8 +2,9 @@
 name: $(BuildID)
 
 trigger:
-  - master
   - feat/*
+  - master
+  - release
 
 schedules:
   - cron: "0 12 * * 0"
@@ -25,12 +26,14 @@ variables:
   - name: app-services-name
     value: azure-nodejs-demo
 
-  # Pattern: registry.azurecr.io/demos/app-name:12-gitsha
   - name: image-name
-    value: $(registry-host)/$(registry-namespace)/$(app-name)
+    value: $(registry-namespace)/$(app-name)
+
+  - name: image-name-with-registry
+    value: $(registry-host)/$(image-name) # e.g. registry.azurecr.io/demos/app-name
 
   - name: image-tag
-    value: $(Build.BuildId)-$(Build.SourceVersion)
+    value: $(Build.BuildId)-$(Build.SourceVersion) # e.g. 12-gitsha
 
 stages:
 - stage: Tests
@@ -70,7 +73,15 @@ stages:
       displayName: Build and Push Image
       steps:
 
-      - script: docker build --tag $(image-name):$(image-tag) .
+      # release: set version to package.json version
+      - script: |
+          echo '##vso[task.setvariable variable=image-tag]'$(npm run --silent project-version)''
+          echo 'Project version is $(image-tag)'
+          echo 'Image tag set to $(image-tag)'
+        displayName: 'Overwrite image tag if `release` branch'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+
+      - script: docker build --tag $(image-name-with-registry):$(image-tag) .
         displayName: 'Docker: Build and tag image'
 
       - task: Docker@1
@@ -80,6 +91,20 @@ stages:
           azureContainerRegistry: $(registry-host)
           imageName: $(image-name):$(image-tag)
           command: push
+
+      # release: lock image
+      - task: AzureCLI@2
+        displayName: 'Lock release image, preventing delete'
+        inputs:
+          azureSubscription:  $(registry-service-connection)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+              az --version
+              az acr repository update \
+                --name $(registry-acr-name) --image $(image-name):$(image-tag) \
+                --write-enabled false
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
 # ----------------------------
 # Deploy to Azure App Services
