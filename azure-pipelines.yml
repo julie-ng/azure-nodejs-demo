@@ -113,12 +113,23 @@ stages:
 - stage: DeployImage
   displayName: Deploy
   jobs:
-  - job: deploy_image
+  - job: deploy_master
     displayName: 'Deploy Image (master)'
     steps:
     - task: AzureWebAppContainer@1
       displayName: Deploy container as Azure Web App
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        appName: $(app-services-name)-dev # add `-dev` suffix
+        azureSubscription: $(appservice-service-connection)
+        imageName: $(image-name):$(image-tag)
+
+  - job: deploy_release
+    displayName: 'Deploy Image (release)'
+    steps:
+    - task: AzureWebAppContainer@1
+      displayName: Deploy container as Azure Web App
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
       inputs:
         appName: $(app-services-name)
         azureSubscription: $(appservice-service-connection)
