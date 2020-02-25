@@ -1,6 +1,23 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.3.0](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.2.1...v0.3.0) (2020-02-25)
+
+
+### Features
+
+* **health:** use snakecase ([43b7a6b](https://github.com/julie-ng/azure-nodejs-dummy/commit/43b7a6bcf44b8b6345c00710066cb6c1c2f81e86))
+* **healthcheck:** use standard-healthcheck pkg ([d36c8c2](https://github.com/julie-ng/azure-nodejs-dummy/commit/d36c8c22e53f22fc8b2e9813501bbdd72c47a9b4))
+* **pipeline:** use azure-devops variable groups ([954ac50](https://github.com/julie-ng/azure-nodejs-dummy/commit/954ac506d1d82344d21abca766515638c7a8c54b))
+* **release:** add npm script to get my project version from package.json ([b12d071](https://github.com/julie-ng/azure-nodejs-dummy/commit/b12d071c784f6d315a67d5146a45ece1b824f50d))
+* **release-pipeline:** adjust docker image tags, lock image for release branch ([c4812c5](https://github.com/julie-ng/azure-nodejs-dummy/commit/c4812c5c8d559a5631c9ce000da2663ae224c060))
+
+
+### Bug Fixes
+
+* **pipeline:** include registry so app service pulls from ACR not Docker Hub ([4e4bf67](https://github.com/julie-ng/azure-nodejs-dummy/commit/4e4bf6708f765ef5bd1f49e83dec33bd1677decc))
+* **release-pipeline:** npm script name ([935c098](https://github.com/julie-ng/azure-nodejs-dummy/commit/935c09841d06db985fa4664e9a77357aab79c4ad))
 
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.2.0...v0.2.1) (2019-10-19)
