@@ -122,7 +122,7 @@ stages:
       inputs:
         appName: $(app-services-name)-dev # add `-dev` suffix
         azureSubscription: $(appservice-service-connection)
-        imageName: $(image-name):$(image-tag)
+        imageName: $(image-name-with-registry):$(image-tag)
 
   - job: deploy_release
     displayName: 'Deploy Image (release)'
@@ -133,4 +133,4 @@ stages:
       inputs:
         appName: $(app-services-name)
         azureSubscription: $(appservice-service-connection)
-        imageName: $(image-name):$(image-tag)
+        imageName: $(image-name-with-registry):$(image-tag)
