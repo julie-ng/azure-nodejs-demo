@@ -75,7 +75,7 @@ stages:
 
       # release: set version to package.json version
       - script: |
-          echo '##vso[task.setvariable variable=image-tag]'$(npm run --silent project-version)''
+          echo '##vso[task.setvariable variable=image-tag]'$(npm run --silent my-version)''
           echo 'Project version is $(image-tag)'
           echo 'Image tag set to $(image-tag)'
         displayName: 'Overwrite image tag if `release` branch'
