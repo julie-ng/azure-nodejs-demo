@@ -1,5 +1,5 @@
 FROM node:12-alpine
-MAINTAINER Julie Ng <me@julie.io>
+LABEL maintainer="Julie Ng <me@julie.io>"
 
 WORKDIR /workspace
 
