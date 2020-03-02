@@ -6,6 +6,10 @@ trigger:
   - master
   - release
 
+
+# Schedule
+# ---------
+
 schedules:
   - cron: "0 12 * * 0"
     displayName: Weekly Sunday build
@@ -14,8 +18,23 @@ schedules:
       include:
       - master
 
+
+# Shared Templates
+# ----------------
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: julie-ng/azure-pipelines-templates
+      endpoint: julie-ng # required, even if public repo
+      ref: refs/tags/v1.0
+
+# Variables
+# ---------
+
 variables:
-  - group: azure-demos-config
+  - group: azure-demos-config # set in DevOps Library
 
   - name: registry-namespace
     value: demos
@@ -33,9 +52,16 @@ variables:
     value: $(registry-host)/$(image-name) # e.g. registry.azurecr.io/demos/app-name
 
   - name: image-tag
-    value: $(Build.BuildId)-$(Build.SourceVersion) # e.g. 12-gitsha
+    value: 'dev' # default
+
+
+# Stages
+# ------
 
 stages:
+
+# --- Stage: Tests ---
+
 - stage: Tests
   displayName: 'Test (Node.js)'
   jobs:
@@ -62,82 +88,72 @@ stages:
       - script: npm ci && npm run test
         displayName: Run Tests
 
-# ----------------------------
-# Docker Image: Build and Push
-# ----------------------------
+
+# --- Stage: Build and Push Docker image ---
 
 - stage: BuildImage
   displayName: 'Build (Docker)'
   jobs:
-    - job: build_and_push_image
-      displayName: Build and Push Image
+    - job: build_and_push
+      displayName: 'Build and Push Image'
+
       steps:
+      - template: steps/set-custom-variable.yml@templates
+        parameters:
+          variableName: image-tag
+          command: 'npm run --silent my-version'
+          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
-      # release: set version to package.json version
-      - script: |
-          echo '##vso[task.setvariable variable=image-tag]'$(npm run --silent my-version)''
-          echo 'Project version is $(image-tag)'
-          echo 'Image tag set to $(image-tag)'
-        displayName: 'Overwrite image tag if `release` branch'
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
-
-      - script: docker build --tag $(image-name-with-registry):$(image-tag) .
-        displayName: 'Docker: Build and tag image'
-
-      - task: Docker@1
-        displayName: 'Push an image'
-        inputs:
-          azureSubscriptionEndpoint: $(registry-service-connection)
-          azureContainerRegistry: $(registry-host)
-          imageName: $(image-name):$(image-tag)
-          command: push
+      - template: steps/docker-build-push.yml@templates
+        parameters:
+          registryConnectionName: $(registry-service-connection)
+          imageName: $(image-name)
+          tagsAsMultilineString: |
+            $(image-tag)
 
       # release: lock image
-      - task: AzureCLI@2
-        displayName: 'Lock release image, preventing delete'
-        inputs:
-          azureSubscription:  $(registry-service-connection)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-              az --version
-              az acr repository update \
-                --name $(registry-acr-name) --image $(image-name):$(image-tag) \
-                --write-enabled false
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+      # - task: AzureCLI@2
+      #   displayName: 'Lock release image, preventing delete'
+      #   inputs:
+      #     azureSubscription:  $(registry-service-connection)
+      #     scriptType: bash
+      #     scriptLocation: inlineScript
+      #     inlineScript: |
+      #         az --version
+      #         az acr repository update \
+      #           --name $(registry-acr-name) --image $(image-name):$(image-tag) \
+      #           --write-enabled false
+      #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
-# ----------------------------
-# Deploy to Azure App Services
-# ----------------------------
+
+# --- Stage: deploy to Azure App Services ---
 
 - stage: DeployImage
   displayName: Deploy
   jobs:
+
   - job: deploy_master
-    displayName: 'Deploy Image (master)'
+    displayName: 'Deploy (master)'
     steps:
-    - task: AzureWebAppContainer@1
-      displayName: Deploy container as Azure Web App
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-      inputs:
-        appName: $(app-services-name)-dev # add `-dev` suffix
-        azureSubscription: $(appservice-service-connection)
-        imageName: $(image-name-with-registry):$(image-tag)
+      - template: steps/deploy-app-service.yml@templates
+        parameters:
+          ARMConnectionName: $(appservice-service-connection)
+          dockerImage: $(image-name-with-registry):$(image-tag)
+          appName: $(app-services-name)-dev # with `-dev` suffix
+          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
   - job: deploy_release
-    displayName: 'Deploy Image (release)'
+    displayName: 'Deploy (release)'
     steps:
-      # release: set version to package.json version
-    - script: |
-        echo '##vso[task.setvariable variable=image-tag]'$(npm run --silent my-version)''
-        echo 'Project version is $(image-tag)'
-        echo 'Image tag set to $(image-tag)'
-      displayName: 'Overwrite image tag if `release` branch'
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
-    - task: AzureWebAppContainer@1
-      displayName: Deploy container as Azure Web App
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
-      inputs:
-        appName: $(app-services-name)
-        azureSubscription: $(appservice-service-connection)
-        imageName: $(image-name-with-registry):$(image-tag)
+      - template: steps/set-custom-variable.yml@templates
+        parameters:
+          variableName: image-tag
+          command: 'npm run --silent my-version'
+          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+
+      - template: steps/deploy-app-service.yml@templates
+        parameters:
+          ARMConnectionName: $(appservice-service-connection)
+          appName: $(app-services-name)
+          dockerImage: $(image-name-with-registry):$(image-tag)
+          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
