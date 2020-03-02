@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.4.0...v0.4.1) (2020-03-02)
+
+
+### Features
+
+* **pipelines:** lock release images in azure container registry ([8c27622](https://github.com/julie-ng/azure-nodejs-dummy/commit/8c276223b8a51cb521f809e406ad54b20a8bb486))
+
+
+### Bug Fixes
+
+* **pipelines:** service connection variable name ([fd52434](https://github.com/julie-ng/azure-nodejs-dummy/commit/fd52434a7e43e812ec417d01c55c4beef8031d76))
+
 ## [0.4.0](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.3.0...v0.4.0) (2020-03-02)
 
 
