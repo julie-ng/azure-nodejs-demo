@@ -111,19 +111,19 @@ stages:
           tagsAsMultilineString: |
             $(image-tag)
 
-      # release: lock image
-      # - task: AzureCLI@2
-      #   displayName: 'Lock release image, preventing delete'
-      #   inputs:
-      #     azureSubscription:  $(registry-service-connection)
-      #     scriptType: bash
-      #     scriptLocation: inlineScript
-      #     inlineScript: |
-      #         az --version
-      #         az acr repository update \
-      #           --name $(registry-acr-name) --image $(image-name):$(image-tag) \
-      #           --write-enabled false
-      #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+      # lock release images
+      - task: AzureCLI@2
+        displayName: 'Lock release image, preventing delete'
+        inputs:
+          azureSubscription:  $(registry-service-connection)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+              az --version
+              az acr repository update \
+                --name $(registry-acr-name) --image $(image-name):$(image-tag) \
+                --write-enabled false
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
 
 # --- Stage: deploy to Azure App Services ---
