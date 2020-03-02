@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.3.0...v0.4.0) (2020-03-02)
+
+
+### Features
+
+* **pipeline:** use templates ([0d8cfd1](https://github.com/julie-ng/azure-nodejs-dummy/commit/0d8cfd115ec37122c591fa50b7cb67bdfc22ecf8))
+
+
+### Bug Fixes
+
+* **pipeline:** need to use release tag when deploying ([0b2cd9b](https://github.com/julie-ng/azure-nodejs-dummy/commit/0b2cd9b023cc9b9655a0f8f2a018f0515849f300))
+
 ## [0.3.0](https://github.com/julie-ng/azure-nodejs-dummy/compare/v0.2.1...v0.3.0) (2020-02-25)
 
 
