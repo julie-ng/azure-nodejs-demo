@@ -115,7 +115,7 @@ stages:
       - task: AzureCLI@2
         displayName: 'Lock release image, preventing delete'
         inputs:
-          azureSubscription:  $(registry-service-connection)
+          azureSubscription: $(lib-var-arm-connection)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
