@@ -66,14 +66,18 @@ stages:
   displayName: 'Test (Node.js)'
   jobs:
     - job: Audit
+      displayName: Audit Dependencies
       pool:
         vmImage: 'ubuntu-latest'
       steps:
       - script: npm audit
-        displayName: Audit Dependencies
+        displayName: Audit (Dev)
         continueOnError: true
+      - script: npm audit --production --audit-level=high
+        displayName: Audit (Prod)
 
     - job: Linter
+      displayName: Lint Code
       pool:
         vmImage: 'ubuntu-latest'
       steps:
