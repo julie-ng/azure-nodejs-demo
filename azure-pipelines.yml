@@ -137,7 +137,7 @@ stages:
     steps:
       - template: steps/deploy-app-service.yml@templates
         parameters:
-          ARMConnectionName: $(appservice-service-connection)
+          ARMConnectionName: $(lib-var-arm-connection)
           dockerImage: $(image-name-with-registry):$(image-tag)
           appName: $(app-services-name)-dev # with `-dev` suffix
           condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -153,7 +153,7 @@ stages:
 
       - template: steps/deploy-app-service.yml@templates
         parameters:
-          ARMConnectionName: $(appservice-service-connection)
+          ARMConnectionName: $(lib-var-arm-connection)
           appName: $(app-services-name)
           dockerImage: $(image-name-with-registry):$(image-tag)
           condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
