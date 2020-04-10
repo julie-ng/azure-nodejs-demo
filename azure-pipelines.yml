@@ -27,8 +27,8 @@ resources:
     - repository: templates
       type: github
       name: julie-ng/azure-pipelines-templates
-      endpoint: julie-ng # required, even if public repo
-      ref: refs/tags/v1.0
+      ref: refs/tags/v1.3.0
+      endpoint: julie-ng # required, even if public repo 🙄
 
 # Variables
 # ---------
@@ -53,6 +53,12 @@ variables:
 
   - name: image-tag
     value: 'dev' # default
+
+  - name: is-dev
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
+
+  - name: is-release
+    value: ${{ and(eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule')) }}
 
 
 # Stages
@@ -104,9 +110,9 @@ stages:
       steps:
       - template: steps/set-custom-variable.yml@templates
         parameters:
+          condition: ${{ variables['is-release'] }}
           variableName: image-tag
           command: 'npm run --silent my-version'
-          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
       - template: steps/docker-build-push.yml@templates
         parameters:
@@ -115,19 +121,13 @@ stages:
           tagsAsMultilineString: |
             $(image-tag)
 
-      # lock release images
-      - task: AzureCLI@2
-        displayName: 'Lock release image, preventing delete'
-        inputs:
-          azureSubscription: $(lib-var-arm-connection)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-              az --version
-              az acr repository update \
-                --name $(registry-acr-name) --image $(image-name):$(image-tag) \
-                --write-enabled false
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+      - template: steps/lock-acr-image.yml@templates
+        parameters:
+          condition: ${{ variables['is-release'] }}
+          azureArmConnection: $(lib-var-az-acr-connection)
+          acrRegistryName: $(registry-acr-name)
+          imageName: $(image-name)
+          imageTag: $(image-tag)
 
 
 # --- Stage: deploy to Azure App Services ---
@@ -138,26 +138,25 @@ stages:
 
   - job: deploy_master
     displayName: 'Deploy (master)'
+    condition: ${{ variables['is-dev'] }}
     steps:
       - template: steps/deploy-app-service.yml@templates
         parameters:
           ARMConnectionName: $(lib-var-arm-connection)
           dockerImage: $(image-name-with-registry):$(image-tag)
           appName: $(app-services-name)-dev # with `-dev` suffix
-          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
   - job: deploy_release
     displayName: 'Deploy (release)'
+    condition: ${{ variables['is-release'] }}
     steps:
       - template: steps/set-custom-variable.yml@templates
         parameters:
           variableName: image-tag
           command: 'npm run --silent my-version'
-          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
 
       - template: steps/deploy-app-service.yml@templates
         parameters:
           ARMConnectionName: $(lib-var-arm-connection)
-          appName: $(app-services-name)
           dockerImage: $(image-name-with-registry):$(image-tag)
-          condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule'))
+          appName: $(app-services-name)
