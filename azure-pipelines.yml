@@ -76,7 +76,7 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-      - script: npm audit
+      - script: npm audit --audit-level=moderate
         displayName: Audit (Dev)
         continueOnError: true
       - script: npm audit --production --audit-level=high
