@@ -9,13 +9,7 @@ const logger = require('morgan')
 const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
-const Healthcheck = require('standard-healthcheck')
-
-const healthcheck = new Healthcheck({
-	version: process.env.npm_package_version,
-	description: process.env.npm_package_description,
-	includeEnv: ['WEBSITE_HOSTNAME', 'WEBSITE_INSTANCE_ID']
-})
+const healthcheck = require('standard-healthcheck')
 
 let app = express()
 
@@ -50,7 +44,11 @@ app.post('/webhooks/test', bodyParser.json(), (req, res) => {
 	res.send(JSON.stringify(payload))
 })
 
-app.get('/health', healthcheck.endpoint)
+app.get('/health', healthcheck({
+	version: process.env.npm_package_version,
+	description: process.env.npm_package_description,
+	includeEnv: ['WEBSITE_HOSTNAME', 'WEBSITE_INSTANCE_ID']
+}))
 
 app.use((req, res, next) => {
   res.status(404).send('Oops - page not found.')
