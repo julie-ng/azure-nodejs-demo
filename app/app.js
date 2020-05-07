@@ -28,7 +28,7 @@ app.set('view options', { layout: 'layout' })
 
 app.get('/', (req, res) => {
 	res.render('home', {
-		title: 'Node.js on Azure Demo'
+		title: 'Node.js on Azure Demo - Hello World'
 	})
 })
 
