@@ -18,23 +18,20 @@ let app = express()
 
 // --- Static Assets ---
 
-const ASSETS_DIR = path.join(__dirname, './../assets')
-const ASSETS_BASE_URL = process.env.NODE_ENV === 'development'
-	? `http://localhost:${PORT}`
-	: process.env.ASSETS_BASE_URL // todo CDN Url
-
+const assetsDir = path.join(__dirname, './../assets')
+const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL || `http://localhost:${PORT}`
 
 if (process.env.NODE_ENV === 'development') {
 	app.use(sassMiddleware({
-		src: `${ASSETS_DIR}/css`,
-		dest: `${ASSETS_DIR}/css`,
+		src: `${assetsDir}/css`,
+		dest: `${assetsDir}/css`,
 		debug: true,
 		outputStyle: 'compressed',
 		prefix:  '/css'
 	}))
 
-	app.use('/css', express.static(`${ASSETS_DIR}/css`))
-	app.use('/images', express.static(`${ASSETS_DIR}/images`))
+	app.use('/css', express.static(`${assetsDir}/css`))
+	app.use('/images', express.static(`${assetsDir}/images`))
 }
 
 // --- Middleware ---
