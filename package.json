@@ -17,7 +17,8 @@
     "release": "standard-version --sign",
     "test": "jest",
     "test:watch": "jest --watch",
-    "preflight": "NODE_ENV=test npm audit && npm run lint && npm run test"
+    "preflight": "NODE_ENV=test npm audit && npm run lint && npm run test",
+    "compile-sass": "node ./assets/compile-sass.js"
   },
   "dependencies": {
     "applicationinsights": "^1.4.2",
