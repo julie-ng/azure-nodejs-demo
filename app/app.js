@@ -22,13 +22,15 @@ app.use(monitor)
 
 // --- Views ---
 
+app.use(express.static(path.join(__dirname, 'assets')))
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
 
 app.get('/', (req, res) => {
 	res.render('home', {
-		title: 'Node.js on Azure Demo - Hello World'
+		title: 'Node.js on Azure Demo',
+		version: 'v' + process.env.npm_package_version
 	})
 })
 

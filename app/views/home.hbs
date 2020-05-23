@@ -1,15 +1,35 @@
-<h3>Features</h3>
-<ul>
-	<li>Azure
+<div class="logos">
+	<img src="/images/nodejs-logo.svg" class="img-logo img-logo--nodejs">
+	<img src="/images/msft-azure-logo.svg" class="img-logo img-logo--azure">
+</div>
+
+<div class="row">
+	<div class="column">
+		<h3>Express.js Setup</h3>
 		<ul>
-			<li>Azure DevOps <a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/azure-pipelines.yml">Pipeline</a></li>
-			<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/middleware/monitor.js">Application Insights</a> Integration</li>
+			<li><a href="https://www.npmjs.com/package/express-handlebars">express-handlebars</a></li>
+			<li><a href="https://www.npmjs.com/package/standard-healthcheck">standard-healthcheck</a></li>
+			<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/middleware/force-https.js">Force https</a></li>
+			<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/app.js#L35">Webhook Test</a></li>
 		</ul>
-	</li>
-	<li>Handlebars Views</li>
-	<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/middleware/force-https.js">Force https</a></li>
-	<li>Webhook Test</li>
-</ul>
-<p>
-	View source at <a href="https://github.com/julie-ng/azure-nodejs-demo" target="_blank">https://github.com/julie-ng/azure-nodejs-demo</a>
-</p>
+	</div>
+
+	<div class="column">
+		<h3>Azure Integration</h3>
+		<ul>
+			<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/azure-pipelines.yml">Azure DevOps Pipeline</a></li>
+			<li><a href="https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/middleware/monitor.js">Application Insights</a></li>
+		</ul>
+	</div>
+</div>
+
+<footer>
+	<p>
+		Open Source on GitHub.com<br>
+		<a href="https://github.com/julie-ng/azure-nodejs-demo" target="_blank">https://github.com/julie-ng/azure-nodejs-demo</a>
+	</p>
+
+	<p>
+		<a href="https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=5&branchName=master" target="_blank"><img src="https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/azure-nodejs-demo?branchName=master"></a>
+	</p>
+</footer>
