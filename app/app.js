@@ -10,8 +10,32 @@ const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
 const healthcheck = require('standard-healthcheck')
+const sassMiddleware = require('node-sass-middleware')
+
+const PORT = process.env.PORT || '3000'
 
 let app = express()
+
+// --- Static Assets ---
+
+const ASSETS_DIR = path.join(__dirname, './../assets')
+const ASSETS_BASE_URL = process.env.NODE_ENV === 'development'
+	? `http://localhost:${PORT}`
+	: process.env.ASSETS_BASE_URL // todo CDN Url
+
+
+if (process.env.NODE_ENV === 'development') {
+	app.use(sassMiddleware({
+		src: `${ASSETS_DIR}/css`,
+		dest: `${ASSETS_DIR}/css`,
+		debug: true,
+		outputStyle: 'compressed',
+		prefix:  '/css'
+	}))
+
+	app.use('/css', express.static(`${ASSETS_DIR}/css`))
+	app.use('/images', express.static(`${ASSETS_DIR}/images`))
+}
 
 // --- Middleware ---
 
@@ -22,7 +46,6 @@ app.use(monitor)
 
 // --- Views ---
 
-app.use(express.static(path.join(__dirname, './../assets')))
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
@@ -30,7 +53,8 @@ app.set('view options', { layout: 'layout' })
 app.get('/', (req, res) => {
 	res.render('home', {
 		title: 'Node.js on Azure Demo',
-		version: 'v' + process.env.npm_package_version
+		version: 'v' + process.env.npm_package_version,
+		assetsBaseUrl: ASSETS_BASE_URL
 	})
 })
 
