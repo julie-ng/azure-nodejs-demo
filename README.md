@@ -19,7 +19,7 @@ A multipurpose dummy node.js app for cloud architecture demos
 ### Azure 
 
 - [Azure DevOps Pipeline](https://azure.microsoft.com/en-us/services/devops/pipelines/)
-- [Azure Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview) Integration as middleware [&rarr;](https://github.com/julie-ng/azure-nodejs-dummy/blob/master/app/middleware/monitor.js)
+- [Azure Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview) Integration as middleware [&rarr;](https://github.com/julie-ng/azure-nodejs-demo/blob/master/app/middleware/monitor.js)
 
 
 ### Node.js

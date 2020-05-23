@@ -6,7 +6,7 @@
   "description": "A multipurpose dummy node.js app for cloud architecture demos",
   "repository": {
     "type": "git",
-    "url": "https://github.com/julie-ng/azure-nodejs-dummy"
+    "url": "https://github.com/julie-ng/azure-nodejs-demo"
   },
   "private": true,
   "scripts": {
