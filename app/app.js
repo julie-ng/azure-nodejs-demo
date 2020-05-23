@@ -22,7 +22,7 @@ app.use(monitor)
 
 // --- Views ---
 
-app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.static(path.join(__dirname, './../assets')))
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
