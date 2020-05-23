@@ -13,15 +13,20 @@ const healthcheck = require('standard-healthcheck')
 const sassMiddleware = require('node-sass-middleware')
 
 const PORT = process.env.PORT || '3000'
+const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
+const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL || `http://localhost:${PORT}`
 
 let app = express()
 
 // --- Static Assets ---
 
 const assetsDir = path.join(__dirname, './../assets')
-const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL || `http://localhost:${PORT}`
+const cssFile = IS_DEVELOPMENT
+	? 'styles.css'
+	: `styles-${process.env.npm_package_version}.css`
+const cssFileUrl = `${ASSETS_BASE_URL}/css/${cssFile}`
 
-if (process.env.NODE_ENV === 'development') {
+if (IS_DEVELOPMENT) {
 	app.use(sassMiddleware({
 		src: `${assetsDir}/css`,
 		dest: `${assetsDir}/css`,
@@ -51,6 +56,7 @@ app.get('/', (req, res) => {
 	res.render('home', {
 		title: 'Node.js on Azure Demo',
 		version: 'v' + process.env.npm_package_version,
+		cssFileUrl: cssFileUrl,
 		assetsBaseUrl: ASSETS_BASE_URL
 	})
 })
