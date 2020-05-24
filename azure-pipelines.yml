@@ -6,6 +6,8 @@ trigger:
   - master
   - release
 
+pool:
+  vmImage: 'ubuntu-latest'
 
 # Schedule
 # ---------
@@ -82,8 +84,6 @@ stages:
   jobs:
     - job: Audit
       displayName: Audit Dependencies
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm audit --audit-level=moderate
         displayName: Audit (Dev)
@@ -93,16 +93,12 @@ stages:
 
     - job: Linter
       displayName: Lint Code
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run lint
         displayName: Lint Code
 
     - job: UnitTests
       displayName: Unit Tests
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run test
         displayName: Run Tests
