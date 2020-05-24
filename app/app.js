@@ -34,10 +34,10 @@ if (IS_DEVELOPMENT) {
 		outputStyle: 'compressed',
 		prefix:  '/css'
 	}))
-
-	app.use('/css', express.static(`${assetsDir}/css`))
-	app.use('/images', express.static(`${assetsDir}/images`))
 }
+
+app.use('/css', express.static(`${assetsDir}/css`))
+app.use('/images', express.static(`${assetsDir}/images`))
 
 // --- Middleware ---
 
