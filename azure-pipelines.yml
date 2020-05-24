@@ -6,6 +6,8 @@ trigger:
   - master
   - release
 
+pool:
+  vmImage: 'ubuntu-latest'
 
 # Schedule
 # ---------
@@ -54,6 +56,15 @@ variables:
   - name: image-tag
     value: 'dev' # default
 
+  - name: storage-account-name
+    value: 'demoassetpipeline'
+
+  - name: storage-container-dev
+    value: 'nodejs-dev'
+
+  - name: storage-container
+    value: 'nodejs'
+
   - name: is-dev
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
 
@@ -73,8 +84,6 @@ stages:
   jobs:
     - job: Audit
       displayName: Audit Dependencies
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm audit --audit-level=moderate
         displayName: Audit (Dev)
@@ -84,16 +93,12 @@ stages:
 
     - job: Linter
       displayName: Lint Code
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run lint
         displayName: Lint Code
 
     - job: UnitTests
       displayName: Unit Tests
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run test
         displayName: Run Tests
@@ -129,6 +134,30 @@ stages:
           imageName: $(image-name)
           imageTag: $(image-tag)
 
+# --- Stage: Asset Pipeline ---
+
+- stage: AssetPipeline
+  displayName: 'Asset pipeline'
+  jobs:
+    - job: build_and_publish
+      steps:
+        - script: |
+            npm install
+            npm run compile-sass
+          displayName: 'Compile Sass to CSS'
+
+        - task: AzureCLI@2
+          displayName: az storage blob upload-batch
+          inputs:
+            azureSubscription: $(lib-var-arm-connection)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az --version
+              az storage blob upload-batch \
+                --account-name $(storage-account-name) \
+                --source ./assets \
+                --destination $(storage-container-dev)
 
 # --- Stage: deploy to Azure App Services ---
 

@@ -4,8 +4,6 @@
 const app = require('./app')
 const request = require('request')
 const http = require('http')
-const path = require('path')
-const fs = require('fs')
 
 const port = process.env.PORT || 3001
 
@@ -21,9 +19,9 @@ describe ('app', () => {
   })
 
   describe ('GET /', () => {
-    fit (`returns 'Hello World!`, (done) => {
+    it (`returns Homepage`, (done) => {
       const url = getUrl('/')
-      const content = fs.readFileSync(path.join(__dirname, '/views/home.hbs')).toString()
+      const content = 'Node.js on Azure Demo'
       request.get(url, (error, response, body) => {
         expect(response.statusCode).toBe(200)
         expect(response.body.includes(content)).toBe(true)

@@ -17,7 +17,8 @@
     "release": "standard-version --sign",
     "test": "jest",
     "test:watch": "jest --watch",
-    "preflight": "NODE_ENV=test npm audit && npm run lint && npm run test"
+    "preflight": "NODE_ENV=test npm audit && npm run lint && npm run test",
+    "compile-sass": "node compile-sass.js"
   },
   "dependencies": {
     "applicationinsights": "^1.4.2",
@@ -35,6 +36,8 @@
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "mem": ">=4.0.0",
+    "node-sass": "^4.14.1",
+    "node-sass-middleware": "^0.11.0",
     "nodemon": "^2.0.2",
     "request": "^2.88.0"
   },
