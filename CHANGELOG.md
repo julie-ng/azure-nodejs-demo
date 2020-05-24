@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.4.1...v0.5.0) (2020-05-24)
+
+
+### Features
+
+* **pipeline:** add purge cdn step after upload ([6a482d9](https://github.com/julie-ng/azure-nodejs-demo/commit/6a482d9a771258ef8abd9ef3821294a824766689))
+* **pipeline:** refactor, removing job complexity, simplify setting prod values ([fad72ad](https://github.com/julie-ng/azure-nodejs-demo/commit/fad72adfb0cb948c658a17f759da82f6ea86b413))
+* externalize images and sass to own asset pipeline to azure blob storage ([a8e2559](https://github.com/julie-ng/azure-nodejs-demo/commit/a8e2559001d50d2e1d3cd34cef2d37646e8cc38a))
+* re-design, add ci badge, app version, logos ([03b23bc](https://github.com/julie-ng/azure-nodejs-demo/commit/03b23bc03ac556ec4acbf38bc515e09f9da1a9eb))
+* **azure-pipelines:** adjust audit level ([2576a3f](https://github.com/julie-ng/azure-nodejs-demo/commit/2576a3f2a0d948aa0892c3118f10513b4898c08f))
+* **azure-pipelines:** refactor variables, use lock image template ([66e3768](https://github.com/julie-ng/azure-nodejs-demo/commit/66e3768cd2a36f77bb4c6457392ddcdea5613284))
+* **healthcheck:** use version 1.0 of standard-healthcheck ([f22d708](https://github.com/julie-ng/azure-nodejs-demo/commit/f22d7086952f4def5b0cc235582a57d60f13cb45))
+* **pipeline:** indicate variable comes from library ([4304c84](https://github.com/julie-ng/azure-nodejs-demo/commit/4304c84959dca6376d199e16b7b7b8bef7294e5c))
+* **pipeline:** separate prod and dev dependency audit ([106b2f1](https://github.com/julie-ng/azure-nodejs-demo/commit/106b2f12f9d4c7e570a8e34a0a3343482d01c86f))
+
 ### [0.4.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.4.0...v0.4.1) (2020-03-02)
 
 
