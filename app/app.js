@@ -10,7 +10,6 @@ const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
 const healthcheck = require('standard-healthcheck')
-const sassMiddleware = require('node-sass-middleware')
 
 const PORT = process.env.PORT || '3000'
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
@@ -32,6 +31,7 @@ const cssFile = IS_DEVELOPMENT
 const cssFileUrl = `${ASSETS_BASE_URL}/css/${cssFile}`
 
 if (IS_DEVELOPMENT) {
+	const sassMiddleware = require('node-sass-middleware')
 	app.use(sassMiddleware({
 		src: `${assetsDir}/css`,
 		dest: `${assetsDir}/css`,
