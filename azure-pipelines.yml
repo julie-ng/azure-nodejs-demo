@@ -143,9 +143,9 @@ stages:
         condition: ${{ variables['is-debug'] }}
 
       - script: |
-          echo '[default] image tag: $(image-tag)'
-          echo '[default] storage account: $(storage-container)'
-          echo '[default] web app name: $(web-app-name)'
+          echo '[run-time] image tag: $(image-tag)'
+          echo '[run-time] storage account: $(storage-container)'
+          echo '[run-time] web app name: $(web-app-name)'
         displayName: 'Debug: run-time values'
         condition: ${{ variables['is-debug'] }}
 
