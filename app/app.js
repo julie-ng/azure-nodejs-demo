@@ -14,7 +14,12 @@ const sassMiddleware = require('node-sass-middleware')
 
 const PORT = process.env.PORT || '3000'
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
-const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL || `http://localhost:${PORT}`
+const AZURE_APP_SERVICE_HOSTNAME = process.env.WEBSITE_HOSTNAME
+	? `https://${process.env.WEBSITE_HOSTNAME}`
+	: false
+const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL
+	|| AZURE_APP_SERVICE_HOSTNAME
+	|| `http://localhost:${PORT}`
 
 let app = express()
 
