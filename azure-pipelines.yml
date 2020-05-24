@@ -48,6 +48,12 @@ variables:
   - name: image-name-with-registry
     value: onazureio.azurecr.io/$(image-name) # app service task expected format 🙄
 
+  - name: cdn-profile-name
+    value: demoassetpipeline
+
+  - name: resource-group
+    value: 'public-demos-rg'
+
   # Deployment Values - Defaults
   - name: web-app-name
     value: azure-nodejs-demo-dev
@@ -58,12 +64,18 @@ variables:
   - name: storage-container
     value: 'nodejs-dev'
 
+  - name: cdn-endpoint
+    value: nodejsdemo-dev
+
   # Deployment Values - Production
   - name: web-app-name-prod
     value: azure-nodejs-demo
 
   - name: storage-container-prod
     value: 'nodejs'
+
+  - name: cdn-endpoint-prod
+    value: nodejsdemo-prod
 
   # Pipeline Conditions
   - name: is-dev
@@ -121,7 +133,7 @@ stages:
 
 - stage: BuildAndDeploy
   displayName: 'Build and Deploy'
-  condition: ${{ variables['is-debug'] }}
+  condition: ${{ variables['is-deployment'] }}
   jobs:
   - job: build_and_deploy
     displayName: 'Build and Deploy'
@@ -132,6 +144,7 @@ stages:
           echo '[default] image tag: $(image-tag)'
           echo '[default] storage account: $(storage-container)'
           echo '[default] web app name: $(web-app-name)'
+          echo '[default] cdn endpoint: $(cdn-endpoint)'
         displayName: 'Debug: default values'
 
       # 1) SET PROD VALUES? (output must be in 2nd step 🙄)
@@ -139,15 +152,17 @@ stages:
           echo "##vso[task.setvariable variable=storage-container]${{ variables['storage-container-prod'] }}"
           echo "##vso[task.setvariable variable=image-tag]$(npm run --silent my-version)"
           echo "##vso[task.setvariable variable=web-app-name]${{ variables['web-app-name-prod'] }}"
+          echo "##vso[task.setvariable variable=cdn-endpoint]${{ variables['cdn-endpoint-prod'] }}"
         displayName: 'Use production values'
-        condition: ${{ variables['is-debug'] }}
+        condition: ${{ variables['is-release'] }}
 
       - script: |
-          echo '[default] image tag: $(image-tag)'
-          echo '[default] storage account: $(storage-container)'
-          echo '[default] web app name: $(web-app-name)'
+          echo '[run-time] image tag: $(image-tag)'
+          echo '[run-time] storage account: $(storage-container)'
+          echo '[run-time] web app name: $(web-app-name)'
+          echo '[run-time] cdn endpoint: $(cdn-endpoint)'
         displayName: 'Debug: run-time values'
-        condition: ${{ variables['is-debug'] }}
+        condition: ${{ variables['is-release'] }}
 
       # 2) COMPILE SASS
       - script: |
@@ -186,7 +201,22 @@ stages:
               --source ./assets \
               --destination $(storage-container)
 
-      # 6) DEPLOY TO APP SERVICES
+      # 6) PURGE CDN CACHE
+      - task: AzureCLI@2
+        displayName: 'CDN - purge cache'
+        inputs:
+          azureSubscription: $(lib-var-arm-connection)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az --version
+            az cdn endpoint purge \
+              --resource-group $(resource-group) \
+              --name $(cdn-endpoint) \
+              --profile-name $(cdn-profile-name) \
+              --content-paths '/css/*' '/images/*'
+
+      # 7) DEPLOY TO APP SERVICES
       - task: AzureWebAppContainer@1
         displayName: "App Service: deploy container"
         inputs:
