@@ -76,7 +76,7 @@ app.post('/webhooks/test', bodyParser.json(), (req, res) => {
 app.get('/health', healthcheck({
 	version: process.env.npm_package_version,
 	description: process.env.npm_package_description,
-	includeEnv: ['WEBSITE_HOSTNAME', 'WEBSITE_INSTANCE_ID']
+	includeEnv: ['WEBSITE_HOSTNAME', 'WEBSITE_INSTANCE_ID', 'ASSETS_BASE_URL', 'NODE_ENV']
 }))
 
 app.use((req, res, next) => {
