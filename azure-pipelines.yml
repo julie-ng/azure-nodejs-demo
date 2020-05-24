@@ -96,7 +96,7 @@ stages:
 
 - stage: Tests
   displayName: 'CI'
-  # condition: false
+  condition: false
   jobs:
     - job: Audit
       displayName: Audit Dependencies
