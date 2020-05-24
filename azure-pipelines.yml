@@ -51,6 +51,9 @@ variables:
   - name: cdn-profile-name
     value: demoassetpipeline
 
+  - name: resource-group
+    value: 'public-demos-rg'
+
   # Deployment Values - Defaults
   - name: web-app-name
     value: azure-nodejs-demo-dev
@@ -200,7 +203,7 @@ stages:
 
       # 6) PURGE CDN CACHE
       - task: AzureCLI@2
-        displayName: az storage blob upload-batch
+        displayName: 'CDN - purge cache'
         inputs:
           azureSubscription: $(lib-var-arm-connection)
           scriptType: bash
@@ -208,6 +211,7 @@ stages:
           inlineScript: |
             az --version
             az cdn endpoint purge \
+              --resource-group $(resource-group) \
               --name $(cdn-endpoint) \
               --profile-name $(cdn-profile-name) \
               --content-paths '/css/*' '/images/*'
