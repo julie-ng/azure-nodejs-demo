@@ -43,10 +43,10 @@ variables:
     value: 'demoassetpipeline'
 
   - name: image-name
-    value: demos/azure-nodejs-demo # acr task expected format
+    value: demos/azure-nodejs-demo # acr task expected format 🙄
 
   - name: image-name-with-registry
-    value: onazureio.azurecr.io/$(image-name) # app service task expected format
+    value: onazureio.azurecr.io/$(image-name) # app service task expected format 🙄
 
   # Deployment Values - Defaults
   - name: web-app-name
@@ -134,7 +134,7 @@ stages:
           echo '[default] web app name: $(web-app-name)'
         displayName: 'Debug: default values'
 
-      # 1) SET PROD VALUES?
+      # 1) SET PROD VALUES? (output must be in 2nd step 🙄)
       - script: |
           echo "##vso[task.setvariable variable=storage-container]${{ variables['storage-container-prod'] }}"
           echo "##vso[task.setvariable variable=image-tag]$(npm run --silent my-version)"
@@ -173,7 +173,7 @@ stages:
           imageTag: $(image-tag)
 
       # 5) UPLOAD ASSETS TO BLOB STORAGE
-      - task: AzureCLI@2
+      - task: AzureCLI@2 # b/c AzCopy task is Windows only 🙄
         displayName: az storage blob upload-batch
         inputs:
           azureSubscription: $(lib-var-arm-connection)
