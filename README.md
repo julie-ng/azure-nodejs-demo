@@ -2,9 +2,18 @@
 
 [![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-demo?branchName=master)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=5&branchName=master)
 
-A multipurpose dummy node.js app for cloud architecture demos
+Containerized Node.js Demo App for Azure incl. CI/CD pipeline
 
-[https://nodejs-demo.onazure.io/](https://nodejs-demo.onazure.io/)
+## CI/CD Triggers
+
+| Environment | git branch | URL |
+|:--|:--|:--|
+| Dev | `master` | [nodejs-demo-dev.onazure.io](https://nodejs-demo-dev.onazure.io/) |
+| Production | `release` | [nodejs-demo.onazure.io](https://nodejs-demo.onazure.io/) |
+
+## Preview
+
+![Preview: v0.5.0](./assets/images/preview-v0.5.0.png)
 
 ## Endpoints
 
