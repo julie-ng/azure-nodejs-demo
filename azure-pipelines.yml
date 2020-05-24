@@ -54,6 +54,15 @@ variables:
   - name: image-tag
     value: 'dev' # default
 
+  - name: storage-account-name
+    value: 'demoassetpipeline'
+
+  - name: storage-container-dev
+    value: 'nodejs-dev'
+
+  - name: storage-container
+    value: 'nodejs'
+
   - name: is-dev
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
 
@@ -129,6 +138,30 @@ stages:
           imageName: $(image-name)
           imageTag: $(image-tag)
 
+# --- Stage: Asset Pipeline ---
+
+- stage: AssetPipeline
+  displayName: 'Asset pipeline'
+  jobs:
+    - job: build_and_publish
+      steps:
+        - script: |
+            npm install
+            npm run compile-sass
+          displayName: 'Compile Sass to CSS'
+
+        - task: AzureCLI@2
+          displayName: az storage blob upload-batch
+          inputs:
+            azureSubscription: $(lib-var-arm-connection)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az --version
+              az storage blob upload-batch \
+                --account-name $(storage-account-name) \
+                --source ./assets \
+                --destination $(storage-container-dev)
 
 # --- Stage: deploy to Azure App Services ---
 
