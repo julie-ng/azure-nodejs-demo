@@ -99,7 +99,7 @@ stages:
 
 - stage: Tests
   displayName: 'CI'
-  condition: false
+  # condition: false
   jobs:
     - job: Audit
       displayName: Audit Dependencies
@@ -133,7 +133,7 @@ stages:
 
 - stage: BuildAndDeploy
   displayName: 'Build and Deploy'
-  condition: ${{ variables['is-debug'] }}
+  condition: ${{ variables['is-deployment'] }}
   jobs:
   - job: build_and_deploy
     displayName: 'Build and Deploy'
@@ -154,7 +154,7 @@ stages:
           echo "##vso[task.setvariable variable=web-app-name]${{ variables['web-app-name-prod'] }}"
           echo "##vso[task.setvariable variable=cdn-endpoint]${{ variables['cdn-endpoint-prod'] }}"
         displayName: 'Use production values'
-        condition: ${{ variables['is-debug'] }}
+        condition: ${{ variables['is-release'] }}
 
       - script: |
           echo '[run-time] image tag: $(image-tag)'
@@ -162,7 +162,7 @@ stages:
           echo '[run-time] web app name: $(web-app-name)'
           echo '[run-time] cdn endpoint: $(cdn-endpoint)'
         displayName: 'Debug: run-time values'
-        condition: ${{ variables['is-debug'] }}
+        condition: ${{ variables['is-release'] }}
 
       # 2) COMPILE SASS
       - script: |
