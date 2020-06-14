@@ -1,6 +1,6 @@
 # azure-nodejs-demo
 
-[![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/julie-ng.azure-nodejs-demo?branchName=main)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=5&branchName=main)
+[![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo?branchName=main)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=5&branchName=main)
 
 Containerized Node.js Demo App for Azure incl. CI/CD and asset pipeline 
 
