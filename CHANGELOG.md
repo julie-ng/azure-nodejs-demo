@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.5.0...v0.6.0) (2020-06-14)
+
+
+### Features
+
+* rename base branch from master to main ([222689f](https://github.com/julie-ng/azure-nodejs-demo/commit/222689f0afa191abfcbf842247e0267abd5b7189))
+* update badge urls after project rename ([5e6f085](https://github.com/julie-ng/azure-nodejs-demo/commit/5e6f0852149b19233080574d50c711f32675b805))
+
 ## [0.5.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.4.1...v0.5.0) (2020-05-24)
 
 
