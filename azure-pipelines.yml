@@ -3,7 +3,7 @@ name: $(BuildID)
 
 trigger:
   - feat/*
-  - master
+  - main
   - release
 
 pool:
@@ -18,7 +18,7 @@ schedules:
     always: true
     branches:
       include:
-      - master
+      - main
 
 
 # Shared Templates
@@ -79,7 +79,7 @@ variables:
 
   # Pipeline Conditions
   - name: is-dev
-    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
   - name: is-release
     value: ${{ and(eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule')) }}

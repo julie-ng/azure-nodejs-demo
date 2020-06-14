@@ -1,6 +1,6 @@
 # azure-nodejs-demo
 
-[![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-demo?branchName=master)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=5&branchName=master)
+[![Build Status](https://dev.azure.com/julie-msft/Public%20Demos/_apis/build/status/julie-ng.azure-nodejs-demo?branchName=main)](https://dev.azure.com/julie-msft/Public%20Demos/_build/latest?definitionId=5&branchName=main)
 
 Containerized Node.js Demo App for Azure incl. CI/CD and asset pipeline 
 
@@ -8,7 +8,7 @@ Containerized Node.js Demo App for Azure incl. CI/CD and asset pipeline
 
 | Environment | git branch | Website URL | CDN Endpoint |
 |:--|:--|:--|:--|
-| Dev | `master` | [nodejs-demo-dev.onazure.io](https://nodejs-demo-dev.onazure.io/) | [nodejsdemo-dev.azureedge.net](https://nodejsdemo-dev.azureedge.net/css/styles.css) |
+| Development | `main` | [nodejs-demo-dev.onazure.io](https://nodejs-demo-dev.onazure.io/) | [nodejsdemo-dev.azureedge.net](https://nodejsdemo-dev.azureedge.net/css/styles.css) |
 | Production | `release` | [nodejs-demo.onazure.io](https://nodejs-demo.onazure.io/) | [nodejsdemo-prod.azureedge.net](https://nodejsdemo-prod.azureedge.net/css/styles.css) |
 
 ## Preview
