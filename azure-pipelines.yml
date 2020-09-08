@@ -2,6 +2,7 @@
 name: $(BuildID)
 
 trigger:
+  - fix/*
   - feat/*
   - main
   - release
@@ -99,7 +100,6 @@ stages:
 
 - stage: Tests
   displayName: 'CI'
-  # condition: false
   jobs:
     - job: Audit
       displayName: Audit Dependencies
@@ -143,7 +143,7 @@ stages:
 
 - stage: BuildAndDeploy
   displayName: 'Build and Deploy'
-  condition: ${{ variables['is-deployment'] }}
+  condition: and(succeeded('Tests'), ${{ variables['is-deployment'] }})
   jobs:
   - job: build_and_deploy
     displayName: 'Build and Deploy'
