@@ -123,10 +123,20 @@ stages:
         displayName: Run Tests
 
     - job: BuildDocker
-      displayName: Build Docker Image
+      displayName: Docker Image Security Scan
       steps:
-      - script: docker build .
+      - script: docker build -t $(image-name) .
         displayName: 'Can Docker Build?'
+
+      - task: SnykSecurityScan@0
+        displayName: 'Snyk Container Security Scan?'
+        inputs:
+          serviceConnectionEndpoint: 'snyk-api-connection'
+          testType: 'container'
+          dockerImageName: $(image-name) # refers to tag in previous step
+          dockerfilePath: 'Dockerfile'
+          monitorOnBuild: true
+          failOnIssues: true
 
 
 # --- Stage: Build and Push Docker image ---
