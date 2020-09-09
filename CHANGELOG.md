@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.6.0...v0.7.0) (2020-09-09)
+
+
+### Features
+
+* **azure-pipelines:** add snyk container security scan ci build step ([82f8bb4](https://github.com/julie-ng/azure-nodejs-demo/commit/82f8bb49163979acbff8aea8982af317975f9ea1))
+* **security:** update node docker base image for vulnerability fixes ([599c961](https://github.com/julie-ng/azure-nodejs-demo/commit/599c961cdcbd417a942e4e46c78095cdc57ea4a2))
+
+
+### Bug Fixes
+
+* **azure-pipelines:** do not deploy if tests stage fails ([a398ca2](https://github.com/julie-ng/azure-nodejs-demo/commit/a398ca20a667546efb29714e3ea8b90fcac56f98))
+
 ## [0.6.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.5.0...v0.6.0) (2020-06-14)
 
 
