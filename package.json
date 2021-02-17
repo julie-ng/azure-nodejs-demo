@@ -21,25 +21,25 @@
     "compile-sass": "node compile-sass.js"
   },
   "dependencies": {
-    "applicationinsights": "^1.4.2",
+    "applicationinsights": "^1.8.10",
     "body-parser": "^1.19.0",
     "express": "^4.16.3",
     "express-handlebars": "^3.1.0",
     "handlebars": "^4.7.7",
     "hbs": "^4.1.1",
-    "helmet": "^3.16.0",
+    "helmet": "^3.23.3",
     "http": "0.0.0",
-    "morgan": "^1.9.1",
+    "morgan": "^1.10.0",
     "standard-healthcheck": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "jest": "^25.1.0",
-    "mem": ">=4.0.0",
+    "jest": "^25.5.4",
+    "mem": "^8.0.0",
     "node-sass": "^4.14.1",
     "node-sass-middleware": "^0.11.0",
-    "nodemon": "^2.0.4",
-    "request": "^2.88.0"
+    "nodemon": "^2.0.7",
+    "request": "^2.88.2"
   },
   "engines": {
     "node": "^10.12.0",
