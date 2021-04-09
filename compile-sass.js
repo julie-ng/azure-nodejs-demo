@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const sass = require('node-sass')
+const sass = require('sass')
 
 const appVersion = process.env.npm_package_version
 

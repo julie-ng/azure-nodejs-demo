@@ -9,7 +9,7 @@ const logger = require('morgan')
 const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
-const healthcheck = require('standard-healthcheck')
+const healthcheck = require('./../../standard-healthcheck/healthcheck')
 
 const PORT = process.env.PORT || '3000'
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
@@ -29,17 +29,6 @@ const cssFile = IS_DEVELOPMENT
 	? 'styles.css'
 	: `styles-${process.env.npm_package_version}.css`
 const cssFileUrl = `${ASSETS_BASE_URL}/css/${cssFile}`
-
-if (IS_DEVELOPMENT) {
-	const sassMiddleware = require('node-sass-middleware')
-	app.use(sassMiddleware({
-		src: `${assetsDir}/css`,
-		dest: `${assetsDir}/css`,
-		debug: true,
-		outputStyle: 'compressed',
-		prefix:  '/css'
-	}))
-}
 
 app.use('/css', express.static(`${assetsDir}/css`))
 app.use('/images', express.static(`${assetsDir}/images`))
