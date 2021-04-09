@@ -30,7 +30,7 @@
     "helmet": "^3.23.3",
     "http": "0.0.0",
     "morgan": "^1.10.0",
-    "standard-healthcheck": "^1.0.0"
+    "standard-healthcheck": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

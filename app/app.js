@@ -9,7 +9,7 @@ const logger = require('morgan')
 const monitor = require('./middleware/monitor')
 const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
-const healthcheck = require('./../../standard-healthcheck/healthcheck')
+const healthcheck = require('standard-healthcheck')
 
 const PORT = process.env.PORT || '3000'
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
