@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.7.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.7.0...v0.7.1) (2021-04-09)
+
+
+### Bug Fixes
+
+* **healthcheck:** bump dep for proper uptime calculation ([441010b](https://github.com/julie-ng/azure-nodejs-demo/commit/441010b7c8af659f6478418e5961fc90aa7a9293))
+* package.json & package-lock.json to reduce vulnerabilities ([0125b79](https://github.com/julie-ng/azure-nodejs-demo/commit/0125b7931ab4f786f05fbc0bd184c597cf4fdb4d))
+
 ## [0.7.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.6.0...v0.7.0) (2020-09-09)
 
 
