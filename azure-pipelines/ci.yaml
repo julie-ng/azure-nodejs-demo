@@ -35,6 +35,7 @@ variables:
   notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
   notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
+  globalConnectionName: onazureio-registry-connection
 
 stages:
 # - stage: Tests
@@ -105,7 +106,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: $(connectionName)
+        containerRegistry: $(globalConnectionName)
 
     # - task: Docker@2
     #   displayName: docker push
