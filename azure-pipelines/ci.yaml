@@ -50,7 +50,7 @@ variables:
 
 stages:
 - stage: Tests
-  condition: not(variables.isTag)
+  condition: eq(variables.isTag, false)
   jobs:
   - job: Tests
     steps:
