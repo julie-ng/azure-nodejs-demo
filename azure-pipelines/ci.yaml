@@ -33,7 +33,7 @@ variables:
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
   - name: is-tag
-    value: ${{ eq(variables['Build.SourceBranch'], 'refs/tags/v') }}
+    value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
 
   - name: not-fork
     value: ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
@@ -45,11 +45,12 @@ variables:
     value: ${{ and(variables['not-fork'], variables['not-schedule'], or(variables['is-tag'], variables['is-main'])) }}
 
   - name: image-tag
-    ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}:
+    ${{ if eq(variables['is-tag'], 'True') }}:
       value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-    ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/v')) }}:
+    ${{ if not(variables['is-tag']) }}:
       value: dev
 
+    # ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/v')) }}:
 steps:
   - script: |
       echo '[default] image-tag: $(image-tag)'
