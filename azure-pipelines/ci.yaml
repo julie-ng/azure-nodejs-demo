@@ -29,60 +29,81 @@ pool:
 #       - main
 
 variables:
-  - name: is-main
+  - name: isMain
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
-  - name: is-tag
+  - name: isTag
     value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
 
-  - name: not-fork
+  - name: notFork
     value: ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
 
-  - name: not-schedule
+  - name: notPR
+    value: ${{ ne(variables['Build.Reason'], 'PullRequest') }}
+
+  - name: notSchedule
     value: ${{ ne(variables['Build.Reason'], 'Schedule') }}
 
-  - name: should-build
-    value: ${{ and(variables['not-fork'], variables['not-schedule'], or(variables['is-tag'], variables['is-main'])) }}
+  - name: isTrustedCI
+    value: ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
+
+stages:
+- stage: Test
+  jobs:
+  - job: Test
+    steps:
+    - script: |
+        echo 'debug test stage'
+    # - script: npm ci
+    #   displayName: npm install
+
+    # - script: npm audit --audit-level=moderate
+    #   displayName: npm audit (Dev)
+    #   continueOnError: true
+
+    # - script: npm audit --production --audit-level=high
+    #   displayName: npm audit (Prod)
+
+    # - script: npm run lint
+    #   displayName: linter
+
+    # - script: npm run test
+    #   displayName: tests
+
+    # - script: docker build -t $(image-tag) .
+    #   displayName: docker build
+
+    # - task: SnykSecurityScan@0
+    #   displayName: Snyk Container Security Scan
+    #   inputs:
+    #     serviceConnectionEndpoint: 'snyk-api-connection'
+    #     testType: 'container'
+    #     dockerImageName: $(image-tag)
+    #     dockerfilePath: 'Dockerfile'
+    #     monitorOnBuild: true
+    #     failOnIssues: true
+
+
+
+  # condition: or(succeeded('Test'), ${{ variables['should-build'] }})
+  # and(succeeded(), eq(variables.isMain, true))
+  # condition: or(eq(variables.isTag, true), and(succeeded(), variables.isMain, variables.internalCI))
+- stage: Build
+  displayName: Build Docker Image
+  condition: or(variables.isTag, and(succeeded(), variables.isMain, variables.isTrustedCI))
+  variables:
+  - group: azure-demos-config
   - name: image-tag
-    ${{ if eq(variables['is-tag'], 'True') }}:
+    ${{ if eq(variables.isTag, 'True') }}:
       value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-    ${{ if eq(variables['is-tag'], 'False') }}:
+    ${{ if eq(variables.isTag, 'False') }}:
       value: dev
-
-    # ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/v')) }}:
-steps:
+  jobs:
+  - job: Build
+    steps:
   - script: |
       echo '[default] image-tag: $(image-tag)'
       echo '[default] is-tag: $(is-tag)'
       echo '[default] is-main: $(is-main)'
     displayName: 'Debug: values'
-
-# - script: npm ci
-#   displayName: npm install
-
-# - script: npm audit --audit-level=moderate
-#   displayName: npm audit (Dev)
-#   continueOnError: true
-
-# - script: npm audit --production --audit-level=high
-#   displayName: npm audit (Prod)
-
-# - script: npm run lint
-#   displayName: linter
-
-# - script: npm run test
-#   displayName: tests
-
-# - script: docker build -t $(image-tag) .
-#   displayName: docker build
-
-# - task: SnykSecurityScan@0
-#   displayName: Snyk Container Security Scan
-#   inputs:
-#     serviceConnectionEndpoint: 'snyk-api-connection'
-#     testType: 'container'
-#     dockerImageName: $(image-tag)
-#     dockerfilePath: 'Dockerfile'
-#     monitorOnBuild: true
-#     failOnIssues: true
