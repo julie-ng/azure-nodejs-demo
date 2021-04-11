@@ -70,7 +70,7 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-    # dockerRegistry: onazureio.azurecr.io
+    dockerRegistry: onazureio.azurecr.io
     imageName:      azure-nodejs-demo
     ${{ if eq(variables.isTag, 'False') }}:
       imageTag: dev
