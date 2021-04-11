@@ -37,7 +37,7 @@ variables:
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
   # Docker@2 Task needes global scope 🙄
-  registryConnection: onazureio-registry-connection
+  # registryConnection: onazureio-registry-connection
 
 stages:
 # - stage: Tests
@@ -66,27 +66,30 @@ stages:
 - stage: Build
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
+  variables:
+    dockerRegistry: onazureio.azurecr.io
+    imageName:      azure-nodejs-demo
+    ${{ if eq(variables.isTag, 'False') }}:
+      imageTag: dev
+    ${{ if eq(variables.isTag, 'True') }}:
+      imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
   jobs:
   - job: Build
     variables:
-      imageRegistry:  onazureio.azurecr.io
-      imageRepo:      demos/azure-nodejs-demo
-      ${{ if eq(variables.isTag, 'False') }}:
-        imageTag: dev
-      ${{ if eq(variables.isTag, 'True') }}:
-        imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+    - group: nodejs-demo-kv
+    - name: dockerTag
+      value: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
-    - script: |
-        echo '[default] imageRegistry: $(imageRegistry)'
-        echo '[default] imageRepo: $(imageRepo)'
+    - bash: |
+        echo '[default] dockerTag: $(dockerTag)'
         echo '[default] imageTag: $(imageTag)'
         echo '[default] isTag: $(isTag)'
         echo '[default] isMain: $(isMain)'
         echo '[default] isTrustedCI: $(isTrustedCI)'
       displayName: 'Debug: values'
 
-    # - script: docker build -t $(imageName):$(imageTag) .
-    #   displayName: docker build
+    - bash: docker build -t $dockerTag .
+      displayName: docker build
 
     # # - task: SnykSecurityScan@0
     # #   displayName: Snyk Container Security Scan
@@ -99,13 +102,16 @@ stages:
     # #     failOnIssues: true
 
 
-    # - bash: docker login $(imageRegistry) --username {} --password {}
-    #   displayName: docker login
+    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+      displayName: docker login
+      env:
+        ACR_USERNAME: $(kv-acr-username)
+        ACR_PASSWORD: $(kv-acr-password)
 
-    # - bash: docker push $(imageName):$(imageTag)
+    # - bash: docker push $(dockerTag)
     #   displayName: docker push
 
-    # - bash: docker logout $(imageRegistry)
+    # - bash: docker logout $(dockerRegistry)
     #   displayName: docker logout
 
 
