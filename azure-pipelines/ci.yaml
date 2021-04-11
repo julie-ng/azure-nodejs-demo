@@ -102,8 +102,8 @@ stages:
   jobs:
   - job: Build
     steps:
-  - script: |
-      echo '[default] image-tag: $(image-tag)'
-      echo '[default] is-tag: $(is-tag)'
-      echo '[default] is-main: $(is-main)'
-    displayName: 'Debug: values'
+    - script: |
+        echo '[default] image-tag: $(image-tag)'
+        echo '[default] is-tag: $(is-tag)'
+        echo '[default] is-main: $(is-main)'
+      displayName: 'Debug: values'
