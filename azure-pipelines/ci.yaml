@@ -39,9 +39,6 @@ variables:
   # Docker@2 Task needes global scope 🙄
   # registryConnection: onazureio-registry-connection
 
-  # Az CLI task nedes global scope
-  # dockerRegistry: onazureio.azurecr.io
-
 stages:
 # - stage: Tests
 #   condition: not(${{ variables.isTag }})
@@ -91,28 +88,18 @@ stages:
         echo '[default] isTrustedCI: $(isTrustedCI)'
       displayName: 'Debug: values'
 
-    # - bash: docker build -t $(dockerTag) .
-    #   displayName: docker build
+    - bash: docker build -t $(dockerTag) .
+      displayName: docker build
 
-    # # - task: SnykSecurityScan@0
-    # #   displayName: Snyk Container Security Scan
-    # #   inputs:
-    # #     serviceConnectionEndpoint: 'snyk-api-connection'
-    # #     testType: 'container'
-    # #     dockerImageName: $(imageTag)
-    # #     dockerfilePath: 'Dockerfile'
-    # #     monitorOnBuild: true
-    # #     failOnIssues: true
-
-    # - task: AzureCLI@2
-    #   displayName: 'docker login'
-    #   inputs:
-    #     azureSubscription: 'nodejs-demo-rg-conn'
-    #     scriptType: bash
-    #     scriptLocation: inlineScript
-    #     inlineScript: |
-    #       az --version
-    #       az acr login --name $(dockerRegistry)
+    - task: SnykSecurityScan@0
+      displayName: Snyk Container Security Scan
+      inputs:
+        serviceConnectionEndpoint: 'snyk-api-connection'
+        testType: 'container'
+        dockerImageName: $(dockerTag)
+        dockerfilePath: 'Dockerfile'
+        monitorOnBuild: true
+        failOnIssues: true
 
     - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
       displayName: docker login
@@ -120,10 +107,10 @@ stages:
         ACR_USERNAME: $(kv-acr-username)
         ACR_PASSWORD: $(kv-acr-password)
 
-    # - bash: docker push $(dockerTag)
-    #   displayName: docker push
+    - bash: docker push $(dockerTag)
+      displayName: docker push
 
-    # - bash: docker logout $(dockerRegistry)
-    #   displayName: docker logout
+    - bash: docker logout $(dockerRegistry)
+      displayName: docker logout
 
 
