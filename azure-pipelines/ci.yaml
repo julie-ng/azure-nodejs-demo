@@ -89,34 +89,34 @@ stages:
     - name: dockerTag
       value: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
-    - bash: docker build -t $(dockerTag) .
-      displayName: docker build
+    # - bash: docker build -t $(dockerTag) .
+    #   displayName: docker build
 
-    - task: SnykSecurityScan@0
-      displayName: Snyk Container Security Scan
-      inputs:
-        serviceConnectionEndpoint: 'snyk-api-connection'
-        testType: 'container'
-        dockerImageName: $(dockerTag)
-        dockerfilePath: 'Dockerfile'
-        monitorOnBuild: true
-        failOnIssues: true
+    # - task: SnykSecurityScan@0
+    #   displayName: Snyk Container Security Scan
+    #   inputs:
+    #     serviceConnectionEndpoint: 'snyk-api-connection'
+    #     testType: 'container'
+    #     dockerImageName: $(dockerTag)
+    #     dockerfilePath: 'Dockerfile'
+    #     monitorOnBuild: true
+    #     failOnIssues: true
 
-    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-      displayName: registry login
-      env:
-        ACR_USERNAME: $(kv-acr-username)
-        ACR_PASSWORD: $(kv-acr-password)
+    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+    #   displayName: registry login
+    #   env:
+    #     ACR_USERNAME: $(kv-acr-username)
+    #     ACR_PASSWORD: $(kv-acr-password)
 
-    - bash: docker push $(dockerTag)
-      displayName: docker push
+    # - bash: docker push $(dockerTag)
+    #   displayName: docker push
 
-    - bash: docker logout $(dockerRegistry)
-      displayName: registry logout
+    # - bash: docker logout $(dockerRegistry)
+    #   displayName: registry logout
 
     - task: AzureCLI@2
       displayName: 'registry - lock prod image'
-      condition: ${{ variables.isTag }}
+      condition: true # ${{ variables.isTag }}
       inputs:
         azureSubscription: ${{ variables.armConnection }}
         scriptType: bash
