@@ -65,6 +65,8 @@ stages:
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
   - group: azure-demos-config
+  - name: acr-connection-name
+    vallue: 'onazureio-registry-connection'
   - name: imageName
     value: demos/azure-nodejs-demo
   - name: imageTag
@@ -100,7 +102,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: $(libVarAcrConnection) #'onazureio-registry-connection'
+        containerRegistry: $(acr-connection-name) #'onazureio-registry-connection'
 
     # - task: Docker@2
     #   displayName: docker push
