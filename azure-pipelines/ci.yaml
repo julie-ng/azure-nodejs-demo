@@ -3,10 +3,9 @@ name: $(BuildID)
 trigger:
   branches:
     include:
-    # - fix/*
-    # - feat/*
-    # - main
-    - feat/split-pipeline
+    - fix/*
+    - feat/*
+    - main
   tags:
     include:
     - v*
@@ -20,48 +19,58 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
-# schedules:
-#   - cron: "0 12 * * 0"
-#     displayName: Weekly Sunday build
-#     always: true
-#     branches:
-#       include:
-#       - main
+schedules:
+  - cron: "0 12 * * 0"
+    displayName: Weekly Sunday build
+    always: true
+    branches:
+      include:
+      - main
 
 variables:
-  isMain:       true # ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
   isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
   notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
   notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
-  # Docker@2 Task needes global scope 🙄
-  # registryConnection: onazureio-registry-connection
 
 stages:
-# - stage: Tests
-#   condition: not(${{ variables.isTag }})
-#   jobs:
-#   - job: Tests
-#     steps:
-#     - script: |
-#         echo 'hello world'
-#     - script: npm ci
-#       displayName: npm install
 
-#     - script: npm audit --audit-level=moderate
-#       displayName: npm audit (dev)
-#       continueOnError: true
+# Tests Stage
+# -----------
+# Skipped for tags, i.e. no new code
 
-#     - script: npm audit --production --audit-level=high
-#       displayName: npm audit (prod)
+- stage: Tests
+  condition: not(${{ variables.isTag }})
+  jobs:
+  - job: Tests
+    steps:
+    - script: |
+        echo 'hello world'
+    - script: npm ci
+      displayName: npm install
 
-#     - script: npm run lint
-#       displayName: linter
+    - script: npm audit --audit-level=moderate
+      displayName: npm audit (dev)
+      continueOnError: true
 
-#     - script: npm run test
-#       displayName: tests
+    - script: npm audit --production --audit-level=high
+      displayName: npm audit (prod)
+
+    - script: npm run lint
+      displayName: linter
+
+    - script: npm run test
+      displayName: tests
+
+
+# Build Stage
+# -----------
+# Runs if:
+# - push a tag starting with `v` (skips tests)
+# - push to main (if tests passed)
 
 - stage: Build
   displayName: Build Docker Image
@@ -80,14 +89,6 @@ stages:
     - name: dockerTag
       value: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
-    - bash: |
-        echo '[default] dockerTag: $(dockerTag)'
-        echo '[default] imageTag: $(imageTag)'
-        echo '[default] isTag: $(isTag)'
-        echo '[default] isMain: $(isMain)'
-        echo '[default] isTrustedCI: $(isTrustedCI)'
-      displayName: 'Debug: values'
-
     - bash: docker build -t $(dockerTag) .
       displayName: docker build
 
