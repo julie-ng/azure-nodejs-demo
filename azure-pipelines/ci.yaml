@@ -66,15 +66,15 @@ stages:
 - stage: Build
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
-  variables:
-    imageRegistry: onazureio.azurecr.io
-    imageRepo: demos/azure-nodejs-demo
-    ${{ if eq(variables.isTag, 'False') }}:
-      imageTag: dev
-    ${{ if eq(variables.isTag, 'True') }}:
-      imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
   jobs:
   - job: Build
+    variables:
+      imageRegistry:  onazureio.azurecr.io
+      imageRepo:      demos/azure-nodejs-demo
+      ${{ if eq(variables.isTag, 'False') }}:
+        imageTag: dev
+      ${{ if eq(variables.isTag, 'True') }}:
+        imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
     steps:
     - script: |
         echo '[default] imageRegistry: $(imageRegistry)'
