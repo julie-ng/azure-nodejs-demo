@@ -69,14 +69,6 @@ stages:
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
     - group: nodejs-demo-kv
-    # armConnection:  nodejs-demo-rg-conn
-    # dockerRegistry: nodejsdemo.azurecr.io
-    # imageName:      azure-nodejs-demo
-    # ${{ if eq(variables.isTag, 'False') }}:
-    #   imageTag: dev
-    # ${{ if eq(variables.isTag, 'True') }}:
-    #   imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-
   jobs:
   - job: Build
     variables:
