@@ -47,7 +47,7 @@ variables:
   - name: image-tag
     ${{ if eq(variables['is-tag'], 'True') }}:
       value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-    ${{ if not(variables['is-tag']) }}:
+    ${{ if eq(variables['is-tag'], 'False') }}:
       value: dev
 
     # ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/v')) }}:
