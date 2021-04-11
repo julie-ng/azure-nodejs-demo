@@ -115,7 +115,7 @@ stages:
       displayName: 'registry - lock prod image'
       condition: ${{ variables.isTag }}
       inputs:
-        azureSubscription: $(armConnection)
+        azureSubscription: ${{ variables.armConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
