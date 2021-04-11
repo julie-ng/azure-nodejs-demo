@@ -109,7 +109,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           az --version
-          az acr login --name $(dockerRegisry)
+          az acr login --name ${{ variables.dockerRegisry }}
 
     # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
     #   displayName: docker login
