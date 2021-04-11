@@ -41,7 +41,8 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - script: echo 'hello imageTag: $(imageTag)'
+    - script: |
+       echo 'hello imageTag: $(imageTag)'
     # - script: npm ci
     #   displayName: npm install
 
