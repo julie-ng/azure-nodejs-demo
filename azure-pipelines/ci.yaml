@@ -70,7 +70,7 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-    dockerRegistry: onazureio.azurecr.io
+    dockerRegistry: nodejsdemo.azurecr.io
     imageName:      azure-nodejs-demo
     ${{ if eq(variables.isTag, 'False') }}:
       imageTag: dev
@@ -104,21 +104,21 @@ stages:
     # #     monitorOnBuild: true
     # #     failOnIssues: true
 
-    - task: AzureCLI@2
-      displayName: 'docker login'
-      inputs:
-        azureSubscription: 'nodejs-demo-rg-conn'
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az --version
-          az acr login --name $(dockerRegistry)
+    # - task: AzureCLI@2
+    #   displayName: 'docker login'
+    #   inputs:
+    #     azureSubscription: 'nodejs-demo-rg-conn'
+    #     scriptType: bash
+    #     scriptLocation: inlineScript
+    #     inlineScript: |
+    #       az --version
+    #       az acr login --name $(dockerRegistry)
 
-    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-    #   displayName: docker login
-    #   env:
-    #     ACR_USERNAME: $(kv-acr-username)
-    #     ACR_PASSWORD: $(kv-acr-password)
+    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+      displayName: docker login
+      env:
+        ACR_USERNAME: $(kv-acr-username)
+        ACR_PASSWORD: $(kv-acr-password)
 
     # - bash: docker push $(dockerTag)
     #   displayName: docker push
