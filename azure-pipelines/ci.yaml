@@ -101,12 +101,21 @@ stages:
     # #     monitorOnBuild: true
     # #     failOnIssues: true
 
+    - task: AzureCLI@2
+      displayName: 'docker login'
+      inputs:
+        azureSubscription: 'nodejs-demo-rg-conn'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az --version
+          az acr login --name $(dockerRegisry)
 
-    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-      displayName: docker login
-      env:
-        ACR_USERNAME: $(kv-acr-username)
-        ACR_PASSWORD: $(kv-acr-password)
+    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+    #   displayName: docker login
+    #   env:
+    #     ACR_USERNAME: $(kv-acr-username)
+    #     ACR_PASSWORD: $(kv-acr-password)
 
     # - bash: docker push $(dockerTag)
     #   displayName: docker push
