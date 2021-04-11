@@ -29,24 +29,12 @@ pool:
 #       - main
 
 variables:
-  - name: isMain
-    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
-
-  - name: isTag
-    value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
-
-  - name: notFork
-    value: ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
-
-  - name: notPR
-    value: ${{ ne(variables['Build.Reason'], 'PullRequest') }}
-
-  - name: notSchedule
-    value: ${{ ne(variables['Build.Reason'], 'Schedule') }}
-
-  - name: isTrustedCI
-    value: ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
-
+  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+  notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
+  notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
+  notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
+  isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
 stages:
 - stage: Tests
