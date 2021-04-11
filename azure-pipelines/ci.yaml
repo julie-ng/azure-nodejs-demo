@@ -45,9 +45,9 @@ variables:
     value: ${{ and(variables['not-fork'], variables['not-schedule'], or(variables['is-tag'], variables['is-main'])) }}
 
   - name: image-tag
-    ${{ if variables['is-main'] }}:
+    ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
       value: dev
-    ${{ if variables['is-tag'] }}:
+    ${{ if eq(variables['Build.SourceBranch'], 'refs/tags/v') }}:
       value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
 
 steps:
