@@ -1,0 +1,12 @@
+variables:
+  armConnection:  nodejs-demo-rg-conn
+  dockerRegistry: nodejsdemo.azurecr.io
+  imageName:      azure-nodejs-demo
+  imageTag:       dev # default
+
+  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+  notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
+  notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
+  notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
+  isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}

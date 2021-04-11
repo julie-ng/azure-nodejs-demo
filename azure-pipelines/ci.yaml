@@ -28,13 +28,7 @@ schedules:
       - main
 
 variables:
-  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
-  isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
-  notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
-  notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
-  notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
-  isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
-
+- template: vars-global.yaml
 
 stages:
 
@@ -47,21 +41,22 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - script: npm ci
-      displayName: npm install
+    - script: echo 'hello imageTag: $(imageTag)'
+    # - script: npm ci
+    #   displayName: npm install
 
-    - script: npm audit --audit-level=moderate
-      displayName: npm audit (dev)
-      continueOnError: true
+    # - script: npm audit --audit-level=moderate
+    #   displayName: npm audit (dev)
+    #   continueOnError: true
 
-    - script: npm audit --production --audit-level=high
-      displayName: npm audit (prod)
+    # - script: npm audit --production --audit-level=high
+    #   displayName: npm audit (prod)
 
-    - script: npm run lint
-      displayName: linter
+    # - script: npm run lint
+    #   displayName: linter
 
-    - script: npm run test
-      displayName: tests
+    # - script: npm run test
+    #   displayName: tests
 
 
 # Build Stage
@@ -74,52 +69,56 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-    armConnection:  nodejs-demo-rg-conn
-    dockerRegistry: nodejsdemo.azurecr.io
-    imageName:      azure-nodejs-demo
-    ${{ if eq(variables.isTag, 'False') }}:
-      imageTag: dev
-    ${{ if eq(variables.isTag, 'True') }}:
-      imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+    - group: nodejs-demo-kv
+    # armConnection:  nodejs-demo-rg-conn
+    # dockerRegistry: nodejsdemo.azurecr.io
+    # imageName:      azure-nodejs-demo
+    # ${{ if eq(variables.isTag, 'False') }}:
+    #   imageTag: dev
+    # ${{ if eq(variables.isTag, 'True') }}:
+    #   imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
 
   jobs:
   - job: Build
     variables:
-    - group: nodejs-demo-kv
-    - name: dockerTag
-      value: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
+      ${{ if eq(variables.isTag, 'True') }}:
+        imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+      dockerTag: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
-    - bash: docker build -t $(dockerTag) .
-      displayName: docker build
+    - bash: |
+        echo 'imageTag: $(imageTag)'
+        echo 'dockerTag: $(dockerTag)'
+    # - bash: docker build -t $(dockerTag) .
+    #   displayName: docker build
 
-    - task: SnykSecurityScan@0
-      displayName: Snyk Container Security Scan
-      inputs:
-        serviceConnectionEndpoint: 'snyk-api-connection'
-        testType: 'container'
-        dockerImageName: $(dockerTag)
-        dockerfilePath: 'Dockerfile'
-        monitorOnBuild: true
-        failOnIssues: true
+    # - task: SnykSecurityScan@0
+    #   displayName: Snyk Container Security Scan
+    #   inputs:
+    #     serviceConnectionEndpoint: 'snyk-api-connection'
+    #     testType: 'container'
+    #     dockerImageName: $(dockerTag)
+    #     dockerfilePath: 'Dockerfile'
+    #     monitorOnBuild: true
+    #     failOnIssues: true
 
-    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-      displayName: registry login
-      env:
-        ACR_USERNAME: $(kv-acr-username)
-        ACR_PASSWORD: $(kv-acr-password)
+    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+    #   displayName: registry login
+    #   env:
+    #     ACR_USERNAME: $(kv-acr-username)
+    #     ACR_PASSWORD: $(kv-acr-password)
 
-    - bash: docker push $(dockerTag)
-      displayName: docker push
+    # - bash: docker push $(dockerTag)
+    #   displayName: docker push
 
-    - bash: docker logout $(dockerRegistry)
-      displayName: registry logout
+    # - bash: docker logout $(dockerRegistry)
+    #   displayName: registry logout
 
-    - task: AzureCLI@2
-      displayName: 'registry - lock prod image'
-      condition: ${{ variables.isTag }}
-      inputs:
-        azureSubscription: ${{ variables.armConnection }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
+    # - task: AzureCLI@2
+    #   displayName: 'registry - lock prod image'
+    #   condition: ${{ variables.isTag }}
+    #   inputs:
+    #     azureSubscription: ${{ variables.armConnection }}
+    #     scriptType: bash
+    #     scriptLocation: inlineScript
+    #     inlineScript: |
+    #       az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
