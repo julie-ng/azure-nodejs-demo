@@ -71,10 +71,10 @@ stages:
     - group: nodejs-demo-kv
   jobs:
   - job: Build
-    variables:
-      ${{ if eq(variables.isTag, 'True') }}:
-        imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-      dockerTag: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
+    # variables:
+    #   ${{ if eq(variables.isTag, 'True') }}:
+    #     imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+    #   dockerTag: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
     - bash: |
         echo 'imageTag: $(imageTag)'
