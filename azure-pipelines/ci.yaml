@@ -102,7 +102,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: $(acr-connection-name) #'onazureio-registry-connection'
+        containerRegistry: 'onazureio-registry-connection'
 
     # - task: Docker@2
     #   displayName: docker push
