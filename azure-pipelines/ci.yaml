@@ -100,7 +100,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: ${{ variables['lib-var-registry-connection' }} #'onazureio-registry-connection'
+        containerRegistry: ${{ variables['lib-var-registry-connection'] }} #'onazureio-registry-connection'
 
     # - task: Docker@2
     #   displayName: docker push
