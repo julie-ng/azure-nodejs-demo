@@ -41,23 +41,21 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - script: |
-       echo 'hello imageTag: $(imageTag)'
-    # - script: npm ci
-    #   displayName: npm install
+    - script: npm ci
+      displayName: npm install
 
-    # - script: npm audit --audit-level=moderate
-    #   displayName: npm audit (dev)
-    #   continueOnError: true
+    - script: npm audit --audit-level=moderate
+      displayName: npm audit (dev)
+      continueOnError: true
 
-    # - script: npm audit --production --audit-level=high
-    #   displayName: npm audit (prod)
+    - script: npm audit --production --audit-level=high
+      displayName: npm audit (prod)
 
-    # - script: npm run lint
-    #   displayName: linter
+    - script: npm run lint
+      displayName: linter
 
-    # - script: npm run test
-    #   displayName: tests
+    - script: npm run test
+      displayName: tests
 
 
 # Build Stage
@@ -89,37 +87,39 @@ stages:
     - bash: |
         echo 'imageTag: $(imageTag)'
         echo 'dockerTag: $(dockerTag)'
-    # - bash: docker build -t $(dockerTag) .
-    #   displayName: docker build
+      displayName: Debug Tags
 
-    # - task: SnykSecurityScan@0
-    #   displayName: Snyk Container Security Scan
-    #   inputs:
-    #     serviceConnectionEndpoint: 'snyk-api-connection'
-    #     testType: 'container'
-    #     dockerImageName: $(dockerTag)
-    #     dockerfilePath: 'Dockerfile'
-    #     monitorOnBuild: true
-    #     failOnIssues: true
+    - bash: docker build -t $(dockerTag) .
+      displayName: docker build
 
-    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-    #   displayName: registry login
-    #   env:
-    #     ACR_USERNAME: $(kv-acr-username)
-    #     ACR_PASSWORD: $(kv-acr-password)
+    - task: SnykSecurityScan@0
+      displayName: Snyk Container Security Scan
+      inputs:
+        serviceConnectionEndpoint: 'snyk-api-connection'
+        testType: 'container'
+        dockerImageName: $(dockerTag)
+        dockerfilePath: 'Dockerfile'
+        monitorOnBuild: true
+        failOnIssues: true
 
-    # - bash: docker push $(dockerTag)
-    #   displayName: docker push
+    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+      displayName: registry login
+      env:
+        ACR_USERNAME: $(kv-acr-username)
+        ACR_PASSWORD: $(kv-acr-password)
 
-    # - bash: docker logout $(dockerRegistry)
-    #   displayName: registry logout
+    - bash: docker push $(dockerTag)
+      displayName: docker push
 
-    # - task: AzureCLI@2
-    #   displayName: 'registry - lock prod image'
-    #   condition: ${{ variables.isTag }}
-    #   inputs:
-    #     azureSubscription: ${{ variables.armConnection }}
-    #     scriptType: bash
-    #     scriptLocation: inlineScript
-    #     inlineScript: |
-    #       az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
+    - bash: docker logout $(dockerRegistry)
+      displayName: registry logout
+
+    - task: AzureCLI@2
+      displayName: 'registry - lock prod image'
+      condition: ${{ variables.isTag }}
+      inputs:
+        azureSubscription: ${{ variables.armConnection }}
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
