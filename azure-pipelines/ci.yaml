@@ -68,7 +68,7 @@ stages:
 
 - stage: Build
   displayName: Build Docker Image
-  condition: true # or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
+  condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
     - group: nodejs-demo-kv
     # armConnection:  nodejs-demo-rg-conn
