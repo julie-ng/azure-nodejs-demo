@@ -74,6 +74,7 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
+    armConnection:  nodejs-demo-rg-conn
     dockerRegistry: nodejsdemo.azurecr.io
     imageName:      azure-nodejs-demo
     ${{ if eq(variables.isTag, 'False') }}:
@@ -102,7 +103,7 @@ stages:
         failOnIssues: true
 
     - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-      displayName: docker login
+      displayName: registry login
       env:
         ACR_USERNAME: $(kv-acr-username)
         ACR_PASSWORD: $(kv-acr-password)
@@ -110,7 +111,21 @@ stages:
     - bash: docker push $(dockerTag)
       displayName: docker push
 
+    - task: AzureCLI@2
+      displayName: 'registry - lock prod image'
+      condition: ${{ variables.isTag }}
+      inputs:
+        azureSubscription: $(armConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az --version
+          az acr repository update \
+            --name $(dockerRegistry) \
+            --image $(imageName):$(imageTag) \
+            --write-enabled false
+
     - bash: docker logout $(dockerRegistry)
-      displayName: docker logout
+      displayName: registry logout
 
 
