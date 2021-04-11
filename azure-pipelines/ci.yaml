@@ -49,9 +49,10 @@ variables:
 
 
 stages:
-- stage: Test
+- stage: Tests
+  condition: not(variables.isTag)
   jobs:
-  - job: Test
+  - job: Tests
     steps:
     - script: |
         echo 'debug test stage'
