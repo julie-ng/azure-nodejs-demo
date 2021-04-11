@@ -64,7 +64,7 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-  - group: azure-demos-config
+  # - group: azure-demos-config
   - name: acr-connection-name
     value: 'onazureio-registry-connection'
   - name: imageName
@@ -76,6 +76,8 @@ stages:
       value: dev
   jobs:
   - job: Build
+    variables:
+      - group: azure-demos-config
     steps:
     - script: |
         echo '[default] imageTag: $(imageTag)'
@@ -102,7 +104,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: 'onazureio-registry-connection'
+        containerRegistry: $(lib-var-registry-connection)
 
     # - task: Docker@2
     #   displayName: docker push
