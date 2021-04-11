@@ -88,7 +88,7 @@ stages:
         echo '[default] isTrustedCI: $(isTrustedCI)'
       displayName: 'Debug: values'
 
-    - bash: docker build -t $dockerTag .
+    - bash: docker build -t $(dockerTag) .
       displayName: docker build
 
     # # - task: SnykSecurityScan@0
