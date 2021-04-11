@@ -65,7 +65,7 @@ stages:
 # - push to main (if tests passed)
 
 - stage: Build
-  displayName: Build Docker Image
+  displayName: Docker - Build and Push
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
     - group: nodejs-demo-kv
@@ -87,13 +87,13 @@ stages:
     - bash: |
         echo 'imageTag: $(imageTag)'
         echo 'dockerTag: $(dockerTag)'
-      displayName: Debug Tags
+      displayName: Debug - Tags
 
     - bash: docker build -t $(dockerTag) .
-      displayName: docker build
+      displayName: docker - build
 
     - task: SnykSecurityScan@0
-      displayName: Snyk Container Security Scan
+      displayName: Snyk - security scan
       inputs:
         serviceConnectionEndpoint: 'snyk-api-connection'
         testType: 'container'
@@ -103,19 +103,19 @@ stages:
         failOnIssues: true
 
     - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-      displayName: registry login
+      displayName: registry - login
       env:
         ACR_USERNAME: $(kv-acr-username)
         ACR_PASSWORD: $(kv-acr-password)
 
     - bash: docker push $(dockerTag)
-      displayName: docker push
+      displayName: docker - push
 
     - bash: docker logout $(dockerRegistry)
-      displayName: registry logout
+      displayName: registry - logout
 
     - task: AzureCLI@2
-      displayName: 'registry - lock prod image'
+      displayName: 'registry - lock image (prod)'
       condition: ${{ variables.isTag }}
       inputs:
         azureSubscription: ${{ variables.armConnection }}
