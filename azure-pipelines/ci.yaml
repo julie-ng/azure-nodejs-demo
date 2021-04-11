@@ -1,0 +1,82 @@
+name: $(BuildID)
+
+trigger:
+  branches:
+    # - fix/*
+    # - feat/*
+    # - main
+    - feat/split-pipeline
+  tags:
+    - v*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# schedules:
+#   - cron: "0 12 * * 0"
+#     displayName: Weekly Sunday build
+#     always: true
+#     branches:
+#       include:
+#       - main
+
+variables:
+  - name: image-tag
+    value: 'dev'
+
+  - name: is-main
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+
+  - name: is-tag
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/tags/v') }}
+
+  - name: not-fork
+    value: ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
+
+  - name: not-schedule
+    value: ${{ ne(variables['Build.Reason'], 'Schedule') }}
+
+  - name: should-build
+    value: ${{ and(variables['not-fork'], variables['not-schedule'], or(variables['is-tag'], variables['is-main'])) }}
+
+  - name: image-tag
+    ${{ if variables['is-main'] }}:
+      value: dev
+    ${{ if variables['is-tag'] }}:
+      value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+
+steps:
+  - script: |
+      echo '[default] image-tag: $(image-tag)'
+      echo '[default] is-tag: $(is-tag)'
+      echo '[default] is-main: $(is-main)'
+    displayName: 'Debug: values'
+
+# - script: npm ci
+#   displayName: npm install
+
+# - script: npm audit --audit-level=moderate
+#   displayName: npm audit (Dev)
+#   continueOnError: true
+
+# - script: npm audit --production --audit-level=high
+#   displayName: npm audit (Prod)
+
+# - script: npm run lint
+#   displayName: linter
+
+# - script: npm run test
+#   displayName: tests
+
+# - script: docker build -t $(image-tag) .
+#   displayName: docker build
+
+# - task: SnykSecurityScan@0
+#   displayName: Snyk Container Security Scan
+#   inputs:
+#     serviceConnectionEndpoint: 'snyk-api-connection'
+#     testType: 'container'
+#     dockerImageName: $(image-tag)
+#     dockerfilePath: 'Dockerfile'
+#     monitorOnBuild: true
+#     failOnIssues: true
