@@ -37,7 +37,7 @@ variables:
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
   # Docker@2 Task needes global scope 🙄
-  dockerRegistry: onazureio-registry-connection
+  registryConnection: onazureio-registry-connection
 
 stages:
 # - stage: Tests
@@ -67,54 +67,45 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-    # acrHost: onazureio.azurecr.io/$(image-name)
-  - name: imageName
-    value: onazureio.azurecr.io/demos/azure-nodejs-demo
-  - name: imageTag
-    ${{ if eq(variables.isTag, 'True') }}:
-      value: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+    imageRegistry: onazureio.azurecr.io
+    imageRepo: demos/azure-nodejs-demo
     ${{ if eq(variables.isTag, 'False') }}:
-      value: dev
+      imageTag: dev
+    ${{ if eq(variables.isTag, 'True') }}:
+      imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
   jobs:
   - job: Build
     steps:
     - script: |
+        echo '[default] imageRegistry: $(imageRegistry)'
+        echo '[default] imageRepo: $(imageRepo)'
         echo '[default] imageTag: $(imageTag)'
-        echo '[default] name and tag: $(imageName):$(imageTag)'
         echo '[default] isTag: $(isTag)'
         echo '[default] isMain: $(isMain)'
         echo '[default] isTrustedCI: $(isTrustedCI)'
-        echo '[debug] lib-var-registry-connection: $(lib-var-registry-connection)'
       displayName: 'Debug: values'
 
-    - script: docker build -t $(imageName):$(imageTag) .
-      displayName: docker build
+    # - script: docker build -t $(imageName):$(imageTag) .
+    #   displayName: docker build
 
-    # - task: SnykSecurityScan@0
-    #   displayName: Snyk Container Security Scan
-    #   inputs:
-    #     serviceConnectionEndpoint: 'snyk-api-connection'
-    #     testType: 'container'
-    #     dockerImageName: $(imageTag)
-    #     dockerfilePath: 'Dockerfile'
-    #     monitorOnBuild: true
-    #     failOnIssues: true
+    # # - task: SnykSecurityScan@0
+    # #   displayName: Snyk Container Security Scan
+    # #   inputs:
+    # #     serviceConnectionEndpoint: 'snyk-api-connection'
+    # #     testType: 'container'
+    # #     dockerImageName: $(imageTag)
+    # #     dockerfilePath: 'Dockerfile'
+    # #     monitorOnBuild: true
+    # #     failOnIssues: true
 
-    - task: Docker@2
-      displayName: docker login (ACR)
-      inputs:
-        command: login
-        containerRegistry: $(dockerRegistry) # WTF, needs to be defined at global scope for task
 
-    - task: Docker@2
-      displayName: docker push
-      inputs:
-        command: push
-        tags: |
-          $(imageName):$(imageTag)
+    # - bash: docker login $(imageRegistry) --username {} --password {}
+    #   displayName: docker login
 
-    - task: Docker@2
-      displayName: docker logout (ACR)
-      inputs:
-        command: logout
-        containerRegistry: $(dockerRegistry)
+    # - bash: docker push $(imageName):$(imageTag)
+    #   displayName: docker push
+
+    # - bash: docker logout $(imageRegistry)
+    #   displayName: docker logout
+
+
