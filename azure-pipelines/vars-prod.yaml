@@ -1,0 +1,4 @@
+variables:
+  webAppName:    azure-nodejs-demo
+  blobContainer: nodejs
+  cdnEndpoint:   nodejsdemo-prod
