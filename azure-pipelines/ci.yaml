@@ -28,7 +28,7 @@ schedules:
       - main
 
 variables:
-  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isMain:       true # ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
   isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
   notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
@@ -42,26 +42,26 @@ stages:
 # -----------
 # Skipped for tags, i.e. no new code
 
-- stage: Tests
-  condition: not(${{ variables.isTag }})
-  jobs:
-  - job: Tests
-    steps:
-    - script: npm ci
-      displayName: npm install
+# - stage: Tests
+#   condition: not(${{ variables.isTag }})
+#   jobs:
+#   - job: Tests
+#     steps:
+#     - script: npm ci
+#       displayName: npm install
 
-    - script: npm audit --audit-level=moderate
-      displayName: npm audit (dev)
-      continueOnError: true
+#     - script: npm audit --audit-level=moderate
+#       displayName: npm audit (dev)
+#       continueOnError: true
 
-    - script: npm audit --production --audit-level=high
-      displayName: npm audit (prod)
+#     - script: npm audit --production --audit-level=high
+#       displayName: npm audit (prod)
 
-    - script: npm run lint
-      displayName: linter
+#     - script: npm run lint
+#       displayName: linter
 
-    - script: npm run test
-      displayName: tests
+#     - script: npm run test
+#       displayName: tests
 
 
 # Build Stage
@@ -111,6 +111,9 @@ stages:
     - bash: docker push $(dockerTag)
       displayName: docker push
 
+    - bash: docker logout $(dockerRegistry)
+      displayName: registry logout
+
     - task: AzureCLI@2
       displayName: 'registry - lock prod image'
       condition: ${{ variables.isTag }}
@@ -124,8 +127,3 @@ stages:
             --name $(dockerRegistry) \
             --image $(imageName):$(imageTag) \
             --write-enabled false
-
-    - bash: docker logout $(dockerRegistry)
-      displayName: registry logout
-
-
