@@ -37,26 +37,28 @@ variables:
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
 
 stages:
-- stage: Tests
-  condition: not(${{ variables.isTag }})
-  jobs:
-  - job: Tests
-    steps:
-    - script: npm ci
-      displayName: npm install
+# - stage: Tests
+#   condition: not(${{ variables.isTag }})
+#   jobs:
+#   - job: Tests
+#     steps:
+#     - script: |
+#         echo 'hello world'
+#     - script: npm ci
+#       displayName: npm install
 
-    - script: npm audit --audit-level=moderate
-      displayName: npm audit (Dev)
-      continueOnError: true
+#     - script: npm audit --audit-level=moderate
+#       displayName: npm audit (dev)
+#       continueOnError: true
 
-    - script: npm audit --production --audit-level=high
-      displayName: npm audit (Prod)
+#     - script: npm audit --production --audit-level=high
+#       displayName: npm audit (prod)
 
-    - script: npm run lint
-      displayName: linter
+#     - script: npm run lint
+#       displayName: linter
 
-    - script: npm run test
-      displayName: tests
+#     - script: npm run test
+#       displayName: tests
 
 - stage: Build
   displayName: Build Docker Image
@@ -78,26 +80,27 @@ stages:
         echo '[default] isTag: $(isTag)'
         echo '[default] isMain: $(isMain)'
         echo '[default] isTrustedCI: $(isTrustedCI)'
+        echo '[debug] lib-var-registry-connection: $(lib-var-registry-connection)'
       displayName: 'Debug: values'
 
-    - script: docker build -t $(imageTag) .
-      displayName: docker build
+    # - script: docker build -t $(imageTag) .
+    #   displayName: docker build
 
-    - task: SnykSecurityScan@0
-      displayName: Snyk Container Security Scan
-      inputs:
-        serviceConnectionEndpoint: 'snyk-api-connection'
-        testType: 'container'
-        dockerImageName: $(imageTag)
-        dockerfilePath: 'Dockerfile'
-        monitorOnBuild: true
-        failOnIssues: true
+    # - task: SnykSecurityScan@0
+    #   displayName: Snyk Container Security Scan
+    #   inputs:
+    #     serviceConnectionEndpoint: 'snyk-api-connection'
+    #     testType: 'container'
+    #     dockerImageName: $(imageTag)
+    #     dockerfilePath: 'Dockerfile'
+    #     monitorOnBuild: true
+    #     failOnIssues: true
 
     - task: Docker@2
-      displayName: Login to ACR
+      displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: ${{ variables['lib-var-registry-connection'] }}
+        containerRegistry: 'onazureio-registry-connection'
 
     # - task: Docker@2
     #   displayName: docker push
