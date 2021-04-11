@@ -1,17 +1,19 @@
 variables:
 
   # ARM
-  armConnection:  nodejs-demo-rg-conn
+  armConnection:    nodejs-demo-rg-conn
+  resourceGroup:    nodejs-demo-rg
+  cdnProfileNaame:  demoassetpipeline
 
   # Docker
-  dockerRegistry: nodejsdemo.azurecr.io
-  imageName:      azure-nodejs-demo
-  imageTag:       dev # default
+  dockerRegistry:   nodejsdemo.azurecr.io
+  imageName:        azure-nodejs-demo
+  imageTag:         dev # default
 
   # Pipeline conditions
-  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
-  isTag:        true # ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
-  notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
-  notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
-  notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
-  isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
+  isMain:           ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isTag:            ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+  notFork:          ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
+  notPR:            ${{ ne(variables['Build.Reason'], 'PullRequest') }}
+  notSchedule:      ${{ ne(variables['Build.Reason'], 'Schedule') }}
+  isTrustedCI:      ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
