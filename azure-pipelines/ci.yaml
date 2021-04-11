@@ -97,18 +97,18 @@ stages:
       displayName: Login to ACR
       inputs:
         command: login
-        containerRegistry: $(lib-var-registry-connection)
+        containerRegistry: ${{ variables['lib-var-registry-connection'] }}
 
-    - task: Docker@2
-      displayName: docker push
-      inputs:
-        command: push
-        repository: $(imageName)
-        tags: |
-          $(imageTag)
+    # - task: Docker@2
+    #   displayName: docker push
+    #   inputs:
+    #     command: push
+    #     repository: $(imageName)
+    #     tags: |
+    #       $(imageTag)
 
-    - task: Docker@2
-      displayName: Logout of ACR
-      inputs:
-        command: logout
-        containerRegistry: $(lib-var-registry-connection)
+    # - task: Docker@2
+    #   displayName: Logout of ACR
+    #   inputs:
+    #     command: logout
+    #     containerRegistry: $(lib-var-registry-connection)
