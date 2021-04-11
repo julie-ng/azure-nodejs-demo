@@ -66,7 +66,7 @@ stages:
   variables:
   - group: azure-demos-config
   - name: acr-connection-name
-    vallue: 'onazureio-registry-connection'
+    value: 'onazureio-registry-connection'
   - name: imageName
     value: demos/azure-nodejs-demo
   - name: imageTag
