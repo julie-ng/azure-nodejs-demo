@@ -28,7 +28,7 @@ schedules:
       - main
 
 variables:
-  isMain:       true # ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
   isTag:        ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   notFork:      ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
   notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
@@ -42,26 +42,26 @@ stages:
 # -----------
 # Skipped for tags, i.e. no new code
 
-# - stage: Tests
-#   condition: not(${{ variables.isTag }})
-#   jobs:
-#   - job: Tests
-#     steps:
-#     - script: npm ci
-#       displayName: npm install
+- stage: Tests
+  condition: not(${{ variables.isTag }})
+  jobs:
+  - job: Tests
+    steps:
+    - script: npm ci
+      displayName: npm install
 
-#     - script: npm audit --audit-level=moderate
-#       displayName: npm audit (dev)
-#       continueOnError: true
+    - script: npm audit --audit-level=moderate
+      displayName: npm audit (dev)
+      continueOnError: true
 
-#     - script: npm audit --production --audit-level=high
-#       displayName: npm audit (prod)
+    - script: npm audit --production --audit-level=high
+      displayName: npm audit (prod)
 
-#     - script: npm run lint
-#       displayName: linter
+    - script: npm run lint
+      displayName: linter
 
-#     - script: npm run test
-#       displayName: tests
+    - script: npm run test
+      displayName: tests
 
 
 # Build Stage
@@ -89,41 +89,37 @@ stages:
     - name: dockerTag
       value: ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
     steps:
-    # - bash: docker build -t $(dockerTag) .
-    #   displayName: docker build
+    - bash: docker build -t $(dockerTag) .
+      displayName: docker build
 
-    # - task: SnykSecurityScan@0
-    #   displayName: Snyk Container Security Scan
-    #   inputs:
-    #     serviceConnectionEndpoint: 'snyk-api-connection'
-    #     testType: 'container'
-    #     dockerImageName: $(dockerTag)
-    #     dockerfilePath: 'Dockerfile'
-    #     monitorOnBuild: true
-    #     failOnIssues: true
+    - task: SnykSecurityScan@0
+      displayName: Snyk Container Security Scan
+      inputs:
+        serviceConnectionEndpoint: 'snyk-api-connection'
+        testType: 'container'
+        dockerImageName: $(dockerTag)
+        dockerfilePath: 'Dockerfile'
+        monitorOnBuild: true
+        failOnIssues: true
 
-    # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-    #   displayName: registry login
-    #   env:
-    #     ACR_USERNAME: $(kv-acr-username)
-    #     ACR_PASSWORD: $(kv-acr-password)
+    - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+      displayName: registry login
+      env:
+        ACR_USERNAME: $(kv-acr-username)
+        ACR_PASSWORD: $(kv-acr-password)
 
-    # - bash: docker push $(dockerTag)
-    #   displayName: docker push
+    - bash: docker push $(dockerTag)
+      displayName: docker push
 
-    # - bash: docker logout $(dockerRegistry)
-    #   displayName: registry logout
+    - bash: docker logout $(dockerRegistry)
+      displayName: registry logout
 
     - task: AzureCLI@2
       displayName: 'registry - lock prod image'
-      condition: true # ${{ variables.isTag }}
+      condition: ${{ variables.isTag }}
       inputs:
         azureSubscription: ${{ variables.armConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-          az --version
-          az acr repository update \
-            --name $(dockerRegistry) \
-            --image $(imageName):$(imageTag) \
-            --write-enabled false
+          az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
