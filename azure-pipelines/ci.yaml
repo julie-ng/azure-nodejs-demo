@@ -29,9 +29,6 @@ pool:
 #       - main
 
 variables:
-  - name: image-tag
-    value: 'dev'
-
   - name: is-main
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
