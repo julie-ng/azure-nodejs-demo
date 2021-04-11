@@ -77,7 +77,8 @@ stages:
   jobs:
   - job: Build
     variables:
-      - group: azure-demos-config
+      # - group: azure-demos-config
+      connectionName: onazureio-registry-connection
     steps:
     - script: |
         echo '[default] imageTag: $(imageTag)'
@@ -104,7 +105,7 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: $(lib-var-registry-connection)
+        containerRegistry: $(connectionName)
 
     # - task: Docker@2
     #   displayName: docker push
