@@ -35,7 +35,9 @@ variables:
   notPR:        ${{ ne(variables['Build.Reason'], 'PullRequest') }}
   notSchedule:  ${{ ne(variables['Build.Reason'], 'Schedule') }}
   isTrustedCI:  ${{ and(variables.notFork, variables.notPR, variables.notSchedule) }}
-  globalConnectionName: onazureio-registry-connection
+
+  # Docker@2 Task needes global scope 🙄
+  dockerRegistry: onazureio-registry-connection
 
 stages:
 # - stage: Tests
@@ -65,9 +67,6 @@ stages:
   displayName: Build Docker Image
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
-  # - group: azure-demos-config
-  - name: acr-connection-name
-    value: 'onazureio-registry-connection'
   - name: imageName
     value: demos/azure-nodejs-demo
   - name: imageTag
@@ -77,9 +76,6 @@ stages:
       value: dev
   jobs:
   - job: Build
-    variables:
-      # - group: azure-demos-config
-      connectionName: onazureio-registry-connection
     steps:
     - script: |
         echo '[default] imageTag: $(imageTag)'
@@ -89,8 +85,8 @@ stages:
         echo '[debug] lib-var-registry-connection: $(lib-var-registry-connection)'
       displayName: 'Debug: values'
 
-    # - script: docker build -t $(imageTag) .
-    #   displayName: docker build
+    - script: docker build -t $(imageTag) .
+      displayName: docker build
 
     # - task: SnykSecurityScan@0
     #   displayName: Snyk Container Security Scan
@@ -106,18 +102,18 @@ stages:
       displayName: docker login (ACR)
       inputs:
         command: login
-        containerRegistry: $(globalConnectionName)
+        containerRegistry: $(dockerRegistry) # WTF, needs to be defined at global scope for task
 
-    # - task: Docker@2
-    #   displayName: docker push
-    #   inputs:
-    #     command: push
-    #     repository: $(imageName)
-    #     tags: |
-    #       $(imageTag)
+    - task: Docker@2
+      displayName: docker push
+      inputs:
+        command: push
+        repository: $(imageName)
+        tags: |
+          $(imageTag)
 
-    # - task: Docker@2
-    #   displayName: Logout of ACR
-    #   inputs:
-    #     command: logout
-    #     containerRegistry: $(lib-var-registry-connection)
+    - task: Docker@2
+      displayName: docker logout (ACR)
+      inputs:
+        command: logout
+        containerRegistry: $(dockerRegistry)
