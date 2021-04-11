@@ -47,8 +47,6 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - script: |
-        echo 'hello world'
     - script: npm ci
       displayName: npm install
 
@@ -82,6 +80,7 @@ stages:
       imageTag: dev
     ${{ if eq(variables.isTag, 'True') }}:
       imageTag: ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
+
   jobs:
   - job: Build
     variables:
