@@ -2,12 +2,20 @@ name: $(BuildID)
 
 trigger:
   branches:
+    include:
     # - fix/*
     # - feat/*
     # - main
     - feat/split-pipeline
   tags:
+    include:
     - v*
+  paths:
+    exclude:
+    - README.md
+
+pr:
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
