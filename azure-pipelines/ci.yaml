@@ -50,7 +50,8 @@ variables:
 
 stages:
 - stage: Tests
-  condition: eq(variables.isTag, false)
+  # condition: eq(variables.isTag, false) # not(variables.isTag) does not work 🤷‍♀️
+  condition: not(${{ variables.isTag }}) # not(variables.isTag) does not work 🤷‍♀️
   jobs:
   - job: Tests
     steps:
@@ -92,7 +93,7 @@ stages:
   # condition: or(eq(variables.isTag, true), and(succeeded(), variables.isMain, variables.internalCI))
 - stage: Build
   displayName: Build Docker Image
-  condition: or(variables.isTag, and(succeeded(), variables.isMain, variables.isTrustedCI))
+  condition: or(eq(variables.isTag, true), and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
   variables:
   - group: azure-demos-config
   - name: image-tag
@@ -105,6 +106,7 @@ stages:
     steps:
     - script: |
         echo '[default] image-tag: $(image-tag)'
-        echo '[default] is-tag: $(is-tag)'
-        echo '[default] is-main: $(is-main)'
+        echo '[default] isTag: $(isTag)'
+        echo '[default] isMain: $(isMain)'
+        echo '[default] isTrustedCI: $(isTrustedCI)'
       displayName: 'Debug: values'
