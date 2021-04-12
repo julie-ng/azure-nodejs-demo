@@ -5,20 +5,23 @@ jobs:
   - template: ../steps/debug.yaml
 
   - bash: |
-      npm ci
-      npm run compile-sass
-      docker build -t $(dockerTag) .
-    displayName: docker - build
+      exit 1
+    displayName: confirm push does not run if this fails
+  # - bash: |
+  #     npm ci
+  #     npm run compile-sass
+  #     docker build -t $(dockerTag) .
+  #   displayName: docker - build
 
-  - task: SnykSecurityScan@0
-    displayName: Snyk - security scan
-    inputs:
-      serviceConnectionEndpoint: 'snyk-api-connection'
-      testType: 'container'
-      dockerImageName: $(dockerTag)
-      dockerfilePath: 'Dockerfile'
-      monitorOnBuild: true
-      failOnIssues: true
+  # - task: SnykSecurityScan@0
+  #   displayName: Snyk - security scan
+  #   inputs:
+  #     serviceConnectionEndpoint: 'snyk-api-connection'
+  #     testType: 'container'
+  #     dockerImageName: $(dockerTag)
+  #     dockerfilePath: 'Dockerfile'
+  #     monitorOnBuild: true
+  #     failOnIssues: true
 
 - job: DockerPush
   displayName: Push
