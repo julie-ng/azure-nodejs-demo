@@ -25,3 +25,8 @@ variables:
   ${{ if eq(variables.isTag, 'True') }}:
     imageTag:       ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
   dockerTag:        ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
+
+  # To be overwritten by dev.yaml or prod.yaml
+  webAppName:    unset
+  blobContainer: unset
+  cdnEndpoint:   unset
