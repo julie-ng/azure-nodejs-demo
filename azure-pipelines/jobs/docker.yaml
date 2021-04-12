@@ -1,8 +1,7 @@
 jobs:
-- job: DockerJob
-  displayName: Build, Scan and Push
+- job: DockerBuild
+  displayName: Build and Scan
   steps:
-
   - template: ../steps/debug.yaml
 
   - bash: |
@@ -21,6 +20,13 @@ jobs:
       monitorOnBuild: true
       failOnIssues: true
 
+- job: DockerPush
+  displayName: Push
+  variables:
+  - group: nodejs-demo-kv
+  steps:
+  - template: ../steps/debug.yaml
+
   # See README.md about why `docker login`
   - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
     displayName: registry - login
@@ -36,7 +42,7 @@ jobs:
 
   - task: AzureCLI@2
     displayName: 'registry - lock image (prod)'
-    condition: ${{ eq(variables.isTag, 'True') }}
+    condition: eq(variables.isTag, 'True')
     inputs:
       azureSubscription: $(armConnection)
       scriptType: bash

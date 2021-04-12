@@ -47,11 +47,10 @@ stages:
   displayName: Build (Docker)
   condition: or(variables.isTag, and(succeeded('TestsStage'), variables.isMain, variables.isTrustedCI))
   variables:
-    - group: nodejs-demo-kv
-    - ${{ if eq(variables.isMain, 'True') }}:
-      - template: vars/dev.yaml
-    - ${{ if eq(variables.isProduction, 'True') }}:
-      - template: vars/prod.yaml
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/dev.yaml
+  - ${{ if eq(variables.isProduction, 'True') }}:
+    - template: vars/prod.yaml
   jobs:
   - template: jobs/docker.yaml
 
