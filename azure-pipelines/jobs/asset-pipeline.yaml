@@ -1,13 +1,21 @@
+parameters:
+- name: webAppName
+  default: ''
+- name: blobContainer
+  default: ''
+- name: cdnEndpoint
+  default: ''
+
 jobs:
 - job: AssetPipeline
   displayName: Asset Pipeline
 
   variables:
   - template: ../vars/global.yaml
-  - ${{ if eq(lower(variables.isMain), 'true') }}:
-    - template: ../vars/dev.yaml
-  - ${{ if eq(lower(variables.isProduction), 'true') }}:
-    - template: ../vars/prod.yaml
+  # - ${{ if eq(lower(variables.isMain), 'true') }}:
+  #   - template: ../vars/dev.yaml
+  # - ${{ if eq(lower(variables.isProduction), 'true') }}:
+  #   - template: ../vars/prod.yaml
 
   steps:
   - template: ../steps/debug.yaml
@@ -29,7 +37,7 @@ jobs:
         az storage blob upload-batch \
           --account-name $(storageAccount) \
           --source ./assets \
-          --destination $(blobContainer)
+          --destination $(parameters.blobContainer)
 
 # az cdn endpoint purge \
 #   --resource-group $(resourceGroup) \
