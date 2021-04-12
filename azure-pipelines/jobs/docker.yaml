@@ -22,7 +22,7 @@ jobs:
 
 - job: DockerPush
   displayName: Push
-  condition: succeeded('BuildAndScan')
+  dependsOn: BuildAndScan
   # variables:
   # - group: nodejs-demo-kv
   steps:
