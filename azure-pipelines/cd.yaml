@@ -46,9 +46,9 @@ stages:
   # --------------
   - template: jobs/asset-pipeline.yaml
     parameters:
-      isMain: true
-      # ${{ if eq(variables.isMain, 'True') }}:
-      #   isMain: true
+      isProduction: ${{ variables.isProduction }}
+      ${{ if eq(variables.isMain, 'True') }}:
+        isMain: true
       # ${{ if eq(variables.isProduction, 'True') }}:
       #   isProduction: true
   # - job: AssetPipeline

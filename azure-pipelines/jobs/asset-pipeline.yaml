@@ -1,10 +1,10 @@
 parameters:
-- name: webAppName
-  default: ''
-- name: blobContainer
-  default: ''
-- name: cdnEndpoint
-  default: ''
+# - name: webAppName
+#   default: ''
+# - name: blobContainer
+#   default: ''
+# - name: cdnEndpoint
+#   default: ''
 - name: isMain
   default: ''
 - name: isProduction
@@ -15,10 +15,9 @@ jobs:
   displayName: Asset Pipeline
 
   variables:
-  # - template: ../vars/global.yaml
-  - ${{ if eq(parameters.isMain, 'true') }}:
+  - ${{ if eq(lower(parameters.isMain), 'true') }}:
     - template: ../vars/dev.yaml
-  - ${{ if eq(lower(variables.isProduction), 'true') }}:
+  - ${{ if eq(lower(parameters.isProduction), 'true') }}:
     - template: ../vars/prod.yaml
 
   steps:
