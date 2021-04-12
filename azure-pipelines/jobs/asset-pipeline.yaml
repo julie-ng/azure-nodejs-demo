@@ -12,18 +12,20 @@ jobs:
 
   variables:
   - template: ../vars/global.yaml
-  # - ${{ if eq(lower(variables.isMain), 'true') }}:
-  #   - template: ../vars/dev.yaml
-  # - ${{ if eq(lower(variables.isProduction), 'true') }}:
-  #   - template: ../vars/prod.yaml
+  - ${{ if eq(lower(variables.isMain), 'true') }}:
+    - template: ../vars/dev.yaml
+  - ${{ if eq(lower(variables.isProduction), 'true') }}:
+    - template: ../vars/prod.yaml
 
   steps:
   - template: ../steps/debug.yaml
   - script: |
-      echo 'webAppName - ${{ parameters.webAppName }}'
-      echo 'blobContainer - ${{ parameters.blobContainer }}'
-      echo 'cdnEndpoint - ${{ parameters.cdnEndpoint }}'
-    displayName: debug
+      echo 'isMain - $(isMain)'
+      echo 'isProduction - $(isProduction)'
+      echo 'webAppName - $(webAppName)'
+      echo 'blobContainer - $(blobContainer)'
+      echo 'cdnEndpoint - $(cdnEndpoint)'
+    displayName: Debug
   # - script: |
   #     npm ci
   #     npm run compile-sass

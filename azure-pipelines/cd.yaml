@@ -46,14 +46,11 @@ stages:
   # --------------
   - template: jobs/asset-pipeline.yaml
     parameters:
-      webAppName:    $(variables.webAppName)
-      blobContainer: ${{ variables.blobContainer }}
-      cdnEndpoint:   $[variables.cdnEndpoint]
-    # parameters:
-    #   ${{ if eq(variables.isMain, 'True') }}:
-    #     isMain: true
-    #   ${{ if eq(variables.isProduction, 'True') }}:
-    #     isProduction: true
+      isMain: true
+      # ${{ if eq(variables.isMain, 'True') }}:
+      #   isMain: true
+      # ${{ if eq(variables.isProduction, 'True') }}:
+      #   isProduction: true
   # - job: AssetPipeline
   #   steps:
   #   - template: steps/debug.yaml
