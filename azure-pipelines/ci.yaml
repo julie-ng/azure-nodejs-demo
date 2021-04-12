@@ -57,8 +57,8 @@ stages:
   jobs:
   # - template: jobs/docker.yaml
   - job:
-      steps:
-        - template: steps/debug.yaml
+    steps:
+      - template: steps/debug.yaml
 
   # Deploy
   # ------
