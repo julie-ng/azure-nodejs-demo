@@ -30,14 +30,15 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         az --version
+        az storage container list --account-name ${{ variables.storageAccount }} -o table
+        az storage container list --account-name $(storageAccount) -o table
+# az storage blob upload-batch \
+#   --account-name $(storageAccount) \
+#   --source ./assets \
+#   --destination $(blobContainer)
 
-        az storage blob upload-batch \
-          --account-name $(storageAccount) \
-          --source ./assets \
-          --destination $(blobContainer)
-
-        az cdn endpoint purge \
-          --resource-group $(resourceGroup) \
-          --name $(cdnEndpoint) \
-          --profile-name $(cdnProfileName) \
-          --content-paths '/css/*' '/images/*'
+# az cdn endpoint purge \
+#   --resource-group $(resourceGroup) \
+#   --name $(cdnEndpoint) \
+#   --profile-name $(cdnProfileName) \
+#   --content-paths '/css/*' '/images/*'
