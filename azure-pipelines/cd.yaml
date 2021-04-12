@@ -12,10 +12,6 @@ pool:
 
 variables:
 - template: vars/global.yaml
-# - ${{ if eq(variables.isMain, 'True') }}:
-#   - template: vars/dev.yaml
-# - ${{ if eq(variables.isProduction, 'True') }}:
-#   - template: vars/prod.yaml
 
 stages:
 - stage: Deployment
@@ -28,5 +24,5 @@ stages:
     - template: vars/prod.yaml
 
   jobs:
-  - template: jobs/deploy.yaml
+  - template: jobs/app-service.yaml
   - template: jobs/asset-pipeline.yaml

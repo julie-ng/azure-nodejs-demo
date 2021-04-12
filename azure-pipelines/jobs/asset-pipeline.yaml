@@ -5,34 +5,34 @@ jobs:
 
   - template: ../steps/debug.yaml
 
-  # - script: |
-  #     npm ci
-  #     npm run compile-sass
-  #   displayName: Compile CSS
+  - script: |
+      npm ci
+      npm run compile-sass
+    displayName: Compile CSS
 
-  # - task: AzureCLI@2
-  #   displayName: Upload to Blob Storage
-  #   inputs:
-  #     azureSubscription: $(armConnection)
-  #     scriptType: bash
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az version
-  #       az storage blob upload-batch \
-  #         --account-name $(storageAccount) \
-  #         --source ./assets \
-  #         --destination $(blobContainer)
+  - task: AzureCLI@2
+    displayName: Upload to Blob Storage
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az version
+        az storage blob upload-batch \
+          --account-name $(storageAccount) \
+          --source ./assets \
+          --destination $(blobContainer)
 
-  # - task: AzureCLI@2
-  #   displayName: Purge Cache
-  #   inputs:
-  #     azureSubscription: $(armConnection)
-  #     scriptType: bash
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az version
-  #       az cdn endpoint purge \
-  #         --resource-group $(resourceGroup) \
-  #         --name $(cdnEndpoint) \
-  #         --profile-name $(cdnProfileName) \
-  #         --content-paths '/css/*' '/images/*'
+  - task: AzureCLI@2
+    displayName: Purge Cache
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az version
+        az cdn endpoint purge \
+          --resource-group $(resourceGroup) \
+          --name $(cdnEndpoint) \
+          --profile-name $(cdnProfileName) \
+          --content-paths '/css/*' '/images/*'
