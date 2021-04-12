@@ -14,7 +14,6 @@ jobs:
     - template: vars/prod.yaml
   steps:
   - template: steps/debug.yaml
-  - template: steps/asset-pipeline.yaml
     parameters:
       blobContainer: ${{ variables.blobContainer }}
       cdnEndpoint: ${{ variables.cdnEndpoint }}
