@@ -1,0 +1,44 @@
+parameters:
+- name: isMain
+  default: false
+- name: isProduction
+  default: false
+
+jobs:
+- job: AssetPipeline
+  variables:
+  - template: vars/global.yaml
+  - ${{ if eq(parameters.isMain, 'True') }}:
+    - template: vars/dev.yaml
+  - ${{ if eq(parameters.isProduction, 'True') }}:
+    - template: vars/prod.yaml
+  steps:
+  - template: steps/debug.yaml
+  - template: steps/asset-pipeline.yaml
+    parameters:
+      blobContainer: ${{ variables.blobContainer }}
+      cdnEndpoint: ${{ variables.cdnEndpoint }}
+  - script: |
+      npm ci
+      npm run compile-sass
+    displayName: 'Compile Sass to CSS'
+
+  - task: AzureCLI@2
+    displayName: Assets - Upload and Purge Cache
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az --version
+
+        az storage blob upload-batch \
+          --account-name $(storageAccount) \
+          --source ./assets \
+          --destination $(blobContainer)
+
+        az cdn endpoint purge \
+          --resource-group $(resourceGroup) \
+          --name $(cdnEndpoint) \
+          --profile-name $(cdnProfileName) \
+          --content-paths '/css/*' '/images/*'
