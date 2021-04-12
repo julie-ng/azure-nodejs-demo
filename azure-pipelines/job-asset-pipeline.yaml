@@ -8,15 +8,12 @@ jobs:
 - job: AssetPipeline
   variables:
   - template: vars/global.yaml
-  - ${{ if eq(parameters.isMain, 'True') }}:
+  - ${{ if eq(lower(parameters.isMain), 'true') }}:
     - template: vars/dev.yaml
-  - ${{ if eq(parameters.isProduction, 'True') }}:
+  - ${{ if eq(lower(parameters.isProduction), 'true') }}:
     - template: vars/prod.yaml
   steps:
   - template: steps/debug.yaml
-    parameters:
-      blobContainer: ${{ variables.blobContainer }}
-      cdnEndpoint: ${{ variables.cdnEndpoint }}
   - script: |
       npm ci
       npm run compile-sass
@@ -30,7 +27,6 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         az --version
-        az storage container list --account-name ${{ variables.storageAccount }} -o table
         az storage container list --account-name $(storageAccount) -o table
 # az storage blob upload-batch \
 #   --account-name $(storageAccount) \

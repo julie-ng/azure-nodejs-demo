@@ -49,7 +49,7 @@ stages:
       ${{ if eq(variables.isMain, 'True') }}:
         isMain: true
       ${{ if eq(variables.isProduction, 'True') }}:
-        isProduction: True
+        isProduction: true
   # - job: AssetPipeline
   #   steps:
   #   - template: steps/debug.yaml
