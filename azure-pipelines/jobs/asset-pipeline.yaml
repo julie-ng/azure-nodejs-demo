@@ -5,6 +5,10 @@ parameters:
   default: ''
 - name: cdnEndpoint
   default: ''
+- name: isMain
+  default: ''
+- name: isProduction
+  default: ''
 
 jobs:
 - job: AssetPipeline
