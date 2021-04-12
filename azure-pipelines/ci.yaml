@@ -30,12 +30,6 @@ schedules:
 
 variables:
 - template: vars/global.yaml
-  # variables:
-- ${{ if eq(variables.isMain, 'True') }}:
-  - template: vars/dev.yaml
-- ${{ if eq(variables.isProduction, 'True') }}:
-  - template: vars/prod.yaml
-
 
 stages:
 
@@ -45,10 +39,7 @@ stages:
   displayName: Tests (Node.js)
   condition: eq(variables.isTag, 'False')
   jobs:
-  # - template: jobs/tests.yaml
-  - job:
-    steps:
-      - template: steps/debug.yaml
+  - template: jobs/tests.yaml
 
 # Build
 # -----
@@ -61,24 +52,18 @@ stages:
   - ${{ if eq(variables.isProduction, 'True') }}:
     - template: vars/prod.yaml
   jobs:
-  # - template: jobs/docker.yaml
-  - job:
-    steps:
-      - template: steps/debug.yaml
+  - template: jobs/docker.yaml
 
   # Deploy
   # ------
 - stage: DeployStage
   displayName: Deploy (App Service)
   condition: and(succeeded(), eq(variables.deployMain,'True'))
-  # variables:
-  # - ${{ if eq(variables.isMain, 'True') }}:
-  #   - template: vars/dev.yaml
-  # - ${{ if eq(variables.isProduction, 'True') }}:
-  #   - template: vars/prod.yaml
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/dev.yaml
+  - ${{ if eq(variables.isProduction, 'True') }}:
+    - template: vars/prod.yaml
   jobs:
-  # - template: jobs/app-service.yaml
-  # - template: jobs/asset-pipeline.yaml
-  - job:
-    steps:
-      - template: steps/debug.yaml
+  - template: jobs/app-service.yaml
+  - template: jobs/asset-pipeline.yaml
