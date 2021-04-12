@@ -1,23 +1,26 @@
-parameters:
-- name: isMain
-  default: false
-- name: isProduction
-  default: false
+# parameters:
+# - name: isMain
+#   default: false
+# - name: isProduction
+#   default: false
 
 jobs:
 - job: AssetPipeline
+  displayName: Asset Pipeline
+
   variables:
   - template: ../vars/global.yaml
-  - ${{ if eq(lower(parameters.isMain), 'true') }}:
+  - ${{ if eq(lower(variables.isMain), 'true') }}:
     - template: ../vars/dev.yaml
-  - ${{ if eq(lower(parameters.isProduction), 'true') }}:
+  - ${{ if eq(lower(variables.isProduction), 'true') }}:
     - template: ../vars/prod.yaml
+
   steps:
   - template: ../steps/debug.yaml
-  - script: |
-      npm ci
-      npm run compile-sass
-    displayName: 'Compile Sass to CSS'
+  # - script: |
+  #     npm ci
+  #     npm run compile-sass
+  #   displayName: 'Compile Sass to CSS'
 
   - task: AzureCLI@2
     displayName: Assets - Upload and Purge Cache
