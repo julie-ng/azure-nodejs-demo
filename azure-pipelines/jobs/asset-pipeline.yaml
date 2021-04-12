@@ -19,25 +19,29 @@ jobs:
 
   steps:
   - template: ../steps/debug.yaml
-
   - script: |
-      npm ci
-      npm run compile-sass
-    displayName: 'Compile Sass to CSS'
+      echo 'webAppName - ${{ parameters.webAppName }}'
+      echo 'blobContainer - ${{ parameters.blobContainer }}'
+      echo 'cdnEndpoint - ${{ parameters.cdnEndpoint }}'
+    dislayName: debug
+  # - script: |
+  #     npm ci
+  #     npm run compile-sass
+  #   displayName: 'Compile Sass to CSS'
 
-  - task: AzureCLI@2
-    displayName: Assets - Upload and Purge Cache
-    inputs:
-      azureSubscription: $(armConnection)
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        az --version
-        az storage container list --account-name $(storageAccount) -o table
-        az storage blob upload-batch \
-          --account-name $(storageAccount) \
-          --source ./assets \
-          --destination ${{ parameters.blobContainer }}
+  # - task: AzureCLI@2
+  #   displayName: Assets - Upload and Purge Cache
+  #   inputs:
+  #     azureSubscription: $(armConnection)
+  #     scriptType: bash
+  #     scriptLocation: inlineScript
+  #     inlineScript: |
+  #       az --version
+  #       az storage container list --account-name $(storageAccount) -o table
+  #       az storage blob upload-batch \
+  #         --account-name $(storageAccount) \
+  #         --source ./assets \
+  #         --destination ${{ parameters.blobContainer }}
 
 # az cdn endpoint purge \
 #   --resource-group $(resourceGroup) \

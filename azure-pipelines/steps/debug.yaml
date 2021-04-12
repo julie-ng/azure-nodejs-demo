@@ -21,4 +21,4 @@ steps:
     echo 'blobContainer:  $(blobContainer)'
     echo 'cdnEndpoint:    $(cdnEndpoint)'
     echo ''
-  displayName: Debug - Tags
+  displayName: Debug - Variables
