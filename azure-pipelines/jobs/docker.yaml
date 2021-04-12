@@ -5,29 +5,24 @@ jobs:
   - template: ../steps/debug.yaml
 
   - bash: |
-      exit 1
-    displayName: confirm push does not run if this fails
-  # - bash: |
-  #     npm ci
-  #     npm run compile-sass
-  #     docker build -t $(dockerTag) .
-  #   displayName: docker - build
+      npm ci
+      npm run compile-sass
+      docker build -t $(dockerTag) .
+    displayName: docker - build
 
-  # - task: SnykSecurityScan@0
-  #   displayName: Snyk - security scan
-  #   inputs:
-  #     serviceConnectionEndpoint: 'snyk-api-connection'
-  #     testType: 'container'
-  #     dockerImageName: $(dockerTag)
-  #     dockerfilePath: 'Dockerfile'
-  #     monitorOnBuild: true
-  #     failOnIssues: true
+  - task: SnykSecurityScan@0
+    displayName: Snyk - security scan
+    inputs:
+      serviceConnectionEndpoint: 'snyk-api-connection'
+      testType: 'container'
+      dockerImageName: $(dockerTag)
+      dockerfilePath: 'Dockerfile'
+      monitorOnBuild: true
+      failOnIssues: true
 
 - job: DockerPush
   displayName: Push
   dependsOn: BuildAndScan
-  # variables:
-  # - group: nodejs-demo-kv
   steps:
   - template: ../steps/debug.yaml
 
@@ -55,19 +50,6 @@ jobs:
     inputs:
       command: logout
       containerRegistry: $(acrConnection)
-
-  # # See README.md about why `docker login`
-  # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-  #   displayName: registry - login
-  #   env:
-  #     ACR_USERNAME: $(kv-acr-username)
-  #     ACR_PASSWORD: $(kv-acr-password)
-
-  # - bash: docker push $(dockerTag)
-  #   displayName: docker - push
-
-  # - bash: docker logout $(dockerRegistry)
-  #   displayName: registry - logout
 
   - task: AzureCLI@2
     displayName: 'registry - lock image (prod)'

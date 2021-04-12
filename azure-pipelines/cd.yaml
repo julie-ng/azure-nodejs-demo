@@ -2,8 +2,6 @@ name: $(BuildID)
 
 trigger:
 - production
-# - main
-# - refactor/more-ci
 
 pr: none
 
@@ -25,4 +23,4 @@ stages:
 
   jobs:
   - template: jobs/app-service.yaml
-  # - template: jobs/asset-pipeline.yaml # Re-enable later. CDN purge takes forever.
+  - template: jobs/asset-pipeline.yaml

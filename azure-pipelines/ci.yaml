@@ -35,7 +35,7 @@ stages:
 
 # Tests
 # -----
-- stage: TestsStage
+- stage: TestStage
   displayName: Tests (Node.js)
   condition: eq(variables.isTag, 'False')
   jobs:
@@ -45,7 +45,7 @@ stages:
 # -----
 - stage: DockerStage
   displayName: Build (Docker)
-  condition: or(variables.isTag, and(succeeded('TestsStage'), variables.isMain, variables.isTrustedCI))
+  condition: or(variables.isTag, and(succeeded('TestStage'), variables.isMain, variables.isTrustedCI))
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
@@ -66,4 +66,4 @@ stages:
     - template: vars/prod.yaml
   jobs:
   - template: jobs/app-service.yaml
-  # - template: jobs/asset-pipeline.yaml # Re-enable later. CDN purge takes forever.
+  - template: jobs/asset-pipeline.yaml
