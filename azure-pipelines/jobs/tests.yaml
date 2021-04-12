@@ -1,5 +1,6 @@
 jobs:
-- job: Code Quality
+- job: Tests
+  displayName: Code Quality
   steps:
   - script: npm ci
     displayName: npm install
