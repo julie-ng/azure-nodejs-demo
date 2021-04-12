@@ -16,35 +16,43 @@ jobs:
 
   steps:
   - template: ../steps/debug.yaml
-  - script: |
-      echo 'isMain - $(isMain)'
-      echo 'isProduction - $(isProduction)'
-      echo 'webAppName - $(webAppName)'
-      echo 'blobContainer - $(blobContainer)'
-      echo 'cdnEndpoint - $(cdnEndpoint)'
-    displayName: Debug
-
   # - script: |
-  #     npm ci
-  #     npm run compile-sass
-  #   displayName: 'Compile Sass to CSS'
+  #     echo 'isMain - $(isMain)'
+  #     echo 'isProduction - $(isProduction)'
+  #     echo 'webAppName - $(webAppName)'
+  #     echo 'blobContainer - $(blobContainer)'
+  #     echo 'cdnEndpoint - $(cdnEndpoint)'
+  #   displayName: Debug
 
-  # - task: AzureCLI@2
-  #   displayName: Assets - Upload and Purge Cache
-  #   inputs:
-  #     azureSubscription: $(armConnection)
-  #     scriptType: bash
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az --version
-  #       az storage container list --account-name $(storageAccount) -o table
-  #       az storage blob upload-batch \
-  #         --account-name $(storageAccount) \
-  #         --source ./assets \
-  #         --destination $(blobContainer)
+  - script: |
+      npm ci
+      npm run compile-sass
+    displayName: Compile CSS
 
-  #       az cdn endpoint purge \
-  #         --resource-group $(resourceGroup) \
-  #         --name $(cdnEndpoint) \
-  #         --profile-name $(cdnProfileName) \
-  #         --content-paths '/css/*' '/images/*'
+  - task: AzureCLI@2
+    displayName: Upload to Blob Storage
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az version
+        az storage blob upload-batch \
+          --account-name $(storageAccount) \
+          --source ./assets \
+          --destination $(blobContainer)
+
+
+    - task: AzureCLI@2
+      displayName: Purge Cache
+      inputs:
+        azureSubscription: $(armConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az version
+          az cdn endpoint purge \
+            --resource-group $(resourceGroup) \
+            --name $(cdnEndpoint) \
+            --profile-name $(cdnProfileName) \
+            --content-paths '/css/*' '/images/*'
