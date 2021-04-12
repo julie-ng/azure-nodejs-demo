@@ -1,3 +1,22 @@
+parameters:
+- name: armConnection
+  default: ${{ variables.armConnection }}
+
+- name: storageAccount
+  default: ${{ variables.demoassetpipeline }}
+
+- name: blobContainer
+  default: ''
+
+- name: resourceGroup
+  default: ${{ variables.resourceGroup }}
+
+- name: cdnEndpoint
+  default: ''
+
+- name: cdnProfileName
+  default: ${{ variables.cdnProfileName }}
+
 steps:
 - script: |
     npm ci
@@ -7,19 +26,19 @@ steps:
 - task: AzureCLI@2
   displayName: Assets - Upload and Purge Cache
   inputs:
-    azureSubscription: $(armConnection)
+    azureSubscription: ${{ parameters.armConnection }}
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
       az --version
 
       az storage blob upload-batch \
-        --account-name $(storageAccount) \
+        --account-name ${{ parameters.storageAccount }} \
         --source ./assets \
-        --destination $(blobContainer)
+        --destination ${{ parameters.blobContainer }}
 
       az cdn endpoint purge \
-        --resource-group $(resourceGroup) \
-        --name $(cdnEndpoint) \
-        --profile-name $(cdnProfileName) \
+        --resource-group ${{ parameters.resourceGroup }} \
+        --name ${{ parameters.cdnEndpoint }} \
+        --profile-name ${{ parameters.cdnProfileName }} \
         --content-paths '/css/*' '/images/*'
