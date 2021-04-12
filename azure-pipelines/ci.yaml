@@ -28,7 +28,7 @@ schedules:
       - main
 
 variables:
-- template: vars-global.yaml
+- template: vars/global.yaml
 
 stages:
 
@@ -40,7 +40,7 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - template: step-debug.yaml
+    - template: steps/debug.yaml
 
     - script: npm ci
       displayName: npm install
@@ -69,7 +69,7 @@ stages:
   jobs:
   - job: Build
     steps:
-    - template: step-debug.yaml
+    - template: steps/debug.yaml
 
     - bash: |
         npm ci
