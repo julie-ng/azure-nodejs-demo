@@ -1,5 +1,6 @@
 jobs:
-- job: DockerBuild
+- job: Docker Build
+  displayName: Build, Scan and Push
   steps:
 
   - template: ../steps/debug.yaml
