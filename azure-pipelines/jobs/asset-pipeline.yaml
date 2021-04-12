@@ -15,8 +15,8 @@ jobs:
   displayName: Asset Pipeline
 
   variables:
-  - template: ../vars/global.yaml
-  - ${{ if eq(lower(variables.isMain), 'true') }}:
+  # - template: ../vars/global.yaml
+  - ${{ if eq(parameters.isMain, 'true') }}:
     - template: ../vars/dev.yaml
   - ${{ if eq(lower(variables.isProduction), 'true') }}:
     - template: ../vars/prod.yaml
