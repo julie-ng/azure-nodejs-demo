@@ -39,7 +39,10 @@ stages:
   displayName: Tests (Node.js)
   condition: eq(variables.isTag, 'False')
   jobs:
-  - template: jobs/tests.yaml
+  # - template: jobs/tests.yaml
+  - job:
+    steps:
+      - template: steps/debug.yaml
 
 # Build
 # -----
@@ -52,7 +55,10 @@ stages:
   - ${{ if eq(variables.isProduction, 'True') }}:
     - template: vars/prod.yaml
   jobs:
-  - template: jobs/docker.yaml
+  # - template: jobs/docker.yaml
+  - job:
+      steps:
+        - template: steps/debug.yaml
 
   # Deploy
   # ------
@@ -65,5 +71,8 @@ stages:
   - ${{ if eq(variables.isProduction, 'True') }}:
     - template: vars/prod.yaml
   jobs:
-  - template: jobs/app-service.yaml
-  - template: jobs/asset-pipeline.yaml
+  # - template: jobs/app-service.yaml
+  # - template: jobs/asset-pipeline.yaml
+  - job:
+    steps:
+      - template: steps/debug.yaml
