@@ -8,7 +8,7 @@ variables:
   cdnProfileName:   demoassetpipeline
 
   # Pipeline conditions
-  isMain:           ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isMain:           True # ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
   isProduction:     ${{ eq(variables['Build.SourceBranch'], 'refs/heads/production') }}
   isTag:            ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   isFork:           ${{ eq(variables['System.PullRequest.IsFork'], 'True') }}
