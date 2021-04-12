@@ -42,17 +42,16 @@ jobs:
           --source ./assets \
           --destination $(blobContainer)
 
-
-    - task: AzureCLI@2
-      displayName: Purge Cache
-      inputs:
-        azureSubscription: $(armConnection)
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az version
-          az cdn endpoint purge \
-            --resource-group $(resourceGroup) \
-            --name $(cdnEndpoint) \
-            --profile-name $(cdnProfileName) \
-            --content-paths '/css/*' '/images/*'
+  - task: AzureCLI@2
+    displayName: Purge Cache
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az version
+        az cdn endpoint purge \
+          --resource-group $(resourceGroup) \
+          --name $(cdnEndpoint) \
+          --profile-name $(cdnProfileName) \
+          --content-paths '/css/*' '/images/*'
