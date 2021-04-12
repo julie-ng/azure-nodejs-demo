@@ -1,0 +1,19 @@
+jobs:
+- job: AppService
+  displayName: Deploy to App Service
+  steps:
+
+  - template: ../steps/debug.yaml
+
+  - script: echo "##vso[task.setvariable variable=imageTag]$(npm run --silent my-version)"
+    displayName: Override imageTag with app version
+    condition: eq(variables.isProduction, 'True')
+
+  - template: ../steps/debug.yaml
+
+  - task: AzureWebAppContainer@1
+    displayName: Deploy Web App Container
+    inputs:
+      appName:  $(webAppName)
+      azureSubscription: $(armConnection)
+      imageName: $(dockerRegistry)/$(imageName):$(imageTag)

@@ -5,9 +5,9 @@ steps:
     echo 'isMain:         $(isMain)'
     echo 'isTag:          $(isTag)'
     echo 'isProduction:   $(isProduction)'
-    echo 'notFork:        $(notFork)'
-    echo 'notPR:          $(notPR)'
-    echo 'notSchedule:    $(notSchedule)'
+    echo 'isFork:         $(isFork)'
+    echo 'isPR:           $(isPR)'
+    echo 'isScheduled:    $(isScheduled)'
     echo 'isTrustedCI:    $(isTrustedCI)'
     echo ''
 
@@ -21,4 +21,4 @@ steps:
     echo 'blobContainer:  $(blobContainer)'
     echo 'cdnEndpoint:    $(cdnEndpoint)'
     echo ''
-  displayName: Debug - Tags
+  displayName: Debug - Variables

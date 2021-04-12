@@ -2,7 +2,6 @@ name: $(BuildID)
 
 trigger:
 - production
-- main
 
 pr: none
 
@@ -10,7 +9,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- template: vars-global.yaml
+- template: vars/global.yaml
 
 stages:
 - stage: Deployment
@@ -18,55 +17,10 @@ stages:
   # need stage scope to process values 🤨
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
-    - template: vars-dev.yaml
+    - template: vars/dev.yaml
   - ${{ if eq(variables.isProduction, 'True') }}:
-    - template: vars-prod.yaml
+    - template: vars/prod.yaml
+
   jobs:
-
-  # Deploy Web App
-  # --------------
-  - job: Deploy
-    steps:
-    - script: echo "##vso[task.setvariable variable=imageTag]$(npm run --silent my-version)"
-      displayName: Override imageTag with app version
-      condition: ${{ variables.isProduction }}
-
-    - template: step-debug.yaml
-
-    - task: AzureWebAppContainer@1
-      displayName: "App Service - deploy container"
-      inputs:
-        appName:  $(webAppName)
-        azureSubscription: $(armConnection)
-        imageName: $(dockerRegistry)/$(imageName):$(imageTag)
-
-  # Asset Pipeline
-  # --------------
-  - job: AssetPipeline
-    steps:
-    - template: step-debug.yaml
-
-    - script: |
-        npm ci
-        npm run compile-sass
-      displayName: 'Compile Sass to CSS'
-
-    - task: AzureCLI@2
-      displayName: Assets - Upload and Purge Cache
-      inputs:
-        azureSubscription: $(armConnection)
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az --version
-
-          az storage blob upload-batch \
-            --account-name $(storageAccount) \
-            --source ./assets \
-            --destination $(blobContainer)
-
-          az cdn endpoint purge \
-            --resource-group $(resourceGroup) \
-            --name $(cdnEndpoint) \
-            --profile-name $(cdnProfileName) \
-            --content-paths '/css/*' '/images/*'
+  - template: jobs/app-service.yaml
+  - template: jobs/asset-pipeline.yaml

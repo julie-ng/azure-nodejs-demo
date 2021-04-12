@@ -1,0 +1,22 @@
+jobs:
+- job: Audit
+  displayName: Audit Dependencies
+  steps:
+  - script: npm audit --audit-level=moderate
+    displayName: Audit (Dev)
+    continueOnError: true
+
+  - script: npm audit --production --audit-level=high
+    displayName: Audit (Prod)
+
+- job: Linter
+  displayName: Lint Code
+  steps:
+  - script: npm ci && npm run lint
+    displayName: Lint Code
+
+- job: UnitTests
+  displayName: Unit Tests
+  steps:
+  - script: npm ci && npm run test
+    displayName: Run Tests

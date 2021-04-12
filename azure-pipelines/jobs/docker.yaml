@@ -1,0 +1,65 @@
+jobs:
+- job: BuildAndScan
+  displayName: Build and Scan
+  steps:
+  - template: ../steps/debug.yaml
+
+  - bash: |
+      npm ci
+      npm run compile-sass
+      docker build -t $(dockerTag) .
+    displayName: docker - build
+
+  - task: SnykSecurityScan@0
+    displayName: Snyk - security scan
+    inputs:
+      serviceConnectionEndpoint: 'snyk-api-connection'
+      testType: 'container'
+      dockerImageName: $(dockerTag)
+      dockerfilePath: 'Dockerfile'
+      monitorOnBuild: true
+      failOnIssues: true
+
+- job: DockerPush
+  displayName: Push
+  dependsOn: BuildAndScan
+  steps:
+  - template: ../steps/debug.yaml
+
+  - bash: |
+      npm ci
+      npm run compile-sass
+    displayName: Compile CSS
+
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      command: login
+      containerRegistry: $(acrConnection)
+
+  - task: Docker@2
+    displayName: Build and Push
+    inputs:
+      command: buildAndPush
+      repository: $(imageName)
+      tags: |
+        $(imageTag)
+
+  - task: Docker@2
+    displayName: Logout of ACR
+    inputs:
+      command: logout
+      containerRegistry: $(acrConnection)
+
+  - task: AzureCLI@2
+    displayName: 'registry - lock image (prod)'
+    condition: eq(variables.isTag, 'True')
+    inputs:
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az acr repository update \
+          --name $(dockerRegistry) \
+          --image $(imageName):$(imageTag) \
+          --write-enabled false
