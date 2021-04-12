@@ -48,7 +48,7 @@ stages:
 # -----
 - stage: DockerStage
   displayName: Build (Docker)
-  condition: or(eq(variables.isTag, 'True'), and(eq(variables.isMain, 'True'), eq(variables.isTrustedCI, 'True')))
+  condition: or(eq(variables.isTag, 'True'), eq(variables.deployMain, 'True'))
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
@@ -64,7 +64,7 @@ stages:
   # ------
 - stage: DeployStage
   displayName: Deploy (App Service)
-  condition: and(variables.isMain, variables.isTrustedCI)
+  condition: eq(variables.deployMain, 'True')
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
