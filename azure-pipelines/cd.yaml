@@ -23,7 +23,7 @@ stages:
   - ${{ if eq(variables.isProduction, 'True') }}:
     - template: vars/prod.yaml
   jobs:
-
+  - template: jobs/deploy.yaml
   # Deploy Web App
   # --------------
   # - job: Deploy
