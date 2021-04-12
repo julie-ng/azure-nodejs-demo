@@ -1,44 +1,44 @@
-parameters:
-- name: armConnection
-  default: ${{ variables.armConnection }}
+# parameters:
+# - name: armConnection
+#   default: ${{ variables.armConnection }}
 
-- name: storageAccount
-  default: ${{ variables.demoassetpipeline }}
+# - name: storageAccount
+#   default: ${{ variables.demoassetpipeline }}
 
-- name: blobContainer
-  default: ''
+# - name: blobContainer
+#   default: ''
 
-- name: resourceGroup
-  default: ${{ variables.resourceGroup }}
+# - name: resourceGroup
+#   default: ${{ variables.resourceGroup }}
 
-- name: cdnEndpoint
-  default: ''
+# - name: cdnEndpoint
+#   default: ''
 
-- name: cdnProfileName
-  default: ${{ variables.cdnProfileName }}
+# - name: cdnProfileName
+#   default: ${{ variables.cdnProfileName }}
 
-steps:
-- script: |
-    npm ci
-    npm run compile-sass
-  displayName: 'Compile Sass to CSS'
+# steps:
+# - script: |
+#     npm ci
+#     npm run compile-sass
+#   displayName: 'Compile Sass to CSS'
 
-- task: AzureCLI@2
-  displayName: Assets - Upload and Purge Cache
-  inputs:
-    azureSubscription: ${{ parameters.armConnection }}
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      az --version
+# - task: AzureCLI@2
+#   displayName: Assets - Upload and Purge Cache
+#   inputs:
+#     azureSubscription: ${{ parameters.armConnection }}
+#     scriptType: bash
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az --version
 
-      az storage blob upload-batch \
-        --account-name ${{ parameters.storageAccount }} \
-        --source ./assets \
-        --destination ${{ parameters.blobContainer }}
+#       az storage blob upload-batch \
+#         --account-name ${{ parameters.storageAccount }} \
+#         --source ./assets \
+#         --destination ${{ parameters.blobContainer }}
 
-      az cdn endpoint purge \
-        --resource-group ${{ parameters.resourceGroup }} \
-        --name ${{ parameters.cdnEndpoint }} \
-        --profile-name ${{ parameters.cdnProfileName }} \
-        --content-paths '/css/*' '/images/*'
+#       az cdn endpoint purge \
+#         --resource-group ${{ parameters.resourceGroup }} \
+#         --name ${{ parameters.cdnEndpoint }} \
+#         --profile-name ${{ parameters.cdnProfileName }} \
+#         --content-paths '/css/*' '/images/*'
