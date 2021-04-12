@@ -7,13 +7,13 @@ parameters:
 jobs:
 - job: AssetPipeline
   variables:
-  - template: ./../vars/global.yaml
+  - template: ../vars/global.yaml
   - ${{ if eq(lower(parameters.isMain), 'true') }}:
-    - template: ./../vars/dev.yaml
+    - template: ../vars/dev.yaml
   - ${{ if eq(lower(parameters.isProduction), 'true') }}:
-    - template: ./../vars/prod.yaml
+    - template: ../vars/prod.yaml
   steps:
-  - template: ./../steps/debug.yaml
+  - template: ../steps/debug.yaml
   - script: |
       npm ci
       npm run compile-sass
