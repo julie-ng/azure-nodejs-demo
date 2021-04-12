@@ -37,8 +37,8 @@ stages:
 # -----
 - stage: TestsStage
   displayName: Tests (Node.js)
-  condition: not(variables.isTag)
-  # condition: eq(variables.isTag, 'False')
+  # condition: not(variables.isTag)
+  condition: eq(variables.isTag, 'False')
   jobs:
   - template: jobs/tests.yaml
 
@@ -60,7 +60,7 @@ stages:
   # ------
 - stage: DeployStage
   displayName: Deploy (App Service)
-  condition: and(succeeded(), variables.isMain, variables.isTrustedCI)
+  condition: and(succeeded('DockerStage'), variables.isMain, variables.isTrustedCI)
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
