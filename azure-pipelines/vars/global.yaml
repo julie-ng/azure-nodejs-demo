@@ -2,6 +2,7 @@ variables:
 
   # ARM
   armConnection:    nodejs-demo-rg-conn
+  acrConnection:    nodejs-demo-acr-conn
   resourceGroup:    nodejs-demo-rg
   storageAccount:   demoassetpipeline
   cdnProfileName:   demoassetpipeline

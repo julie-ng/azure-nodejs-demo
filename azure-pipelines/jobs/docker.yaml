@@ -1,5 +1,5 @@
 jobs:
-- job: DockerBuild
+- job: BuildAndScan
   displayName: Build and Scan
   steps:
   - template: ../steps/debug.yaml
@@ -22,30 +22,49 @@ jobs:
 
 - job: DockerPush
   displayName: Push
-  condition: succeeded('DockerBuild')
-  variables:
-  - group: nodejs-demo-kv
+  condition: succeeded('BuildAndScan')
+  # variables:
+  # - group: nodejs-demo-kv
   steps:
   - template: ../steps/debug.yaml
 
   - bash: |
       npm ci
       npm run compile-sass
-      docker build -t $(dockerTag) .
-    displayName: docker - build
+    displayName: Compile CSS
 
-  # See README.md about why `docker login`
-  - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-    displayName: registry - login
-    env:
-      ACR_USERNAME: $(kv-acr-username)
-      ACR_PASSWORD: $(kv-acr-password)
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      command: login
+      containerRegistry: $(acrConnection)
 
-  - bash: docker push $(dockerTag)
-    displayName: docker - push
+  - task: Docker@2
+    displayName: Build and Push
+    inputs:
+      command: buildAndPush
+      repository: $(imageName)
+      tags: |
+        $(imageTag)
 
-  - bash: docker logout $(dockerRegistry)
-    displayName: registry - logout
+  - task: Docker@2
+    displayName: Logout of ACR
+    inputs:
+      command: logout
+      containerRegistry: $(acrConnection)
+
+  # # See README.md about why `docker login`
+  # - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
+  #   displayName: registry - login
+  #   env:
+  #     ACR_USERNAME: $(kv-acr-username)
+  #     ACR_PASSWORD: $(kv-acr-password)
+
+  # - bash: docker push $(dockerTag)
+  #   displayName: docker - push
+
+  # - bash: docker logout $(dockerRegistry)
+  #   displayName: registry - logout
 
   - task: AzureCLI@2
     displayName: 'registry - lock image (prod)'
