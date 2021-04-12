@@ -35,17 +35,18 @@ stages:
 
 # Tests
 # -----
-- stage: Tests
+- stage: TestsStage
   displayName: Tests (Node.js)
   condition: not(variables.isTag)
+  # condition: eq(variables.isTag, 'False')
   jobs:
   - template: jobs/tests.yaml
 
 # Build
 # -----
-- stage: DockerBuild
+- stage: DockerStage
   displayName: Build (Docker)
-  condition: or(variables.isTag, and(succeeded(), variables.isMain, variables.isTrustedCI))
+  condition: or(variables.isTag, and(succeeded('TestsStage'), variables.isMain, variables.isTrustedCI))
   variables:
     - group: nodejs-demo-kv
     - ${{ if eq(variables.isMain, 'True') }}:
@@ -57,9 +58,9 @@ stages:
 
   # Deploy
   # ------
-- stage: Deploy
+- stage: DeployStage
   displayName: Deploy (App Service)
-  condition: and(succeeded(), variables.isTrustedCI, or(variables.isMain, variables.isProduction))
+  condition: and(succeeded(), variables.isMain, variables.isTrustedCI)
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml

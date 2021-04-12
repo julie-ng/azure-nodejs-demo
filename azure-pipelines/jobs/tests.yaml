@@ -1,5 +1,5 @@
 jobs:
-- job: Tests
+- job: TestsJob
   steps:
   - script: npm ci
     displayName: npm install

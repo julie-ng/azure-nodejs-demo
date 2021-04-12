@@ -1,5 +1,5 @@
 jobs:
-- job: Docker
+- job: DockerJob
   displayName: Build, Scan and Push
   steps:
 
