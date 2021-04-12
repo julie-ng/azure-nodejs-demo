@@ -23,7 +23,7 @@ jobs:
       echo 'webAppName - ${{ parameters.webAppName }}'
       echo 'blobContainer - ${{ parameters.blobContainer }}'
       echo 'cdnEndpoint - ${{ parameters.cdnEndpoint }}'
-    dislayName: debug
+    displayName: debug
   # - script: |
   #     npm ci
   #     npm run compile-sass
