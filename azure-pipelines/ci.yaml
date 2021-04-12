@@ -33,35 +33,16 @@ variables:
 
 stages:
 
-# Tests Stage
-# -----------
-# - stage: Tests
-#   displayName: Node.js - Tests
-#   condition: not(${{ variables.isTag }})
-#   jobs:
-#   - job: Tests
-#     steps:
-#     - template: steps/debug.yaml
+# Tests
+# -----
+- stage: Tests
+  displayName: Node.js - Tests
+  condition: not(${{ variables.isTag }})
+  jobs:
+  - template: jobs/tests.yaml
 
-#     - script: npm ci
-#       displayName: npm install
-
-#     - script: npm run lint
-#       displayName: linter
-
-#     - script: npm run test
-#       displayName: tests
-
-#     - script: npm audit --audit-level=moderate
-#       displayName: npm audit (dev)
-#       continueOnError: true
-
-#     - script: npm audit --production --audit-level=high
-#       displayName: npm audit (prod)
-
-
-# Build Stage
-# -----------
+# Build
+# -----
 - stage: DockerBuild
   displayName: Docker Build
   condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
@@ -73,45 +54,17 @@ stages:
       - template: vars/prod.yaml
   jobs:
   - template: jobs/docker.yaml
-  # - job: Build
-  #   steps:
-  #   - template: steps/debug.yaml
 
-  #   - bash: |
-  #       npm ci
-  #       npm run compile-sass
-  #       docker build -t $(dockerTag) .
-  #     displayName: docker - build
-
-  #   - task: SnykSecurityScan@0
-  #     displayName: Snyk - security scan
-  #     inputs:
-  #       serviceConnectionEndpoint: 'snyk-api-connection'
-  #       testType: 'container'
-  #       dockerImageName: $(dockerTag)
-  #       dockerfilePath: 'Dockerfile'
-  #       monitorOnBuild: true
-  #       failOnIssues: true
-
-  #   # See README.md about why `docker login`
-  #   - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
-  #     displayName: registry - login
-  #     env:
-  #       ACR_USERNAME: $(kv-acr-username)
-  #       ACR_PASSWORD: $(kv-acr-password)
-
-  #   - bash: docker push $(dockerTag)
-  #     displayName: docker - push
-
-  #   - bash: docker logout $(dockerRegistry)
-  #     displayName: registry - logout
-
-  #   - task: AzureCLI@2
-  #     displayName: 'registry - lock image (prod)'
-  #     condition: ${{ variables.isTag }}
-  #     inputs:
-  #       azureSubscription: ${{ variables.armConnection }}
-  #       scriptType: bash
-  #       scriptLocation: inlineScript
-  #       inlineScript: |
-  #         az acr repository update -n $(dockerRegistry) -t $(imageName):$(imageTag) --write-enabled false
+  # Deploy
+  # ------
+- stage: Deploy
+  displayName: Deploy
+  condition: or(${{ variables.isTag }}, and(succeeded(), ${{ variables.isMain }}, ${{ variables.isTrustedCI }}))
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/dev.yaml
+  - ${{ if eq(variables.isProduction, 'True') }}:
+    - template: vars/prod.yaml
+  jobs:
+  - template: jobs/app-service.yaml
+  # - template: jobs/asset-pipeline.yaml # Re-enable later. CDN purge takes forever.

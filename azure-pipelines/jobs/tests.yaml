@@ -1,0 +1,18 @@
+jobs:
+- job: Tests
+  steps:
+  - script: npm ci
+    displayName: npm install
+
+  - script: npm run lint
+    displayName: linter
+
+  - script: npm run test
+    displayName: tests
+
+  - script: npm audit --audit-level=moderate
+    displayName: npm audit (dev)
+    continueOnError: true
+
+  - script: npm audit --production --audit-level=high
+    displayName: npm audit (prod)

@@ -3,7 +3,7 @@ name: $(BuildID)
 trigger:
 - production
 - main
-- refactor/more-ci
+# - refactor/more-ci
 
 pr: none
 
