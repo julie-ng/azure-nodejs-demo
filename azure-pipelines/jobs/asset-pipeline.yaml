@@ -1,10 +1,4 @@
 parameters:
-# - name: webAppName
-#   default: ''
-# - name: blobContainer
-#   default: ''
-# - name: cdnEndpoint
-#   default: ''
 - name: isMain
   default: ''
 - name: isProduction
@@ -29,6 +23,7 @@ jobs:
       echo 'blobContainer - $(blobContainer)'
       echo 'cdnEndpoint - $(cdnEndpoint)'
     displayName: Debug
+
   # - script: |
   #     npm ci
   #     npm run compile-sass
@@ -46,10 +41,10 @@ jobs:
   #       az storage blob upload-batch \
   #         --account-name $(storageAccount) \
   #         --source ./assets \
-  #         --destination ${{ parameters.blobContainer }}
+  #         --destination $(blobContainer)
 
-# az cdn endpoint purge \
-#   --resource-group $(resourceGroup) \
-#   --name $(cdnEndpoint) \
-#   --profile-name $(cdnProfileName) \
-#   --content-paths '/css/*' '/images/*'
+  #       az cdn endpoint purge \
+  #         --resource-group $(resourceGroup) \
+  #         --name $(cdnEndpoint) \
+  #         --profile-name $(cdnProfileName) \
+  #         --content-paths '/css/*' '/images/*'
