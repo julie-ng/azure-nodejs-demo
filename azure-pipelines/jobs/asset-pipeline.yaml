@@ -37,7 +37,7 @@ jobs:
         az storage blob upload-batch \
           --account-name $(storageAccount) \
           --source ./assets \
-          --destination $(parameters.blobContainer)
+          --destination ${{ parameters.blobContainer }}
 
 # az cdn endpoint purge \
 #   --resource-group $(resourceGroup) \
