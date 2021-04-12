@@ -1,5 +1,5 @@
 jobs:
-- job: Docker Build
+- job: DockerBuild
   steps:
 
   - template: ../steps/debug.yaml
