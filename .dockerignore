@@ -1,5 +1,6 @@
+azure-pipelines/
 coverage/
+diagrams/
 node_modules/
 .DS_Store
-azure-pipelines.yml
 *.azcli

@@ -16,4 +16,4 @@ Docker Images are only built in the CI pipeline and assumed valid and secure whe
 | `ci.yaml` | `main` branch | Push | `dev` | 
 | `ci.yaml` | `v*` tag | Push | `v*` | 
 | `cd.yaml` | `main` branch | Pull | `dev` |
-| `cd.yaml` | `production` branch | Pull | Version per `package.json` |
+| `cd.yaml` | `production` branch | Pull | Version per `package.json` so we can deploy beyond pushing git tags|
