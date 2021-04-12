@@ -9,8 +9,8 @@ variables:
 
   # Pipeline conditions
   isMain:           ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
-  isTag:            ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   isProduction:     ${{ eq(variables['Build.SourceBranch'], 'refs/heads/production') }}
+  isTag:            ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
   notFork:          ${{ eq(variables['System.PullRequest.IsFork'], 'False') }}
   notPR:            ${{ ne(variables['Build.Reason'], 'PullRequest') }}
   notSchedule:      ${{ ne(variables['Build.Reason'], 'Schedule') }}

@@ -6,6 +6,7 @@ trigger:
     - fix/*
     - feat/*
     - main
+    - refactor/more-ci
   tags:
     include:
     - v*
@@ -44,7 +45,7 @@ stages:
 # -----
 - stage: DockerStage
   displayName: Build (Docker)
-  condition: or(variables.isTag, and(succeeded('TestStage'), variables.isMain, variables.isTrustedCI))
+  condition: or(variables.isTag, and(variables.isMain, variables.isTrustedCI))
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
@@ -57,7 +58,7 @@ stages:
   # ------
 - stage: DeployStage
   displayName: Deploy (App Service)
-  condition: and(succeeded('DockerStage'), variables.isMain, variables.isTrustedCI)
+  condition: and(variables.isMain, variables.isTrustedCI)
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
