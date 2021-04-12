@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.7.1...v0.8.0) (2021-04-12)
+
+
+### Features
+
+* **pipeline:** refactored into separate files, templates ([fd23811](https://github.com/julie-ng/azure-nodejs-demo/commit/fd23811e35e946ab600d95c99c61ffb80464f2a3))
+
+
+### Bug Fixes
+
+* **app-insights:** only load and setup once ([14cac41](https://github.com/julie-ng/azure-nodejs-demo/commit/14cac41314e425c9e3963f872092f98011ca2e72))
+
 ### [0.7.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.7.0...v0.7.1) (2021-04-09)
 
 
