@@ -22,10 +22,17 @@ jobs:
 
 - job: DockerPush
   displayName: Push
+  condition: succeeded('DockerBuild')
   variables:
   - group: nodejs-demo-kv
   steps:
   - template: ../steps/debug.yaml
+
+  - bash: |
+      npm ci
+      npm run compile-sass
+      docker build -t $(dockerTag) .
+    displayName: docker - build
 
   # See README.md about why `docker login`
   - bash: docker login $(dockerRegistry) --username $ACR_USERNAME --password $ACR_PASSWORD
