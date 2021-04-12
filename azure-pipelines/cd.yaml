@@ -22,6 +22,7 @@ stages:
     - template: vars/dev.yaml
   - ${{ if eq(variables.isProduction, 'True') }}:
     - template: vars/prod.yaml
+
   jobs:
   - template: jobs/deploy.yaml
   # Deploy Web App
