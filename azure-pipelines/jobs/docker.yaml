@@ -35,9 +35,9 @@ jobs:
 
   - task: AzureCLI@2
     displayName: 'registry - lock image (prod)'
-    condition: ${{ variables.isTag }}
+    condition: ${{ eq(variables.isTag, 'True') }}
     inputs:
-      azureSubscription: ${{ variables.armConnection }}
+      azureSubscription: $(armConnection)
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
