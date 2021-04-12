@@ -1,6 +1,6 @@
 jobs:
 - job: AssetPipeline
-  displayName: Asset Pipeline
+  displayName: Deploy Static Assets
   steps:
 
   - template: ../steps/debug.yaml

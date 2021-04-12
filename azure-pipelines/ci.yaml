@@ -37,7 +37,6 @@ stages:
 # -----
 - stage: TestsStage
   displayName: Tests (Node.js)
-  # condition: not(variables.isTag)
   condition: eq(variables.isTag, 'False')
   jobs:
   - template: jobs/tests.yaml
