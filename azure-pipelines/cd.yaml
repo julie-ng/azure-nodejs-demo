@@ -12,20 +12,20 @@ pool:
 
 variables:
 - template: vars/global.yaml
-- ${{ if eq(variables.isMain, 'True') }}:
-  - template: vars/dev.yaml
-- ${{ if eq(variables.isProduction, 'True') }}:
-  - template: vars/prod.yaml
+# - ${{ if eq(variables.isMain, 'True') }}:
+#   - template: vars/dev.yaml
+# - ${{ if eq(variables.isProduction, 'True') }}:
+#   - template: vars/prod.yaml
 
 stages:
 - stage: Deployment
 
   # need stage scope to process values 🤨
-  # variables:
-  # - ${{ if eq(variables.isMain, 'True') }}:
-  #   - template: vars/dev.yaml
-  # - ${{ if eq(variables.isProduction, 'True') }}:
-  #   - template: vars/prod.yaml
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/dev.yaml
+  - ${{ if eq(variables.isProduction, 'True') }}:
+    - template: vars/prod.yaml
 
   jobs:
   - template: jobs/deploy.yaml
