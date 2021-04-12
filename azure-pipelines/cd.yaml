@@ -25,4 +25,4 @@ stages:
 
   jobs:
   - template: jobs/app-service.yaml
-  # - template: jobs/asset-pipeline.yaml
+  # - template: jobs/asset-pipeline.yaml # Re-enable later. CDN purge takes forever.
