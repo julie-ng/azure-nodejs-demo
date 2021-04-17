@@ -96,10 +96,10 @@ variables:
 - Docker Images are only built in the `ci.yaml` CI pipeline.
 - Production-ready images are [locked](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-image-lock) (Azure Container Registry specific feature) and thus immutable.
 
-| Pipeline | Triggers | Image Tag | Immutable |
-|:--|:--|:--|:--|
-| `ci.yaml` | `main` branch | &bull; `dev`<br>&bull; `dev-$(git rev-parse --short HEAD)` | - |
-| `ci.yaml` | `v*` tag | &bull; `*` | True |
+| Triggers | Image Tag | Immutable |
+|:--|:--|:--|
+| `main` branch | `dev-$(git rev-parse --short HEAD)` | - |
+| `v*` tag | e.g. `0.1.0` | True |
 
 ### Deployment
 
