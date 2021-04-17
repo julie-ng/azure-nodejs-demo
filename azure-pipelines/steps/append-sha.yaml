@@ -1,0 +1,6 @@
+# Prefer shorter ~7 git sha
+steps:
+- script: |
+    echo "##vso[task.setvariable variable=imageTag]$(imageTag)-$(git rev-parse --short HEAD)"
+  displayName: Image Tag - append git sha
+  condition: and( eq(variables.isTag, 'False'), eq(variables.isProduction, 'False') )

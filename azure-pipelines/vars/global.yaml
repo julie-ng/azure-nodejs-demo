@@ -24,7 +24,7 @@ variables:
     imageTag:       dev
   ${{ if eq(variables.isTag, 'True') }}:
     imageTag:       ${{ replace(variables['Build.SourceBranch'], 'refs/tags/v', '') }}
-  dockerTag:        ${{ variables.dockerRegistry }}/${{ variables.imageName }}:${{ variables.imageTag }}
+  dockerImage:      ${{ variables.dockerRegistry }}/${{ variables.imageName }}
 
   # To be overwritten by dev.yaml or prod.yaml
   webAppName:    unset

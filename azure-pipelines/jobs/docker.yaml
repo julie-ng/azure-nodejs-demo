@@ -7,15 +7,15 @@ jobs:
   - bash: |
       npm ci
       npm run compile-sass
-      docker build -t $(dockerTag) .
-    displayName: docker - build
+      docker build -t $(dockerImage):$(imageTag) .
+    displayName: Docker - build
 
   - task: SnykSecurityScan@0
     displayName: Snyk - security scan
     inputs:
       serviceConnectionEndpoint: 'snyk-api-connection'
       testType: 'container'
-      dockerImageName: $(dockerTag)
+      dockerImageName: $(dockerImage):$(imageTag)
       dockerfilePath: 'Dockerfile'
       monitorOnBuild: true
       failOnIssues: true
@@ -32,27 +32,26 @@ jobs:
     displayName: Compile CSS
 
   - task: Docker@2
-    displayName: Login to ACR
+    displayName: Docker - Login
     inputs:
       command: login
       containerRegistry: $(acrConnection)
 
-  - task: Docker@2
-    displayName: Build and Push
-    inputs:
-      command: buildAndPush
-      repository: $(imageName)
-      tags: |
-        $(imageTag)
+  - template: ../steps/append-sha.yaml
+
+  - bash: |
+      docker build -t $(dockerImage):$(imageTag) .
+      docker push $(dockerImage):$(imageTag)
+    displayName: Docker - Build and Push
 
   - task: Docker@2
-    displayName: Logout of ACR
+    displayName: Docker - Logout
     inputs:
       command: logout
       containerRegistry: $(acrConnection)
 
   - task: AzureCLI@2
-    displayName: 'registry - lock image (prod)'
+    displayName: 'ACR - lock production image'
     condition: eq(variables.isTag, 'True')
     inputs:
       azureSubscription: $(armConnection)

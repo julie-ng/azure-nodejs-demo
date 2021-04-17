@@ -7,7 +7,6 @@ trigger:
     - fix/*
     - feat/*
     - main
-    - refactor/more-ci
   tags:
     include:
     - v*
