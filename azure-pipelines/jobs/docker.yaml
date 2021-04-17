@@ -42,8 +42,14 @@ jobs:
     inputs:
       command: buildAndPush
       repository: $(imageName)
-      tags: |
-        $(imageTag)
+      # if isMain true and isTag false
+      ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag') }}:
+        tags: |
+          $(imageTag)
+          dev-$(git rev-parse --short HEAD)
+      ${{ if eq(variables.isTag, 'CHANGEcondition') }}: # TODO
+        tags: |
+          $(imageTag)
 
   - task: Docker@2
     displayName: Logout of ACR
