@@ -1,4 +1,4 @@
-# Pipelines Overview
+# Opinionated CI/CD Pipelines
 
 The pipelines in this repository follow opinionated best practices. They are documented here for reference and easier debugging. 
 
@@ -43,7 +43,7 @@ variables:
 
 ### Environment Specific Variables
 
-Some parameters, e.g. app name are dependent on the deployment target environment. Using conditionals at `stage` scope, the defaults are overwritten.
+Some parameters, e.g. app name are dependent on the deployment target environment. Using conditionals at `stages:` scope, the defaults are overwritten.
 
 ```yaml
 - stage: StageName
@@ -67,14 +67,17 @@ Please also see [Docker Images](#docker-images) section, which describes the git
 
 ### Zero Trust Principle
 
-Pull Requests only runs tests and does not build any images. The YAML pedanticly excludes forks, pull requests and scheduled runs. In this manner only `git merge`s, which requires human intervention will trigger deployments. This is configured using branch production configurations.
+Pull Requests only runs tests and does not build any images. The YAML pedanticly excludes forks, pull requests and scheduled runs. In this manner only `git merge` events, which requires human intervention will trigger deployments. This is configured using branch production configurations.
 
 See [`vars/global.yaml`](./vars/global.yaml) for details:
 
 ```yaml
+# Excerpt
 variables:
-  # …
-  isTrustedCI: ${{ and( eq(variables.isFork,'False'), eq(variables.isPR,'False'), eq(variables.isScheduled,'False') ) }}
+  isFork:       ${{ eq(variables['System.PullRequest.IsFork'], 'True') }}
+  isPR:         ${{ eq(variables['Build.Reason'], 'PullRequest') }}
+  isScheduled:  ${{ eq(variables['Build.Reason'], 'Schedule') }}
+  isTrustedCI:  ${{ and( eq(variables.isFork,'False'), eq(variables.isPR,'False'), eq(variables.isScheduled,'False') ) }}
 ```
 
 # Docker Images 
