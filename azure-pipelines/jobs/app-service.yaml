@@ -16,4 +16,4 @@ jobs:
     inputs:
       appName:  $(webAppName)
       azureSubscription: $(armConnection)
-      imageName: $(dockerRegistry)/$(imageName):$(imageTag)
+      imageName: $(dockerImage):$(imageTag)

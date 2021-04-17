@@ -8,29 +8,29 @@ jobs:
   - bash: |
       npm ci
       npm run compile-sass
-      docker build -t $(dockerTag) .
-    displayName: docker - build
+      docker build -t $(dockerImage):$(imageTag) .
+    displayName: Docker - build
 
   - task: SnykSecurityScan@0
     displayName: Snyk - security scan
     inputs:
       serviceConnectionEndpoint: 'snyk-api-connection'
       testType: 'container'
-      dockerImageName: $(dockerTag)
+      dockerImageName: $(dockerImage):$(imageTag)
       dockerfilePath: 'Dockerfile'
       monitorOnBuild: true
       failOnIssues: true
 
 - job: DockerPush
   displayName: Push
-  # dependsOn: BuildAndScan
+  # dependsOn: BuildAndScan # DEBUG
   steps:
   - template: ../steps/debug.yaml
 
-  # - bash: |
-  #     npm ci
-  #     npm run compile-sass
-  #   displayName: Compile CSS
+  - bash: |
+      npm ci
+      npm run compile-sass
+    displayName: Compile CSS
 
   - task: Docker@2
     displayName: Login to ACR
@@ -39,58 +39,15 @@ jobs:
       containerRegistry: $(acrConnection)
 
   # Prefer ~7 characters over 40 char defult `Build.SourceVersion`
-  # - script: |
-  #     echo "##vso[task.setvariable variable=imageTag]$(imageTag)\\ndev-$(git rev-parse --short HEAD)"
-  #   displayName: git (short) sha for Docker Tag
-    # condition: eq(variables.shouldTagGitSha, 'True') # DEBUG
+  - script: |
+      echo "##vso[task.setvariable variable=imageTag]$(imageTag)-$(git rev-parse --short HEAD)"
+    displayName: Tag - append git sha
+    condition: eq(variables.isTag, 'False')
 
   - bash: |
-      echo 'gitTag:   $(gitTag)'
-      echo 'imageTag: $(imageTag)'
-    displayName: Debug Tags
-
-  # - task: AzureCLI@2
-  #   displayName: 'ACR Login'
-  #   # condition: eq(variables.isTag, 'True')
-  #   inputs:
-  #     azureSubscription: $(armConnection)
-  #     scriptType: bash
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az acr login
-
-  - bash: |
-      docker build -t $(dockerTag) .
-      docker build -t $(dockerTag)-$(git rev-parse --short HEAD) .
-      docker push $(dockerTag)
-      docker push $(dockerTag)-$(git rev-parse --short HEAD)
-    displayName: docker - build and push
-
-
-  # - task: Docker@2
-  #   displayName: Build and Push
-  #   inputs:
-  #     command: buildAndPush
-  #     repository: $(imageName)
-  #     tags: |
-  #       $(imageTag)
-  #       $(gitTag)
-  #       foo
-
-  # - task: Docker@2
-  #   displayName: Build and Push
-  #   inputs:
-  #     command: buildAndPush
-  #     repository: $(imageName)
-  #     ${{ if eq(variables.shouldTagGitSha, 'True') }}:
-  #       tags: |
-  #         $(imageTag)
-  #         $(gitTag)
-  #         foo
-  #     ${{ if eq(variables.shouldTagGitSha, 'False') }}:
-  #       tags: |
-  #         bar
-  #         $(imageTag)
+      docker build -t $(dockerImage):$(imageTag) .
+      docker push $(dockerImage):$(imageTag)
+    displayName: Docker Build and Push
 
   - task: Docker@2
     displayName: Logout of ACR

@@ -13,7 +13,7 @@ steps:
 
     echo '===== DOCKER ====='
     echo 'imageTag:         $(imageTag)'
-    echo 'dockerTag:        $(dockerTag)'
+    echo 'dockerImage:      $(dockerImage)'
     echo 'shouldTagGitSha:  $(shouldTagGitSha)'
     echo ''
 
