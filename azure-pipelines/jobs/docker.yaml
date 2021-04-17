@@ -27,10 +27,10 @@ jobs:
   steps:
   - template: ../steps/debug.yaml
 
-  - bash: |
-      npm ci
-      npm run compile-sass
-    displayName: Compile CSS
+  # - bash: |
+  #     npm ci
+  #     npm run compile-sass
+  #   displayName: Compile CSS
 
   - task: Docker@2
     displayName: Login to ACR
@@ -39,9 +39,9 @@ jobs:
       containerRegistry: $(acrConnection)
 
   # Prefer ~7 characters over 40 char defult `Build.SourceVersion`
-  - script: |
-      echo "##vso[task.setvariable variable=imageTag]$(imageTag)\\ndev-$(git rev-parse --short HEAD)"
-    displayName: git (short) sha for Docker Tag
+  # - script: |
+  #     echo "##vso[task.setvariable variable=imageTag]$(imageTag)\\ndev-$(git rev-parse --short HEAD)"
+  #   displayName: git (short) sha for Docker Tag
     # condition: eq(variables.shouldTagGitSha, 'True') # DEBUG
 
   - bash: |
@@ -49,16 +49,33 @@ jobs:
       echo 'imageTag: $(imageTag)'
     displayName: Debug Tags
 
-
-  - task: Docker@2
-    displayName: Build and Push
+  - task: AzureCLI@2
+    displayName: 'ACR Login'
+    # condition: eq(variables.isTag, 'True')
     inputs:
-      command: buildAndPush
-      repository: $(imageName)
-      tags: |
-        $(imageTag)
-        $(gitTag)
-        foo
+      azureSubscription: $(armConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az acr login
+
+  - bash: |
+      docker build -t $(dockerTag) .
+      docker build -t $(dockerTag)-$(git rev-parse --short HEAD) .
+      docker push $(dockerTag)
+      docker push -t $(dockerTag)-$(git rev-parse --short HEAD) .
+    displayName: docker - build and push
+
+
+  # - task: Docker@2
+  #   displayName: Build and Push
+  #   inputs:
+  #     command: buildAndPush
+  #     repository: $(imageName)
+  #     tags: |
+  #       $(imageTag)
+  #       $(gitTag)
+  #       foo
 
   # - task: Docker@2
   #   displayName: Build and Push
