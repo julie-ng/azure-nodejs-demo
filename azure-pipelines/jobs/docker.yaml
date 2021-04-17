@@ -48,20 +48,31 @@ jobs:
       echo 'imageTag: $(imageTag)'
     displayName: Debug Tags
 
+
   - task: Docker@2
     displayName: Build and Push
     inputs:
       command: buildAndPush
       repository: $(imageName)
-      ${{ if eq(variables.shouldTagGitSha, 'True') }}:
-        tags: |
-          $(imageTag)
-          $(gitTag)
-          foo
-      ${{ if eq(variables.shouldTagGitSha, 'False') }}:
-        tags: |
-          bar
-          $(imageTag)
+      tags: |
+        $(imageTag)
+        $(gitTag)
+        foo
+
+  # - task: Docker@2
+  #   displayName: Build and Push
+  #   inputs:
+  #     command: buildAndPush
+  #     repository: $(imageName)
+  #     ${{ if eq(variables.shouldTagGitSha, 'True') }}:
+  #       tags: |
+  #         $(imageTag)
+  #         $(gitTag)
+  #         foo
+  #     ${{ if eq(variables.shouldTagGitSha, 'False') }}:
+  #       tags: |
+  #         bar
+  #         $(imageTag)
 
   - task: Docker@2
     displayName: Logout of ACR
