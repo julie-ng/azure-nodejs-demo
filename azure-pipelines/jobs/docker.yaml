@@ -39,7 +39,9 @@ jobs:
       containerRegistry: $(acrConnection)
 
   # Prefer ~7 characters over 40 char defult `Build.SourceVersion`
-  - script: echo "##vso[task.setvariable variable=gitTag]dev-$(git rev-parse --short HEAD)"
+  - script: |
+      echo "##vso[task.setvariable variable=imageTag]$(imageTag)\ndev-$(git rev-parse --short HEAD)"
+      echo "##vso[task.setvariable variable=gitTag]dev-$(git rev-parse --short HEAD)"
     displayName: git (short) sha for Docker Tag
     # condition: eq(variables.shouldTagGitSha, 'True') # DEBUG
 
