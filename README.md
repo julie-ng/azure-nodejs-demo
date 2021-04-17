@@ -28,7 +28,7 @@ In real life you have more than one environment.
   - See [./azure-pipelines](./azure-pipelines) for working pipelines and details
 
 - **Asset Pipeline**  
-	The included cd.yaml pipeline shows how to upload assets to Blob Storage and purge the Azure CDN cache as part of your deployment process.
+  The included cd.yaml pipeline shows how to upload assets to Blob Storage and purge the Azure CDN cache as part of your deployment process.
 
 - **CI/CD & Versioning**  
   Example versioning and promotion strategies leveraging git commit messages, git tags and `package.json`.
@@ -56,22 +56,22 @@ This is an example healthcheck endpoint with standardized JSON per draft [IETF s
 
 ```json
 {
-	"status": "pass",
-	"version": "0.7.1",
-	"details": {
-		"uptime": {
-			"component_type": "system",
-			"observed_value": 24208698,
-			"human_readable": "0 days, 6 hours, 43 minutes, 28 seconds",
-			"observed_unit": "ms",
-			"status": "pass",
-			"time": "2021-04-12T11:45:32.508Z"
-		},
-		"env": {
-			"WEBSITE_HOSTNAME": "azure-nodejs-demo-dev.azurewebsites.net",
-			"WEBSITE_INSTANCE_ID": "03e7481d3d5ff1e67e297f158abd943ce8c8b920fa55dc7bf0565e86886404a8",
-			"ASSETS_BASE_URL": "https://nodejsdemo-dev.azureedge.net"
-		}
-	}
+  "status": "pass",
+  "version": "0.7.1",
+  "details": {
+    "uptime": {
+      "component_type": "system",
+      "observed_value": 24208698,
+      "human_readable": "0 days, 6 hours, 43 minutes, 28 seconds",
+      "observed_unit": "ms",
+      "status": "pass",
+      "time": "2021-04-12T11:45:32.508Z"
+    },
+    "env": {
+      "WEBSITE_HOSTNAME": "azure-nodejs-demo-dev.azurewebsites.net",
+      "WEBSITE_INSTANCE_ID": "03e7481d3d5ff1e67e297f158abd943ce8c8b920fa55dc7bf0565e86886404a8",
+      "ASSETS_BASE_URL": "https://nodejsdemo-dev.azureedge.net"
+    }
+  }
 }
 ```
