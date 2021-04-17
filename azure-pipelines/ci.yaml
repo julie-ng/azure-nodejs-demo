@@ -1,6 +1,7 @@
 name: $(BuildID)
 
 trigger:
+  batch: true
   branches:
     include:
     - fix/*

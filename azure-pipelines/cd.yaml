@@ -1,7 +1,10 @@
 name: $(BuildID)
 
 trigger:
-- production
+  batch: true
+  branches:
+    include:
+      - production
 
 pr: none
 
