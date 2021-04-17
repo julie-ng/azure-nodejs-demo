@@ -3,7 +3,7 @@ jobs:
   displayName: Deploy Static Assets
   steps:
 
-  - template: ../steps/debug.yaml
+  - template: ../steps/debug-vars.yaml
 
   - script: |
       npm ci

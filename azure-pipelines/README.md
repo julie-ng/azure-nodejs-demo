@@ -16,7 +16,7 @@ The main pipelines sit in this `azure-pipelines` directory and use subfolders fo
 │   ├── docker.yaml
 │   └── tests.yaml
 ├── steps
-│   └── debug.yaml
+│   └── debug-vars.yaml
 └── vars
     ├── dev.yaml
     ├── global.yaml

@@ -2,7 +2,7 @@ jobs:
 - job: BuildAndScan
   displayName: Build and Scan
   steps:
-  - template: ../steps/debug.yaml
+  - template: ../steps/debug-vars.yaml
 
   - bash: |
       npm ci
@@ -24,7 +24,7 @@ jobs:
   displayName: Push
   dependsOn: BuildAndScan
   steps:
-  - template: ../steps/debug.yaml
+  - template: ../steps/debug-vars.yaml
 
   - bash: |
       npm ci

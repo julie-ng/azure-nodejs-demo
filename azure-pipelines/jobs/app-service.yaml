@@ -9,7 +9,7 @@ jobs:
 
   - template: ../steps/append-sha.yaml
 
-  - template: ../steps/debug.yaml
+  - template: ../steps/debug-vars.yaml
 
   - task: AzureWebAppContainer@1
     displayName: Deploy Web App Container
