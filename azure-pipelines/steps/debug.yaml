@@ -12,8 +12,9 @@ steps:
     echo ''
 
     echo '===== DOCKER ====='
-    echo 'imageTag:       $(imageTag)'
-    echo 'dockerTag:      $(dockerTag)'
+    echo 'imageTag:         $(imageTag)'
+    echo 'dockerTag:        $(dockerTag)'
+    echo 'shouldTagGitSha:  $(shouldTagGitSha)'
     echo ''
 
     echo '===== DEPLOYMENT ====='

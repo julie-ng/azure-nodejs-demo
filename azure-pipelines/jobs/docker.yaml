@@ -1,6 +1,7 @@
 jobs:
 - job: BuildAndScan
   displayName: Build and Scan
+  condition: eq(variables.isTag, 'NEVER') # DEBUG
   steps:
   - template: ../steps/debug.yaml
 
@@ -42,6 +43,11 @@ jobs:
     displayName: git (short) sha for Docker Tag
     condition: eq(variables.shouldTagGitSha, 'True')
 
+  - bash: |
+      echo 'gitTag:   $(gitTag)'
+      echo 'imageTag: $(imageTag)'
+    displayName: Debug Tags
+
   - task: Docker@2
     displayName: Build and Push
     inputs:
@@ -51,6 +57,7 @@ jobs:
         tags: |
           $(imageTag)
           $(gitTag)
+          foo
       ${{ if eq(variables.shouldTagGitSha, 'False') }}:
         tags: |
           $(imageTag)
