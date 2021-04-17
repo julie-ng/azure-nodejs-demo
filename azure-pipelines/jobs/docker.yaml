@@ -23,9 +23,6 @@ jobs:
 - job: DockerPush
   displayName: Push
   dependsOn: BuildAndScan
-  # ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag') }}:
-  #   variables:
-  #     gitTag: dev-${{ variables['Build.SourceVersion'] }}
   steps:
   - template: ../steps/debug.yaml
 
@@ -40,21 +37,21 @@ jobs:
       command: login
       containerRegistry: $(acrConnection)
 
+  # Prefer ~7 characters over 40 char defult `Build.SourceVersion`
   - script: echo "##vso[task.setvariable variable=gitTag]dev-$(git rev-parse --short HEAD)"
-    displayName: set git sha (short version) for Docker Tag
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag')
+    displayName: git (short) sha for Docker Tag
+    condition: eq(variables.shouldTagGitSha, 'True')
 
   - task: Docker@2
     displayName: Build and Push
     inputs:
       command: buildAndPush
       repository: $(imageName)
-      # if isMain true and isTag false
-      ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag') }}:
+      ${{ if eq(variables.shouldTagGitSha, 'True') }}:
         tags: |
           $(imageTag)
           $(gitTag)
-      ${{ if eq(variables.isTag, 'CHANGEcondition') }}: # TODO
+      ${{ if eq(variables.shouldTagGitSha, 'False') }}:
         tags: |
           $(imageTag)
 

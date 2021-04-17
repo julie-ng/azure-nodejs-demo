@@ -19,6 +19,7 @@ variables:
 
   # Docker
   dockerRegistry:   nodejsdemo.azurecr.io
+  shouldTagGitSha:  ${{ and( eq(variables.deployMain, 'True'), eq(variables.isTag, 'False') ) }}
   imageName:        azure-nodejs-demo
   ${{ if eq(variables.isTag, 'False') }}:
     imageTag:       dev
