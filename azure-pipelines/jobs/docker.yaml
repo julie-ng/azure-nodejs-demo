@@ -23,7 +23,7 @@ jobs:
 
 - job: DockerPush
   displayName: Push
-  dependsOn: BuildAndScan
+  # dependsOn: BuildAndScan
   steps:
   - template: ../steps/debug.yaml
 
