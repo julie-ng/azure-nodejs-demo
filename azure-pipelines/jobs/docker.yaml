@@ -63,7 +63,7 @@ jobs:
       docker build -t $(dockerTag) .
       docker build -t $(dockerTag)-$(git rev-parse --short HEAD) .
       docker push $(dockerTag)
-      docker push -t $(dockerTag)-$(git rev-parse --short HEAD) .
+      docker push $(dockerTag)-$(git rev-parse --short HEAD) .
     displayName: docker - build and push
 
 
