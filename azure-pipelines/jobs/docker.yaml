@@ -23,6 +23,9 @@ jobs:
 - job: DockerPush
   displayName: Push
   dependsOn: BuildAndScan
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag') }}:
+    variables:
+      gitTag: dev-${{ variables['Build.SourceVersion'] }}
   steps:
   - template: ../steps/debug.yaml
 
@@ -46,7 +49,7 @@ jobs:
       ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/feat/git-sha-tag') }}:
         tags: |
           $(imageTag)
-          dev-$(git rev-parse --short HEAD)
+          $(gitTag)
       ${{ if eq(variables.isTag, 'CHANGEcondition') }}: # TODO
         tags: |
           $(imageTag)
