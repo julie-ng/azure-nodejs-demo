@@ -61,6 +61,7 @@ jobs:
       ${{ if eq(variables.shouldTagGitSha, 'False') }}:
         tags: |
           $(imageTag)
+          bar
 
   - task: Docker@2
     displayName: Logout of ACR
