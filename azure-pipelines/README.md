@@ -1,6 +1,6 @@
 # Pipelines Overview
 
-The pipelines in this repository follow opinionated best practices. They are documented for your reference and easier debugging. 
+The pipelines in this repository follow opinionated best practices. They are documented here for reference and easier debugging. 
 
 ## File Structure
 
@@ -22,6 +22,8 @@ The main pipelines sit in this `azure-pipelines` directory and use subfolders fo
     ├── global.yaml
     └── prod.yaml
 ```
+
+## Templates and Variables
 
 ### Local Templates 
 
@@ -56,12 +58,26 @@ _Note: Environment specific variables must be set in a non-root, e.g. downstream
 
 ## Triggers and Deployments
 
+Please also see [Docker Images](#docker-images) section, which describes the git tag trigger.
+
 | Pipeline | Branch Triggers | Pull Request Triggers | Deployment |
 |:--|:--|:--|:--|
 | [`ci.yaml`](./ci.yaml) | &bull; `main`<br>&bull; `feat/*`<br>&bull; `fix/*` | `main` | Dev |
 | [`cd.yaml`](./cd.yaml) | &bull; `production`  | (none) |  Production |
 
-## Docker Images 
+### Zero Trust Principle
+
+Pull Requests only runs tests and does not build any images. The YAML pedanticly excludes forks, pull requests and scheduled runs. In this manner only `git merge`s, which requires human intervention will trigger deployments. This is configured using branch production configurations.
+
+See [`vars/global.yaml`](./vars/global.yaml) for details:
+
+```yaml
+variables:
+  # …
+  isTrustedCI: ${{ and( eq(variables.isFork,'False'), eq(variables.isPR,'False'), eq(variables.isScheduled,'False') ) }}
+```
+
+# Docker Images 
 
 ### Tag Definitions
 
@@ -75,7 +91,7 @@ _Note: Environment specific variables must be set in a non-root, e.g. downstream
 ### Build Triggers & Tags
 
 - Docker Images are only built in the `ci.yaml` CI pipeline.
-- Production-ready images [locked](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-image-lock) and thus immutable.
+- Production-ready images are [locked](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-image-lock) (Azure Container Registry specific feature) and thus immutable.
 
 | Pipeline | Triggers | Image Tag | Immutable |
 |:--|:--|:--|:--|
@@ -84,7 +100,7 @@ _Note: Environment specific variables must be set in a non-root, e.g. downstream
 
 ### Deployment
 
-Deployment pipeline deploys existing images, which are assumed valid and secure.
+Deployment pipeline only deploys existing images, which have passed previous stages and are thus assumed valid and secure.
 
 | Branch | Image Tag | 
 |:--|:--|
