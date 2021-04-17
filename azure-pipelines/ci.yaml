@@ -3,11 +3,9 @@ name: $(BuildID)
 trigger:
   branches:
     include:
-    # - fix/*
-    # - feat/*
-    # - main
-    # - refactor/more-ci
-    - feat/git-sha-tag
+    - fix/*
+    - feat/*
+    - main
   tags:
     include:
     - v*
@@ -38,8 +36,7 @@ stages:
 # -----
 - stage: TestStage
   displayName: Tests (Node.js)
-  # condition: eq(variables.isTag, 'False')
-  condition: eq(variables.isTag, 'neverTrue') # DEBUGGING
+  condition: eq(variables.isTag, 'False')
   jobs:
   - template: jobs/tests.yaml
 
@@ -47,8 +44,7 @@ stages:
 # -----
 - stage: DockerStage
   displayName: Build (Docker)
-  condition: eq(variables.isTag, 'False') # DEBUGGING always True for testing
-  # condition: or(eq(variables.isTag,'True'), and(succeeded(), eq(variables.deployMain,'True')))
+  condition: or(eq(variables.isTag,'True'), and(succeeded(), eq(variables.deployMain,'True')))
   variables:
   - ${{ if eq(variables.isMain, 'True') }}:
     - template: vars/dev.yaml
