@@ -49,15 +49,15 @@ jobs:
       echo 'imageTag: $(imageTag)'
     displayName: Debug Tags
 
-  - task: AzureCLI@2
-    displayName: 'ACR Login'
-    # condition: eq(variables.isTag, 'True')
-    inputs:
-      azureSubscription: $(armConnection)
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        az acr login
+  # - task: AzureCLI@2
+  #   displayName: 'ACR Login'
+  #   # condition: eq(variables.isTag, 'True')
+  #   inputs:
+  #     azureSubscription: $(armConnection)
+  #     scriptType: bash
+  #     scriptLocation: inlineScript
+  #     inlineScript: |
+  #       az acr login
 
   - bash: |
       docker build -t $(dockerTag) .
