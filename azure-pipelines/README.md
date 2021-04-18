@@ -43,6 +43,8 @@ variables:
 
 ### Environment Specific Variables
 
+_**Note**: this is no longer used since switching to environment specific pipelines, but kept here for reference._
+
 Some parameters, e.g. app name are dependent on the deployment target environment. Using conditionals at `stages:` scope, the defaults are overwritten.
 
 ```yaml
@@ -54,7 +56,7 @@ Some parameters, e.g. app name are dependent on the deployment target environmen
     - template: vars/prod.yaml
 ```
 
-_Note: Environment specific variables must be set in a non-root, e.g. downstream scope._
+_Important: Environment specific variables must be set in a non-root, e.g. downstream scope._
 
 ## Triggers and Deployments
 

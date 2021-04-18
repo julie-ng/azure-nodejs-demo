@@ -30,6 +30,7 @@ schedules:
 
 variables:
 - template: vars/global.yaml
+- template: vars/dev.yaml
 
 stages:
 
@@ -46,11 +47,6 @@ stages:
 - stage: DockerStage
   displayName: Build (Docker)
   condition: or(eq(variables.isTag,'True'), and(succeeded(), eq(variables.deployMain,'True')))
-  variables:
-  - ${{ if eq(variables.isMain, 'True') }}:
-    - template: vars/dev.yaml
-  - ${{ if eq(variables.isProduction, 'True') }}:
-    - template: vars/prod.yaml
   jobs:
   - template: jobs/docker.yaml
 
@@ -59,11 +55,6 @@ stages:
 - stage: DeployStage
   displayName: Deploy (App Service)
   condition: and(succeeded(), eq(variables.deployMain,'True'))
-  variables:
-  - ${{ if eq(variables.isMain, 'True') }}:
-    - template: vars/dev.yaml
-  - ${{ if eq(variables.isProduction, 'True') }}:
-    - template: vars/prod.yaml
   jobs:
   - template: jobs/app-service.yaml
   - template: jobs/asset-pipeline.yaml
