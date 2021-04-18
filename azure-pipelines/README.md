@@ -8,8 +8,8 @@ The main pipelines sit in this `azure-pipelines` directory and use subfolders fo
 
 ```
 ├── README.md
-├── cd.yaml
-├── ci.yaml
+├── production.yaml
+├── dev.yaml
 ├── jobs
 │   ├── app-service.yaml
 │   ├── asset-pipeline.yaml
@@ -62,8 +62,8 @@ Please also see [Docker Images](#docker-images) section, which describes the git
 
 | Pipeline | Branch Triggers | Pull Request Triggers | Deployment |
 |:--|:--|:--|:--|
-| [`ci.yaml`](./ci.yaml) | &bull; `main`<br>&bull; `feat/*`<br>&bull; `fix/*` | `main` | Dev |
-| [`cd.yaml`](./cd.yaml) | &bull; `production`  | (none) |  Production |
+| [`dev.yaml`](./dev.yaml) | &bull; `main`<br>&bull; `feat/*`<br>&bull; `fix/*` | `main` | Dev |
+| [`production.yaml`](./production.yaml) | &bull; `production`  | (none) |  Production |
 
 ### Zero Trust Principle
 
@@ -93,7 +93,7 @@ variables:
 
 ### Build Triggers & Tags
 
-- Docker Images are only built in the `ci.yaml` CI pipeline.
+- Docker Images are only built in the `dev.yaml` CI pipeline.
 - Production-ready images are [locked](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-image-lock) (Azure Container Registry specific feature) and thus immutable.
 
 | Triggers | Image Tag | Immutable |
