@@ -4,8 +4,8 @@ Containerized Node.js Demo App for Azure App Service.
 
 | Status | Pipeline | Website URL | CDN Endpoint |
 |:--|:--|:--|:--|
-| [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(dev)?branchName=main)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=36&branchName=main) | [dev.yaml](./azure-pipelines/dev.yaml) | [nodejs-demo-dev.onazure.io](https://nodejs-demo-dev.onazure.io/) | [nodejsdemo-dev.azureedge.net](https://nodejsdemo-dev.azureedge.net/css/styles.css) |
-| [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(production)?branchName=refactor%2Fmore-ci)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=37&branchName=refactor%2Fmore-ci) | [production.yaml](./azure-pipelines/production.yaml) | [nodejs-demo.onazure.io](https://nodejs-demo.onazure.io/) | [nodejsdemo-prod.azureedge.net](https://nodejsdemo-prod.azureedge.net/css/styles.css) |
+| [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(dev)?branchName=main)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=36&branchName=main) | [dev.yaml](./azure-pipelines/dev.yaml) | [azure-nodejs-demo-dev.azurewebsites.net](https://azure-nodejs-demo-dev.azurewebsites.net/) | [nodejsdemo-dev.azureedge.net](https://nodejsdemo-dev.azureedge.net/css/styles.css) |
+| [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(production)?branchName=refactor%2Fmore-ci)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=37&branchName=refactor%2Fmore-ci) | [production.yaml](./azure-pipelines/production.yaml) | [azure-nodejs-demo.azurewebsites.net](https://azure-nodejs-demo.azurewebsites.net/) | [nodejsdemo-prod.azureedge.net](https://nodejsdemo-prod.azureedge.net/css/styles.css) |
 
 
 ## Architecture 
