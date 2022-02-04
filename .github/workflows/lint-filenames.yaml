@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lint Valid Fixtures
-        uses: julie-ng/lowercase-only@v1
+        uses: julie-ng/lowercase-linter@v1
         id: linter
         with:
           path: 'sessions'
