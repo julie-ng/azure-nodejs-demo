@@ -21,11 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Lint Valid Fixtures
+      - name: Lint Filenames
         uses: julie-ng/lowercase-linter@v1
         id: linter
         with:
-          path: 'sessions'
+          path: '.'
           pr-comment: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
