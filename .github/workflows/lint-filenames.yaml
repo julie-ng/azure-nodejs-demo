@@ -1,0 +1,33 @@
+name: lint-filenames
+
+on:
+  push:
+    branches:
+      - 'dev'
+      - 'main'
+      - 'feat/*'
+      - 'fix/*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - 'main'
+      - 'dev'
+
+jobs:
+  lint-filenames:
+    runs-on: ubuntu-latest
+    name: Lint filenames
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Lint Valid Fixtures
+        uses: julie-ng/lowercase-only@v1
+        id: linter
+        with:
+          path: 'sessions'
+          pr-comment: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug Outputs
+        run: echo "${{ toJSON(steps.linter.outputs) }}"
