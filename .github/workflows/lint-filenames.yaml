@@ -29,5 +29,5 @@ jobs:
           pr-comment: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug Outputs
-        run: echo "${{ toJSON(steps.linter.outputs) }}"
+      - name: Output Pull Request Comment URL
+        run: echo "${{ steps.linter.outputs.comment-url }}"
