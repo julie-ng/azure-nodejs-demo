@@ -1,0 +1,33 @@
+name: lint-filenames
+
+on:
+  push:
+    branches:
+      - 'dev'
+      - 'main'
+      - 'feat/*'
+      - 'fix/*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - 'main'
+      - 'dev'
+
+jobs:
+  lint-filenames:
+    runs-on: ubuntu-latest
+    name: Lint filenames
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Lint Filenames
+        uses: julie-ng/lowercase-linter@v1
+        id: linter
+        with:
+          path: '.'
+          pr-comment: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output Pull Request Comment URL
+        run: echo "${{ steps.linter.outputs.comment-url }}"
