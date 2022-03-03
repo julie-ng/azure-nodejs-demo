@@ -28,7 +28,6 @@ jobs:
       - uses: Azure/container-scan@v0
         name: Scan image for vulnerabilities
         id: container-scan
-        continue-on-error: true
         with:
           image-name: julieio/azure-nodejs-demo:defender-${{ github.sha }}
           severity-threshold: WARN
