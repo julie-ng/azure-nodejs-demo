@@ -11,6 +11,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     name: Build and Scan Image
+    env:
+      IMAGE_NAME: nodejsdemo.azurecr.io/azure-nodejs-demo
+      IMAGE_TAG: defender-scan # static for now b/c Azure Pipelines handles dev lifecycle for now.
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,14 +25,13 @@ jobs:
 
       - name: Build and tag Image
         run: |
-          echo "github.sha=$GITHUB_SHA"
-          docker build -t julieio/azure-nodejs-demo:defender-${{ github.sha }} .
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
 
       - uses: Azure/container-scan@v0
         name: Scan image for vulnerabilities
         id: container-scan
         with:
-          image-name: julieio/azure-nodejs-demo:defender-${{ github.sha }}
+          image-name: $IMAGE_NAME:$IMAGE_TAG
           severity-threshold: WARN
 
 # For details, see
