@@ -1,0 +1,30 @@
+name: msft-defender-image-scan
+
+on:
+  push:
+    branches:
+      - 'feat/defender-acr'
+      # - 'dev'
+      # - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    name: Build and Scan Image
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - run: |
+        echo "github.sha=$GITHUB_SHA"
+        docker build -t nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
+
+      - uses: Azure/container-scan@v0
+        name: Scan image for vulnerabilities
+        id: container-scan
+        continue-on-error: true
+        with:
+          image-name: nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
+
+# For details, see
+# https://docs.microsoft.com/en-us/azure/defender-for-cloud/defender-for-container-registries-cicd
