@@ -25,13 +25,13 @@ jobs:
 
       - name: Build and tag Image
         run: |
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
       - uses: Azure/container-scan@v0
         name: Scan image for vulnerabilities
         id: container-scan
         with:
-          image-name: $IMAGE_NAME:$IMAGE_TAG
+          image-name: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           severity-threshold: WARN
 
 # For details, see
