@@ -23,14 +23,14 @@ jobs:
       - name: Build and tag Image
         run: |
           echo "github.sha=$GITHUB_SHA"
-          docker build -t nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }} .
+          docker build -t julieio/azure-nodejs-demo:defender-${{ github.sha }} .
 
       - uses: Azure/container-scan@v0
         name: Scan image for vulnerabilities
         id: container-scan
         continue-on-error: true
         with:
-          image-name: nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
+          image-name: julieio/azure-nodejs-demo:defender-${{ github.sha }}
           severity-threshold: WARN
 
 # For details, see
