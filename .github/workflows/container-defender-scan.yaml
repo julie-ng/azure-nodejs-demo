@@ -15,7 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - run: |
+      - name: npm install and build
+        run: |
+          npm ci
+          npm run compile-sass
+
+      - name: Build and tag Image
+        run: |
           echo "github.sha=$GITHUB_SHA"
           docker build -t nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }} .
 
