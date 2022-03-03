@@ -31,6 +31,7 @@ jobs:
         continue-on-error: true
         with:
           image-name: nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
+          severity-threshold: WARN
 
 # For details, see
 # https://docs.microsoft.com/en-us/azure/defender-for-cloud/defender-for-container-registries-cicd
