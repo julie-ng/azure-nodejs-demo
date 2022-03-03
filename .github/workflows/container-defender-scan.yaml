@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v2
 
       - run: |
-        echo "github.sha=$GITHUB_SHA"
-        docker build -t nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
+          echo "github.sha=$GITHUB_SHA"
+          docker build -t nodejsdemo.azurecr.io/azure-nodejs-demo:defender-${{ github.sha }}
 
       - uses: Azure/container-scan@v0
         name: Scan image for vulnerabilities
