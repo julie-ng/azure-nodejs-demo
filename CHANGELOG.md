@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.8.0...v0.9.0) (2022-05-03)
+
+
+### Features
+
+* **ci:** lint filenames for mixed case ([6b4c105](https://github.com/julie-ng/azure-nodejs-demo/commit/6b4c105a789864e05d7fab0c21d2300559a2e64b))
+* **pipelines:** add git sha tags for dev images ([37a3fa1](https://github.com/julie-ng/azure-nodejs-demo/commit/37a3fa1c7ff5675eacd333e91034ab9a83626daa))
+* **pipelines:** batch changes to limit pipeline runs ([#6](https://github.com/julie-ng/azure-nodejs-demo/issues/6)) ([58ea5ec](https://github.com/julie-ng/azure-nodejs-demo/commit/58ea5ec92b154cd51ff7e3d102e1602613e24265))
+* **pipelines:** refactor, leverage templates ([7b5e4c0](https://github.com/julie-ng/azure-nodejs-demo/commit/7b5e4c0f89db29c11bfc815417f8f9f323a8bebc))
+* **pipelines:** remove unneeded conditionals for envs ([58a3f7b](https://github.com/julie-ng/azure-nodejs-demo/commit/58a3f7b4cb5c8aa0d32e0c52a2e2a6e94fd5a20f))
+* **pipelines:** rename to dev and production yamls ([29471af](https://github.com/julie-ng/azure-nodejs-demo/commit/29471af18c87e508a255f1b64359572e26350f87))
+
+
+### Bug Fixes
+
+* **deps:** bump to fix security issues ([52d65e4](https://github.com/julie-ng/azure-nodejs-demo/commit/52d65e49efbee8bffc76326369e9d0e1d1164894))
+* package.json & package-lock.json to reduce vulnerabilities ([fe52594](https://github.com/julie-ng/azure-nodejs-demo/commit/fe52594b4b7504f9ebf5da3f7a4671ad852820c8))
+
 ## [0.8.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.7.1...v0.8.0) (2021-04-12)
 
 
