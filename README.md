@@ -73,3 +73,29 @@ This is an example healthcheck endpoint with standardized JSON per draft [IETF s
   }
 }
 ```
+
+## Local Docker Development
+
+Note: in local development, I tend to reference the image sha256. But for the docs, we'll leverage a custom tag `azure-nodejs-demo` to make this doc easier to follow.
+
+### Build Image
+
+```bash
+docker build --tag azure-nodejs-demo .
+```
+
+### Run Image
+
+To ensure it runs locally, we need to change the default `NODE_ENV` to disable `https://` redirect. Otherwise browser throws insecure connection message and will not load page.
+
+```bash
+docker run -it -p 3000:3000 -e NODE_ENV=development azure-nodejs-demo
+```
+
+### Target Platform (Edge Case)
+
+In general, **you should _never_ publish local builds**. In case you decide to do this (I was debugging some Azure Container Registry behavior ;-)) from an m1 Mac, you need to specify Linux as the target platform.
+
+```
+docker build --platform linux/amd64  .
+```
