@@ -7,6 +7,9 @@ Containerized Node.js Demo App for Azure App Service.
 | [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(dev)?branchName=main)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=36&branchName=main) | [dev.yaml](./azure-pipelines/dev.yaml) | [azure-nodejs-demo-dev.azurewebsites.net](https://azure-nodejs-demo-dev.azurewebsites.net/) | [nodejsdemo-dev.azureedge.net](https://nodejsdemo-dev.azureedge.net/css/styles.css) |
 | [![Build Status](https://dev.azure.com/julie-msft/public-demos/_apis/build/status/azure-nodejs-demo%20(production)?branchName=refactor%2Fmore-ci)](https://dev.azure.com/julie-msft/public-demos/_build/latest?definitionId=37&branchName=refactor%2Fmore-ci) | [production.yaml](./azure-pipelines/production.yaml) | [azure-nodejs-demo.azurewebsites.net](https://azure-nodejs-demo.azurewebsites.net/) | [nodejsdemo-prod.azureedge.net](https://nodejsdemo-prod.azureedge.net/css/styles.css) |
 
+Note: the `dev.yaml` pipeline generally "partially" fails because of security vulnerabilities found when running `npm audit`. Personally I allow the pipeline to continue and I'm not super concerned because these are only used for local development, e.g. watchers and hot reload.
+
+The `production.yaml` pipeline only checks for non-development dependency vulnerabilities. And that's usually passing and green :)
 
 ## Architecture 
 
