@@ -20,6 +20,10 @@ const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL
 	|| AZURE_APP_SERVICE_HOSTNAME
 	|| `http://localhost:${PORT}`
 
+const APP_VERSION = process.env.NODE_ENV === 'production'
+	? 'v' + process.env.npm_package_version
+	: process.env.NODE_ENV
+
 let app = express()
 
 // --- Static Assets ---
@@ -49,7 +53,7 @@ app.set('view options', { layout: 'layout' })
 app.get('/', (req, res) => {
 	res.render('home', {
 		title: 'Node.js on Azure Demo',
-		version: 'v' + process.env.npm_package_version,
+		version: APP_VERSION,
 		cssFileUrl: cssFileUrl,
 		assetsBaseUrl: ASSETS_BASE_URL
 	})
