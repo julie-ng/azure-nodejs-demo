@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.9.0...v0.10.0) (2022-06-28)
+
+
+### Features
+
+* use node v16 ([8ea8211](https://github.com/julie-ng/azure-nodejs-demo/commit/8ea8211a6a143c67bcdfd22231abb5e423cf2322))
+* **dockerfile:** update for node.js container best practices ([58628b0](https://github.com/julie-ng/azure-nodejs-demo/commit/58628b002834518d5e2e9bfa5c19fede9f024dfe))
+
+
+### Bug Fixes
+
+* **footer:** pipeline results URL ([ec5c5aa](https://github.com/julie-ng/azure-nodejs-demo/commit/ec5c5aab0afdefe94930814915d585e81d3faa22))
+* **view:** use NODE_ENV for local dev, not package.json version ([96d2d1d](https://github.com/julie-ng/azure-nodejs-demo/commit/96d2d1d48685d454db697c8ec4d572fb6a2d837f))
+
 ## [0.9.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.8.0...v0.9.0) (2022-05-03)
 
 
