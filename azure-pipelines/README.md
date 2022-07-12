@@ -2,6 +2,13 @@
 
 The pipelines in this repository follow opinionated best practices. They are documented here for reference and easier debugging. 
 
+### Video Walkthrough
+
+And there's a ca. 20 minute video walkthrough explaining the pipelines and why I organize them this way:  
+[youtube.com/watch?v=e0bF1LlclEs](https://www.youtube.com/watch?v=e0bF1LlclEs)
+
+[![YouTube Video](https://img.youtube.com/vi/e0bF1LlclEs/0.jpg)](https://www.youtube.com/watch?v=e0bF1LlclEs)
+
 ## File Structure
 
 The main pipelines sit in this `azure-pipelines` directory and use subfolders for templating.
