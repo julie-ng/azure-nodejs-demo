@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.10.0...v0.10.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* **pipelines:** add missing app service settings, fix CDN path ([325fcad](https://github.com/julie-ng/azure-nodejs-demo/commit/325fcad513d562a5ac3cec85ada6549be5a335bd))
+
 ## [0.10.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.9.0...v0.10.0) (2022-06-28)
 
 
