@@ -21,7 +21,7 @@ describe ('app', () => {
   describe ('GET /', () => {
     it (`returns Homepage`, (done) => {
       const url = getUrl('/')
-      const content = 'Node.js on Azure Demo'
+      const content = 'Node.js on Azure App Service Demo'
       request.get(url, (error, response, body) => {
         expect(response.statusCode).toBe(200)
         expect(response.body.includes(content)).toBe(true)
