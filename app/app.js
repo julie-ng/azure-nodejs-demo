@@ -11,27 +11,31 @@ const forceHttps = require('./middleware/force-https')
 const bodyParser = require('body-parser')
 const healthcheck = require('standard-healthcheck')
 
+const packageJsonVersion = require('./../package.json').version
+
 const PORT = process.env.PORT || '3000'
-const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+const APP_VERSION = IS_PRODUCTION
+	? 'v-' + packageJsonVersion
+	: 'dev'
+
 const AZURE_APP_SERVICE_HOSTNAME = process.env.WEBSITE_HOSTNAME
 	? `https://${process.env.WEBSITE_HOSTNAME}`
 	: false
+
 const ASSETS_BASE_URL = process.env.ASSETS_BASE_URL
 	|| AZURE_APP_SERVICE_HOSTNAME
 	|| `http://localhost:${PORT}`
 
-const APP_VERSION = process.env.NODE_ENV === 'production'
-	? 'v' + process.env.npm_package_version
-	: process.env.NODE_ENV
-
 let app = express()
+
 
 // --- Static Assets ---
 
 const assetsDir = path.join(__dirname, './../assets')
-const cssFile = IS_DEVELOPMENT
-	? 'styles.css'
-	: `styles-${process.env.npm_package_version}.css`
+const cssFile = IS_PRODUCTION
+	? `styles-${APP_VERSION}.css`
+	: 'styles.css'
 const cssFileUrl = `${ASSETS_BASE_URL}/css/${cssFile}`
 
 app.use('/css', express.static(`${assetsDir}/css`))

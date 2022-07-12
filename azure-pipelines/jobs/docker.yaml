@@ -18,7 +18,7 @@ jobs:
       dockerImageName: $(dockerImage):$(imageTag)
       dockerfilePath: 'Dockerfile'
       monitorOnBuild: true
-      failOnIssues: true
+      failOnIssues: false # TODO - leverage variables
 
 - job: DockerPush
   displayName: Push

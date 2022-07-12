@@ -17,3 +17,4 @@ jobs:
       appName:  $(webAppName)
       azureSubscription: $(armConnection)
       imageName: $(dockerImage):$(imageTag)
+      appSettings: -PORT 8080 -WEBSITES_PORT 8080 -NODE_ENV $(nodeEnvName) -ASSETS_BASE_URL "https://$(cdnEndpoint).azureedge.net"
