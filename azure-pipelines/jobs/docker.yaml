@@ -12,13 +12,13 @@ jobs:
 
   - task: SnykSecurityScan@0
     displayName: Snyk - security scan
+    continueOnError: true
     inputs:
       serviceConnectionEndpoint: 'snyk-api-connection'
       testType: 'container'
       dockerImageName: $(dockerImage):$(imageTag)
       dockerfilePath: 'Dockerfile'
       monitorOnBuild: true
-      failOnIssues: false # TODO - leverage variables
 
 - job: DockerPush
   displayName: Push
