@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.10.1...v0.11.0) (2022-07-12)
+
+
+### Features
+
+* adjust title ([e85d635](https://github.com/julie-ng/azure-nodejs-demo/commit/e85d6359bfb2b637aeb505ab8b1257fddb475c5a))
+
 ### [0.10.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.10.0...v0.10.1) (2022-07-12)
 
 
