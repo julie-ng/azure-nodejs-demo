@@ -34,7 +34,7 @@ let app = express()
 
 const assetsDir = path.join(__dirname, './../assets')
 const cssFile = IS_PRODUCTION
-	? `styles-${APP_VERSION}.css`
+	? `styles-${packageJsonVersion}.css`
 	: 'styles.css'
 const cssFileUrl = `${ASSETS_BASE_URL}/css/${cssFile}`
 
