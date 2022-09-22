@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.11.2](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.11.1...v0.11.2) (2022-09-22)
+
+
+### Features
+
+* **devops:** rebuild prod docker image weekly ([21b0fcb](https://github.com/julie-ng/azure-nodejs-demo/commit/21b0fcb64460600832577f335362205850f9ef08))
+
+
+### Bug Fixes
+
+* **deps:** update ([86bf96d](https://github.com/julie-ng/azure-nodejs-demo/commit/86bf96d5d917f4a10b8630fd79dc9b4823448e3c))
+
 ### [0.11.1](https://github.com/julie-ng/azure-nodejs-demo/compare/v0.11.0...v0.11.1) (2022-07-13)
 
 
