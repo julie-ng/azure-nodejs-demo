@@ -15,7 +15,8 @@ variables:
 - template: vars/global.yaml
 
 stages:
-- stage: Refresh Image
+- stage: RefreshImage
+  displayName: Refresh Image
   jobs:
 
   - job: RebuildImage
