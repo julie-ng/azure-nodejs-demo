@@ -6,6 +6,7 @@ schedules:
     include:
       - production
 
+trigger: none
 pr: none
 
 pool:
