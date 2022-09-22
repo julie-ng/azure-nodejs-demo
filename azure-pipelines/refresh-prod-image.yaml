@@ -1,0 +1,48 @@
+schedules:
+- cron: "0 6 * * 1" # Mondays, 6am
+  displayName: Weekly Production Build Refresh
+  always: true # run even if no code changes
+  branches:
+    include:
+      - production
+
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- template: vars/global.yaml
+
+stages:
+- stage: Refresh Image
+  jobs:
+
+  - job: RebuildImage
+    displayName: Rebuild Image
+    steps:
+    - displayName: Latest Tag # e.g. v0.11.1-refresh
+      script: |
+        echo "##vso[task.setvariable variable=imageTag]$(git describe)-refresh"
+
+    - displayName: Docker - build
+      bash: |
+        npm ci
+        npm run compile-sass
+        docker build -t $(dockerImage):$(imageTag) .
+
+    - task: Docker@2
+      displayName: Docker - Login
+      inputs:
+        command: login
+        containerRegistry: $(acrConnection)
+
+    - bash: |
+        docker push $(dockerImage):$(imageTag)
+      displayName: Docker - Build and Push
+
+    - task: Docker@2
+      displayName: Docker - Logout
+      inputs:
+        command: logout
+        containerRegistry: $(acrConnection)
